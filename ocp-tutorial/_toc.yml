@@ -3,7 +3,13 @@
 
 format: jb-book
 root: intro
-chapters:
-- file: markdown
-- file: notebooks
-- file: markdown-notebooks
+parts:
+- caption: Tutorial
+  chapters:  
+  - file: OCP-introduction.ipynb
+- caption: Workshop
+  chapters:
+  - file: NRR/NRR_example.ipynb
+- caption: Documentation
+  chapters:
+  - glob: ocp-modules/*

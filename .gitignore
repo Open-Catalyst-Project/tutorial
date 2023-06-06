@@ -1,0 +1,6 @@
+*.DS_STORE
+_archive
+_build
+*.ipynb_checkpoints
+.projectile
+ocp/
