@@ -20,10 +20,13 @@ RUN	conda-merge env.common.yml env.cpu.yml > env.yml &&\
 	micromamba install -n base -f env.yml && \
 	micromamba install -n base -c conda-forge jupyterlab jupyter-book && \
  	micromamba clean --all --yes && \
- 	pip install -e .
+	pip install e3nn && \
+ 	pip install -e . 
 
 WORKDIR /home/mambauser
-RUN wget -q -nc https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_09/oc22/s2ef/gnoc_oc22_oc20_all_s2ef.pt &&\
-    wget -q -nc https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_08/s2ef/gemnet_t_direct_h512_all.pt
+RUN git clone https://github.com/Open-Catalyst-Project/Open-Catalyst-Dataset.git
 
-ENV OCP_S2EF=/home/mambauser/gnoc_oc22_oc20_all_s2ef.pt
+WORKDIR Open-Catalyst-Dataset
+RUN pip install -e .
+
+WORKDIR /home/mambauser
