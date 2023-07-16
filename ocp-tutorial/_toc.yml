@@ -4,10 +4,10 @@
 format: jb-book
 root: intro
 parts:
-- caption: Tutorial
+- caption: Introduction to OCP 
   chapters:  
   - file: OCP-introduction.ipynb
-- caption: Workshop
+- caption: Screening catalysts with OCP 
   chapters:
   - file: NRR/NRR_example.ipynb
 - caption: Documentation
