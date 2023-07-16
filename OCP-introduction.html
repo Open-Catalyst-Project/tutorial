@@ -502,99 +502,6 @@ H2O + * -&gt; O* + H2  re2  # Get from OCP as a direct calculation
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: false
-cmd:
-  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/checkpoints/2023-06-06-19-07-44
-  commit: 3aa7a61
-  identifier: &#39;&#39;
-  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/logs/tensorboard/2023-06-06-19-07-44
-  print_every: 100
-  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/results/2023-06-06-19-07-44
-  seed: null
-  timestamp_id: 2023-06-06-19-07-44
-dataset: null
-gpus: 1
-logger: tensorboard
-model: escn
-model_attributes:
-  basis_width_scalar: 2.0
-  cutoff: 12.0
-  distance_function: gaussian
-  hidden_channels: 384
-  lmax_list:
-  - 6
-  max_neighbors: 20
-  mmax_list:
-  - 3
-  num_layers: 20
-  num_sphere_samples: 128
-  otf_graph: true
-  regress_forces: true
-  sphere_channels: 160
-  use_pbc: true
-noddp: false
-optim:
-  batch_size: 3
-  clip_grad_norm: 20
-  ema_decay: 0.999
-  energy_coefficient: 4
-  eval_batch_size: 3
-  eval_every: 5000
-  force_coefficient: 100
-  loss_energy: mae
-  loss_force: l2mae
-  lr_gamma: 0.3
-  lr_initial: 0.0008
-  lr_milestones:
-  - 433166
-  - 541460
-  - 649750
-  max_epochs: 24
-  num_workers: 8
-  optimizer: AdamW
-  optimizer_params:
-    amsgrad: true
-  warmup_factor: 0.2
-  warmup_steps: 100
-slurm:
-  additional_parameters:
-    constraint: volta32gb
-  constraint: volta32gb
-  cpus_per_task: 9
-  folder: /checkpoint/zitnick/ocp_logs/4486283
-  gpus_per_node: 8
-  job_id: &#39;4486283&#39;
-  job_name: eSCN-L6-M3-Lay20-All-MD
-  mem: 480GB
-  nodes: 4
-  ntasks_per_node: 8
-  partition: ocp
-  time: 4320
-task:
-  dataset: trajectory_lmdb
-  description: Regressing to energies and forces for DFT trajectories from OCP
-  eval_on_free_atoms: true
-  grad_input: atomic forces
-  labels:
-  - potential energy
-  metric: mae
-  primary_metric: forces_mae
-  relax_opt:
-    alpha: 70.0
-    damping: 1.0
-    maxstep: 0.04
-    memory: 50
-    name: lbfgs
-    traj_dir: traj_id
-  relaxation_steps: 200
-  train_on_free_atoms: true
-  type: regression
-  write_pos: true
-trainer: forces
-</pre></div>
-</div>
-</div>
 </div>
 <p>Next we can build a slab with an adsorbate on it. Here we use the ASE module to build a Pt slab. We use the experimental lattice constant that is the default. This can introduce some small errors with DFT since the lattice constant can differ by a few percent, and it is common to use DFT lattice constants. In this example, we do not constrain any layers.</p>
 <div class="cell docutils container">
@@ -620,25 +527,6 @@ trainer: forces
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Step     Time          Energy         fmax
-BFGS:    0 19:09:32        1.744689        1.6982
-BFGS:    1 19:09:32        1.517990        0.9685
-BFGS:    2 19:09:32        1.363595        0.7206
-BFGS:    3 19:09:32        1.273019        0.7950
-BFGS:    4 19:09:32        0.868181        0.7050
-BFGS:    5 19:09:33        0.811486        0.4946
-BFGS:    6 19:09:33        0.785268        0.6083
-BFGS:    7 19:09:33        0.770407        0.7404
-BFGS:    8 19:09:33        0.752678        0.5184
-BFGS:    9 19:09:33        0.741967        0.1253
-BFGS:   10 19:09:33        0.736692        0.0372
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.2933084654808042
-</pre></div>
-</div>
-</div>
 </div>
 <p>It is good practice to look at your geometries to make sure they are what you expect.</p>
 <div class="cell docutils container">
@@ -652,9 +540,6 @@ BFGS:   10 19:09:33        0.736692        0.0372
 <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/d8a35291b2e15ff342f94b8cbfef70ccca514643924d8fbc8a43f887a17810b0.png" src="_images/d8a35291b2e15ff342f94b8cbfef70ccca514643924d8fbc8a43f887a17810b0.png" />
 </div>
 </div>
 <p>How did we do? We need a reference point. In the paper below, there is an atomic adsorption energy for O on Pt(111) of about -4.264 eV. This is for the reaction O + * -&gt; O*. To convert this to the dissociative adsorption energy, we have to add the reaction:</p>
@@ -708,11 +593,6 @@ O -&gt; 1/2 O2         re3 = -2.58 eV
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-4.263842000000002
-</pre></div>
-</div>
-</div>
 </div>
 <p>Next, we load data from the SI to get the geometry to start from.</p>
 <div class="cell docutils container">
@@ -750,21 +630,6 @@ O -&gt; 1/2 O2         re3 = -2.58 eV
         <span class="n">re2</span> <span class="o">+=</span> <span class="n">re1</span> <span class="o">+</span> <span class="n">re3</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">re2</span> <span class="o">/</span> <span class="n">nO</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Step     Time          Energy         fmax
-BFGS:    0 19:37:00        0.608057        0.3374
-BFGS:    1 19:37:00        0.603557        0.2932
-BFGS:    2 19:37:01        0.593898        0.0957
-BFGS:    3 19:37:01        0.607993        0.0720
-BFGS:    4 19:37:01        0.595942        0.0854
-BFGS:    5 19:37:01        0.591433        0.0833
-BFGS:    6 19:37:01        0.588323        0.0821
-BFGS:    7 19:37:01        0.592364        0.0664
-BFGS:    8 19:37:01        0.590290        0.0248
--5.019709632396697
 </pre></div>
 </div>
 </div>
@@ -820,53 +685,6 @@ BFGS:    8 19:37:01        0.590290        0.0248
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cu
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.34s/it]
-100%|██████████| 1/1 [00:00&lt;00:00,  1.44it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ag
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  1.21it/s]
-100%|██████████| 1/1 [00:00&lt;00:00,  1.81it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pd
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.24s/it]
-100%|██████████| 1/1 [00:00&lt;00:00,  1.20it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pt
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.25s/it]
-100%|██████████| 1/1 [00:00&lt;00:00,  2.39it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Rh
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  2.41it/s]
-100%|██████████| 1/1 [00:00&lt;00:00,  2.39it/s]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ir
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  1.80it/s]
-100%|██████████| 1/1 [00:00&lt;00:00,  1.81it/s]
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Elapsed time = 9.1206214427948 seconds&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <p>First, we compare the computed data and reference data. There is a systematic difference of about 0.5 eV due to the difference between RPBE and PBE functionals, and other subtle differences like lattice constant differences and reference energy differences.</p>
 <div class="cell docutils container">
@@ -878,9 +696,6 @@ BFGS:    8 19:37:01        0.590290        0.0248
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;OCP prediction&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/607fc2886678361630767ece13a0083705e65cbeb0ccb302fdb2a0a3d2f44b8b.png" src="_images/607fc2886678361630767ece13a0083705e65cbeb0ccb302fdb2a0a3d2f44b8b.png" />
 </div>
 </div>
 <p>Next we compare the correlation between the hcp and fcc sites. Here we see the same trends. The data falls below the parity line because the hcp sites tend to be a little weaker binding than the fcc sites.</p>
@@ -894,9 +709,6 @@ BFGS:    8 19:37:01        0.590290        0.0248
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;DFT (PBE)&#39;</span><span class="p">,</span> <span class="s1">&#39;OCP&#39;</span><span class="p">]);</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/eee571b20c98133f7ef8d9391c1020f865284c32bdd1ba0c1b1004da5fa8da98.png" src="_images/eee571b20c98133f7ef8d9391c1020f865284c32bdd1ba0c1b1004da5fa8da98.png" />
 </div>
 </div>
 <section id="id1">
