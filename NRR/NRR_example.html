@@ -421,7 +421,10 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#enumerate-the-adsorbate-slab-configurations-to-run-relaxations-on">Enumerate the adsorbate-slab configurations to run relaxations on</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-ml-relaxations">Run ML relaxations:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-ml-relaxations">Run ML relaxations:</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-all-the-systems">Run all the systems</a></li>
+</ul>
+</li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-the-trajectories-and-post-process">Parse the trajectories and post-process</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper">Make parity plots for values obtained by ML v. reported in the paper</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figure-6b-and-compare-to-literature-results">Make figure 6b and compare to literature results</a></li>
@@ -439,6 +442,54 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="using-ocp-to-enumerate-adsorbates-on-catalyst-surfaces">
 <h1>Using OCP to enumerate adsorbates on catalyst surfaces<a class="headerlink" href="#using-ocp-to-enumerate-adsorbates-on-catalyst-surfaces" title="Permalink to this heading">#</a></h1>
+<p>In the previous example, we constructed slab models of adsorbates on desired sites. Here we leverage code to automate this process.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>rm<span class="w"> </span>-fr<span class="w"> </span>ocdata
+<span class="o">!</span><span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Open-Catalyst-Project/Open-Catalyst-Dataset.git<span class="w"> </span>ocdata
+<span class="o">!</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>ocdata<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cloning into &#39;ocdata&#39;...
+remote: Enumerating objects: 1741, done.
+remote: Counting objects: 100% (433/433), done.
+remote: Compressing objects: 100% (212/212), done.
+remote: Total 1741 (delta 260), reused 241 (delta 221), pack-reused 1308
+Receiving objects: 100% (1741/1741), 36.87 MiB | 13.40 MiB/s, done.
+Resolving deltas: 100% (1081/1081), done.
+Obtaining file:///home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/ocdata
+  Preparing metadata (setup.py) ... ?25ldone
+?25hInstalling collected packages: ocdata
+  Running setup.py develop for ocdata
+Successfully installed ocdata-0.2.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>e3nn
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: e3nn in /opt/conda/lib/python3.9/site-packages (0.5.1)
+Requirement already satisfied: sympy in /opt/conda/lib/python3.9/site-packages (from e3nn) (1.11.1)
+Requirement already satisfied: scipy in /opt/conda/lib/python3.9/site-packages (from e3nn) (1.9.3)
+Requirement already satisfied: torch&gt;=1.8.0 in /opt/conda/lib/python3.9/site-packages (from e3nn) (1.11.0)
+Requirement already satisfied: opt-einsum-fx&gt;=0.1.4 in /opt/conda/lib/python3.9/site-packages (from e3nn) (0.1.4)
+Requirement already satisfied: packaging in /opt/conda/lib/python3.9/site-packages (from opt-einsum-fx&gt;=0.1.4-&gt;e3nn) (21.3)
+Requirement already satisfied: opt-einsum in /opt/conda/lib/python3.9/site-packages (from opt-einsum-fx&gt;=0.1.4-&gt;e3nn) (3.3.0)
+Requirement already satisfied: typing_extensions in /opt/conda/lib/python3.9/site-packages (from torch&gt;=1.8.0-&gt;e3nn) (4.4.0)
+Requirement already satisfied: numpy&lt;1.26.0,&gt;=1.18.5 in /opt/conda/lib/python3.9/site-packages (from scipy-&gt;e3nn) (1.23.4)
+Requirement already satisfied: mpmath&gt;=0.19 in /opt/conda/lib/python3.9/site-packages (from sympy-&gt;e3nn) (1.2.1)
+Requirement already satisfied: pyparsing!=3.0.5,&gt;=2.0.2 in /opt/conda/lib/python3.9/site-packages (from packaging-&gt;opt-einsum-fx&gt;=0.1.4-&gt;e3nn) (3.0.9)
+</pre></div>
+</div>
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
@@ -464,7 +515,7 @@ document.write(`
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h1>
-<p>Hello All! We are so glad you could join us to learn a bit more about using OCP models to accelerate chemical simulations. We will reproduce Fig 6b from the following paper: Zhou, Jing, et al. “Enhanced Catalytic Activity of Bimetallic Ordered Catalysts for Nitrogen Reduction Reaction by Perturbation of Scaling Relations.” ACS Catalysis 13.4 (2023): 2190-2201.</p>
+<p>Hello All! We are so glad you could join us to learn a bit more about using OCP models to accelerate chemical simulations. We will reproduce Fig 6b from the following paper: Zhou, Jing, et al. “Enhanced Catalytic Activity of Bimetallic Ordered Catalysts for Nitrogen Reduction Reaction by Perturbation of Scaling Relations.” ACS Catalysis 134 (2023): 2190-2201 (<a class="reference external" href="https://doi.org/10.1021/acscatal.2c05877">https://doi.org/10.1021/acscatal.2c05877</a>).</p>
 <p>To do this, we will enumerate adsorbate-slab configurations and run ML relaxations on them to find the lowest energy configuration. We will assess parity between the model predicted values and those reported in the paper. Finally we will make the figure and assess separability of the NRR favored and HER favored domains.</p>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="enumerate-the-adsorbate-slab-configurations-to-run-relaxations-on">
@@ -472,13 +523,28 @@ document.write(`
 <p>Be sure to set the path in <code class="docutils literal notranslate"><span class="pre">ocdata/configs/paths.py</span></code> to point to the correct place or pass the paths as an argument. The database pickles can be found in <code class="docutils literal notranslate"><span class="pre">ocdata/databases/pkls</span></code>. We will show one explicitly here as an example and then run all of them in an automated fashion for brevity.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ocdata</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">ocdata</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;databases/pkls/adsorbates.pkl&#39;</span><span class="p">)</span>
+<span class="n">db</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/ocdata/ocdata/databases/pkls/adsorbates.pkl&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bulk_src_id</span> <span class="o">=</span> <span class="s2">&quot;oqmd-343039&quot;</span>
 <span class="n">adsorbate_smiles_nnh</span> <span class="o">=</span> <span class="s2">&quot;*N*NH&quot;</span>
 <span class="n">adsorbate_smiles_h</span> <span class="o">=</span> <span class="s2">&quot;*H&quot;</span>
 
-<span class="n">bulk</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">bulk_src_id_from_db</span> <span class="o">=</span> <span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">bulk_db_path</span> <span class="o">=</span> <span class="s2">&quot;NRR_example_bulks.pkl&quot;</span><span class="p">)</span>
-<span class="n">adsorbate_H</span> <span class="o">=</span> <span class="n">Adsorbate</span><span class="p">(</span><span class="n">adsorbate_smiles_from_db</span> <span class="o">=</span> <span class="n">adsorbate_smiles_h</span><span class="p">,</span> <span class="n">adsorbate_db_path</span> <span class="o">=</span> <span class="s2">&quot;/private/home/brookwander/Open-Catalyst-Dataset/ocdata/databases/pkls/adsorbates.pkl&quot;</span><span class="p">)</span>
-<span class="n">adsorbate_NNH</span> <span class="o">=</span> <span class="n">Adsorbate</span><span class="p">(</span><span class="n">adsorbate_smiles_from_db</span> <span class="o">=</span> <span class="n">adsorbate_smiles_nnh</span><span class="p">,</span> <span class="n">adsorbate_db_path</span> <span class="o">=</span> <span class="s2">&quot;/private/home/brookwander/Open-Catalyst-Dataset/ocdata/databases/pkls/adsorbates.pkl&quot;</span><span class="p">)</span>
+<span class="n">bulk</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">bulk_src_id_from_db</span> <span class="o">=</span> <span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">bulk_db_path</span><span class="o">=</span><span class="s2">&quot;NRR_example_bulks.pkl&quot;</span><span class="p">)</span>
+<span class="n">adsorbate_H</span> <span class="o">=</span> <span class="n">Adsorbate</span><span class="p">(</span><span class="n">adsorbate_smiles_from_db</span> <span class="o">=</span> <span class="n">adsorbate_smiles_h</span><span class="p">,</span> <span class="n">adsorbate_db_path</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+<span class="n">adsorbate_NNH</span> <span class="o">=</span> <span class="n">Adsorbate</span><span class="p">(</span><span class="n">adsorbate_smiles_from_db</span> <span class="o">=</span> <span class="n">adsorbate_smiles_nnh</span><span class="p">,</span> <span class="n">adsorbate_db_path</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
 <span class="n">slab</span> <span class="o">=</span> <span class="n">Slab</span><span class="o">.</span><span class="n">from_bulk_get_specific_millers</span><span class="p">(</span><span class="n">bulk</span><span class="o">=</span> <span class="n">bulk</span><span class="p">,</span> <span class="n">specific_millers</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -507,37 +573,47 @@ document.write(`
 <li><p>By writing objects to lmdb and relaxing them using <code class="docutils literal notranslate"><span class="pre">main.py</span></code> in the ocp repo</p></li>
 </ol>
 <p>(1) is really only adequate for small stuff and it is what I will show here, but if you plan to run many relaxations, you should definitely use (2). More details about writing lmdbs has been provided <a class="reference external" href="https://github.com/Open-Catalyst-Project/ocp/blob/main/tutorials/lmdb_dataset_creation.ipynb">here</a> - follow the IS2RS/IS2RE instructions. And more information about running relaxations once the lmdb has been written is <a class="reference external" href="https://github.com/Open-Catalyst-Project/ocp/blob/main/TRAIN.md#initial-structure-to-relaxed-structure-is2rs">here</a>.</p>
-<p>You need to provide the calculator with a path to a model checkpoint file. That can be downloaded <a class="reference external" href="https://github.com/Open-Catalyst-Project/ocp/blob/main/MODELS.md">here</a></p>
-<p>Running the model with BFGS prints at each relaxation step is a lot to print. So we will just run one to demonstrate</p>
+<p>You need to provide the calculator with a path to a model checkpoint file. That can be downloaded <a class="reference external" href="https://github.com/Open-Catalyst-Project/ocp/blob/main/MODELS.md">here</a>.</p>
+<p>Running the model with BFGS prints at each relaxation step is a lot to print. So we will just run one to demonstrate what happens on each iteration.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">checkpoint_path</span> <span class="o">=</span> <span class="s2">&quot;/private/home/brookwander/ocp_checkpoints/escn_l6_m3_lay20_all_md_s2ef.pt&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">checkpoint_path</span> <span class="o">=</span> <span class="s2">&quot;../escn_l6_m3_lay20_all_md_s2ef.pt&quot;</span>
 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">adsorbate_smiles_h</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Define the calculator</span>
-<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">,</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># calc = OCPCalculator(checkpoint=checkpoint_path, cpu=False)   # if you have a GPU</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">,</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H&quot;</span><span class="p">)</span>
 <span class="n">adslab</span> <span class="o">=</span> <span class="n">adslabs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
 <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H/test.traj&quot;</span><span class="p">)</span>
 <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Elapsed time </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="n">t0</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/conda/lib/python3.9/site-packages/requests/__init__.py:102: RequestsDependencyWarning: urllib3 (1.26.9) or chardet (5.0.0)/charset_normalizer (2.0.12) doesn&#39;t match a supported version!
+  warnings.warn(&quot;urllib3 ({}) or chardet ({})/charset_normalizer ({}) doesn&#39;t match a supported &quot;
+</pre></div>
+</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: false
 cmd:
-  checkpoint_dir: /private/home/brookwander/random/nrr/checkpoints/2023-07-07-09-59-44
-  commit: 819e11d
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/checkpoints/2023-07-16-16-12-48
+  commit: ab7833d
   identifier: &#39;&#39;
-  logs_dir: /private/home/brookwander/random/nrr/logs/tensorboard/2023-07-07-09-59-44
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/logs/tensorboard/2023-07-16-16-12-48
   print_every: 100
-  results_dir: /private/home/brookwander/random/nrr/results/2023-07-07-09-59-44
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/results/2023-07-16-16-12-48
   seed: null
-  timestamp_id: 2023-07-07-09-59-44
+  timestamp_id: 2023-07-16-16-12-48
 dataset: null
-gpus: 1
+gpus: 0
 logger: tensorboard
 model: escn
 model_attributes:
@@ -615,40 +691,51 @@ task:
   type: regression
   write_pos: true
 trainer: forces
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileExistsError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
+<span class="nn">Input In [7],</span> in <span class="ni">&lt;cell line: 11&gt;</span><span class="nt">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># Define the calculator</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1"># calc = OCPCalculator(checkpoint=checkpoint_path, cpu=False)   # if you have a GPU</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">,</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">11</span> <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="n">adslab</span> <span class="o">=</span> <span class="n">adslabs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
 
-      Step     Time          Energy         fmax
-BFGS:    0 09:59:33        0.172671        0.6259
-BFGS:    1 09:59:33        0.147689        0.5858
-BFGS:    2 09:59:34        0.016639        0.1566
-BFGS:    3 09:59:34        0.016496        0.1751
-BFGS:    4 09:59:34        0.008896        0.1807
-BFGS:    5 09:59:34        0.003126        0.1366
-BFGS:    6 09:59:35       -0.000565        0.0679
-BFGS:    7 09:59:35       -0.002134        0.0779
-BFGS:    8 09:59:35       -0.006986        0.0875
-BFGS:    9 09:59:35       -0.008139        0.0965
-BFGS:   10 09:59:36       -0.009709        0.0877
-BFGS:   11 09:59:36       -0.014754        0.0572
-BFGS:   12 09:59:36       -0.013468        0.0324
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
+<span class="ne">FileExistsError</span>: [Errno 17] File exists: &#39;data/oqmd-343039_H&#39;
 </pre></div>
 </div>
 </div>
 </div>
-<p>Now we will run everything but silence the BFGS print outs</p>
+<section id="run-all-the-systems">
+<h2>Run all the systems<a class="headerlink" href="#run-all-the-systems" title="Permalink to this heading">#</a></h2>
+<p>In principle you can run all the systems now. It takes about an hour though, and we leave that for a later exercise if you want. For now we will run the first two, and for later analysis we provide a results file of all the runs. Let’s read in our reference file and take a look at what is in it.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## THIS WILL TAKE ~1h for all 19 bulks which feels too long!</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;NRR_example_bulks.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;NRR_example_bulks.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">bulks</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-<span class="n">bulk_ids</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">bulks</span><span class="p">)</span><span class="o">.</span><span class="n">src_id</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-
-<span class="k">for</span> <span class="n">bulk_src_id</span> <span class="ow">in</span> <span class="n">bulk_ids</span><span class="p">:</span> 
+    
+<span class="n">bulks</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We have 19 bulk materials we will consider. Next we extract the <code class="docutils literal notranslate"><span class="pre">src-id</span></code> for each one.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bulk_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;src_id&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">bulks</span><span class="p">]</span>
+<span class="n">bulk_ids</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">bulk_src_id</span> <span class="ow">in</span> <span class="n">bulk_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]:</span> 
     <span class="c1"># Enumerate slabs and establish adsorbates</span>
-    <span class="n">bulk</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">bulk_src_id_from_db</span> <span class="o">=</span> <span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">bulk_db_path</span> <span class="o">=</span> <span class="s2">&quot;NRR_example_bulks.pkl&quot;</span><span class="p">)</span>
-    <span class="n">slab</span> <span class="o">=</span> <span class="n">Slab</span><span class="o">.</span><span class="n">from_bulk_get_specific_millers</span><span class="p">(</span><span class="n">bulk</span><span class="o">=</span> <span class="n">bulk</span><span class="p">,</span> <span class="n">specific_millers</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">bulk</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">bulk_src_id_from_db</span><span class="o">=</span><span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">bulk_db_path</span><span class="o">=</span><span class="s2">&quot;NRR_example_bulks.pkl&quot;</span><span class="p">)</span>
+    <span class="n">slab</span> <span class="o">=</span> <span class="n">Slab</span><span class="o">.</span><span class="n">from_bulk_get_specific_millers</span><span class="p">(</span><span class="n">bulk</span><span class="o">=</span> <span class="n">bulk</span><span class="p">,</span> <span class="n">specific_millers</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
 
     <span class="c1"># Perform heuristic placements</span>
     <span class="n">heuristic_adslabs_H</span> <span class="o">=</span> <span class="n">AdsorbateSlabConfig</span><span class="p">(</span><span class="n">slab</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adsorbate_H</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;heuristic&quot;</span><span class="p">)</span>
@@ -657,23 +744,23 @@ BFGS:   12 09:59:36       -0.013468        0.0324
     <span class="c1">#Run relaxations</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">old_stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="c1"># backup current stdout</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">devnull</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    
+
     <span class="c1"># Set up the calculator</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_H</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">):</span>
         <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
-        <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">)</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
         <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
         
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_NNH</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">):</span>
         <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
-        <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">)</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
         <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">old_stdout</span>
 </pre></div>
 </div>
 </div>
 </div>
+</section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="parse-the-trajectories-and-post-process">
 <h1>Parse the trajectories and post-process<a class="headerlink" href="#parse-the-trajectories-and-post-process" title="Permalink to this heading">#</a></h1>
@@ -799,12 +886,8 @@ BFGS:   12 09:59:36       -0.013468        0.0324
 <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;dE NRR paper [eV]&quot;</span><span class="p">);</span>
 <span class="n">f</span><span class="o">.</span><span class="n">set_figwidth</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
 <span class="n">f</span><span class="o">.</span><span class="n">set_figheight</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-<span class="n">f</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;parity.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/4e8cb83dc5aad8c1d07084731b404be3bb6b145f1902ffbe71a6fb8ee99c6667.png" src="../_images/4e8cb83dc5aad8c1d07084731b404be3bb6b145f1902ffbe71a6fb8ee99c6667.png" />
 </div>
 </div>
 </section>
@@ -854,12 +937,8 @@ BFGS:   12 09:59:36       -0.013468        0.0324
 <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;dE *H literature [eV]&quot;</span><span class="p">)</span>
 <span class="n">f</span><span class="o">.</span><span class="n">set_figwidth</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
 <span class="n">f</span><span class="o">.</span><span class="n">set_figheight</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-<span class="n">f</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;fig_6b.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/b60ec53451e4c7c514d259e868d71909802917d4e10f61443de44644b552f792.png" src="../_images/b60ec53451e4c7c514d259e868d71909802917d4e10f61443de44644b552f792.png" />
 </div>
 </div>
 </section>
@@ -934,7 +1013,10 @@ BFGS:   12 09:59:36       -0.013468        0.0324
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#enumerate-the-adsorbate-slab-configurations-to-run-relaxations-on">Enumerate the adsorbate-slab configurations to run relaxations on</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-ml-relaxations">Run ML relaxations:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-ml-relaxations">Run ML relaxations:</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-all-the-systems">Run all the systems</a></li>
+</ul>
+</li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-the-trajectories-and-post-process">Parse the trajectories and post-process</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper">Make parity plots for values obtained by ML v. reported in the paper</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figure-6b-and-compare-to-literature-results">Make figure 6b and compare to literature results</a></li>
