@@ -1,0 +1,893 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Introduction &#8212; OCP tutorials</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'NRR/NRR_example';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ASE-compatible calculator for OCP" href="../ocp-modules/ase-calculator.html" />
+    <link rel="prev" title="Introduction to using OCP in molecular simulations" href="../OCP-introduction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Utilizing large, graph-based, pre-trained  machine learned potentials in atomistic simulations
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../OCP-introduction.html">Introduction to using OCP in molecular simulations</a></li>
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workshop</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction</a></li>
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ocp-modules/ase-calculator.html">ASE-compatible calculator for OCP</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://lab.amdatascience.com/hub/user-redirect/git-pull?repo=https%3A//github.com/Open-Catalyst-Project/tutorial&urlpath=lab/tree/tutorial/ocp-tutorial/NRR/NRR_example.ipynb&branch=main" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onJupyterHub"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_jupyterhub.svg">
+  </span>
+<span class="btn__text-container">JupyterHub</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/Open-Catalyst-Project/tutorial/blob/main/ocp-tutorial/NRR/NRR_example.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Open-Catalyst-Project/tutorial" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Open-Catalyst-Project/tutorial/issues/new?title=Issue%20on%20page%20%2FNRR/NRR_example.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/NRR/NRR_example.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Introduction</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#enumerate-the-adsorbate-slab-configurations-to-run-relaxations-on">Enumerate the adsorbate-slab configurations to run relaxations on</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-ml-relaxations">Run ML relaxations:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-the-trajectories-and-post-process">Parse the trajectories and post-process</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper">Make parity plots for values obtained by ML v. reported in the paper</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figure-6b-and-compare-to-literature-results">Make figure 6b and compare to literature results</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h1>
+<p>Hello All! We are so glad you could join us to learn a bit more about using OCP models to accelerate chemical simulations. We will reproduce Fig 6b from the following paper: Zhou, Jing, et al. “Enhanced Catalytic Activity of Bimetallic Ordered Catalysts for Nitrogen Reduction Reaction by Perturbation of Scaling Relations.” ACS Catalysis 13.4 (2023): 2190-2201. <a class="reference external" href="https://pubs.acs.org/doi/abs/10.1021/acscatal.2c05877">link</a>.</p>
+<p>To do this, we will enumerate adsorbate-slab configurations and run ML relaxations on them to find the lowest energy configuration. We will assess parity between the model predicted values and those reported in the paper. Finally we will make the figure and assess separability of the NRR favored and HER favored domains.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+<span class="kn">import</span> <span class="nn">ase.io</span>
+<span class="kn">from</span> <span class="nn">ase.optimize</span> <span class="kn">import</span> <span class="n">BFGS</span>
+<span class="kn">from</span> <span class="nn">ase</span> <span class="kn">import</span> <span class="n">Atoms</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">ocdata.core</span> <span class="kn">import</span> <span class="n">Adsorbate</span><span class="p">,</span> <span class="n">AdsorbateSlabConfig</span><span class="p">,</span> <span class="n">Bulk</span><span class="p">,</span> <span class="n">Slab</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">ocdata.utils</span> <span class="kn">import</span> <span class="n">DetectTrajAnomaly</span>
+<span class="kn">from</span> <span class="nn">ocdata.utils.vasp</span> <span class="kn">import</span> <span class="n">write_vasp_input_files</span>
+
+<span class="c1"># Optional - see below</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># from dscribe.descriptors import SOAP</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">pdist</span><span class="p">,</span> <span class="n">squareform</span>
+<span class="kn">import</span> <span class="nn">random</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/conda/lib/python3.9/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">8</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">sys</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="ne">----&gt; </span><span class="mi">8</span> <span class="kn">from</span> <span class="nn">ocdata.core</span> <span class="kn">import</span> <span class="n">Adsorbate</span><span class="p">,</span> <span class="n">AdsorbateSlabConfig</span><span class="p">,</span> <span class="n">Bulk</span><span class="p">,</span> <span class="n">Slab</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">import</span> <span class="nn">os</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;ocdata&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="enumerate-the-adsorbate-slab-configurations-to-run-relaxations-on">
+<h1>Enumerate the adsorbate-slab configurations to run relaxations on<a class="headerlink" href="#enumerate-the-adsorbate-slab-configurations-to-run-relaxations-on" title="Permalink to this heading">#</a></h1>
+<p>Be sure to set the path in <code class="docutils literal notranslate"><span class="pre">ocdata/configs/paths.py</span></code> to point to the correct place or pass the paths as an argument. The database pickles can be found in <code class="docutils literal notranslate"><span class="pre">ocdata/databases/pkls</span></code>. We will show one explicitly here as an example and then run all of them in an automated fashion for brevity.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bulk_src_id</span> <span class="o">=</span> <span class="s2">&quot;bw-10&quot;</span>
+<span class="n">adsorbate_smiles_nnh</span> <span class="o">=</span> <span class="s2">&quot;*N*NH&quot;</span>
+<span class="n">adsorbate_smiles_h</span> <span class="o">=</span> <span class="s2">&quot;*H&quot;</span>
+
+<span class="n">bulk</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">bulk_src_id_from_db</span> <span class="o">=</span> <span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">bulk_db_path</span> <span class="o">=</span> <span class="s2">&quot;NRR_example_bulks&quot;</span><span class="p">)</span>
+<span class="n">adsorbate_H</span> <span class="o">=</span> <span class="n">Adsorbate</span><span class="p">(</span><span class="n">adsorbate_smiles_from_db</span> <span class="o">=</span> <span class="n">adsorbate_smiles_h</span><span class="p">)</span>
+<span class="n">adsorbate_NNH</span> <span class="o">=</span> <span class="n">Adsorbate</span><span class="p">(</span><span class="n">adsorbate_smiles_from_db</span> <span class="o">=</span> <span class="n">adsorbate_smiles_nnh</span><span class="p">)</span>
+<span class="n">slab</span> <span class="o">=</span> <span class="n">Slab</span><span class="o">.</span><span class="n">from_bulk_get_specific_millers</span><span class="p">(</span><span class="n">bulk</span><span class="o">=</span> <span class="n">bulk</span><span class="p">,</span> <span class="n">specific_millers</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Perform heuristic placements</span>
+<span class="n">heuristic_adslabs</span> <span class="o">=</span> <span class="n">AdsorbateSlabConfig</span><span class="p">(</span><span class="n">slab</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adsorbate_H</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;heuristic&quot;</span><span class="p">)</span>
+
+<span class="c1"># Perform random placements</span>
+<span class="c1"># (for AdsorbML we use `num_sites = 100` but we will use 4 for brevity here)</span>
+<span class="n">random_adslabs</span> <span class="o">=</span> <span class="n">AdsorbateSlabConfig</span><span class="p">(</span><span class="n">slab</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adsorbate_H</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;random_site_heuristic_placement&quot;</span><span class="p">,</span> <span class="n">num_sites</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="run-ml-relaxations">
+<h1>Run ML relaxations:<a class="headerlink" href="#run-ml-relaxations" title="Permalink to this heading">#</a></h1>
+<p>There are 2 options for how to do this.</p>
+<ol class="arabic simple">
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">OCPCalculator</span></code> as the calculator within the ASE framework</p></li>
+<li><p>By writing objects to lmdb and relaxing them using <code class="docutils literal notranslate"><span class="pre">main.py</span></code> in the ocp repo</p></li>
+</ol>
+<p>(1) is really only adequate for small stuff and it is what I will show here, but if you plan to run many relaxations, you should definitely use (2). More details about writing lmdbs has been provided <a class="reference external" href="https://github.com/Open-Catalyst-Project/ocp/blob/main/tutorials/lmdb_dataset_creation.ipynb">here</a> - follow the IS2RS/IS2RE instructions. And more information about running relaxations once the lmdb has been written is <a class="reference external" href="https://github.com/Open-Catalyst-Project/ocp/blob/main/TRAIN.md#initial-structure-to-relaxed-structure-is2rs">here</a>.</p>
+<p>You need to provide the calculator with a path to a model checkpoint file. That can be downloaded <a class="reference external" href="https://github.com/Open-Catalyst-Project/ocp/blob/main/MODELS.md">here</a></p>
+<p>Running the model with BFGS prints at each relaxation step is a lot to print. So we will just run one to demonstrate</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">checkpoint_path</span> <span class="o">=</span> <span class="s2">&quot;/home/jovyan/shared-scratch/ocp_checkpoints/public_checkpoints/gemnet_oc_large_s2ef_all_md.pt&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">adsorbate_smiles_h</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Define the calculator</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">checkpoint_path</span><span class="p">,</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">adslab</span> <span class="o">=</span> <span class="n">adslabs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">)</span>
+<span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we will run everything but silence the BFGS print outs</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## THIS WILL TAKE ~1h for all bulks which feels too long!</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;NRR_example_bulks.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">bulks</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">bulk_ids</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">bulks</span><span class="p">)</span><span class="o">.</span><span class="n">src_id</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">bulk_src_id</span> <span class="ow">in</span> <span class="n">bulk_ids</span><span class="p">:</span> 
+    <span class="c1"># Enumerate slabs and establish adsorbates</span>
+    <span class="n">bulk</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">bulk_src_id_from_db</span> <span class="o">=</span> <span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">bulk_db_path</span> <span class="o">=</span> <span class="s2">&quot;combined_mp_oqmd_dcgat_db_2023apr07_ase3.21.pkl&quot;</span><span class="p">)</span>
+    <span class="n">slab</span> <span class="o">=</span> <span class="n">Slab</span><span class="o">.</span><span class="n">from_bulk_get_specific_millers</span><span class="p">(</span><span class="n">bulk</span><span class="o">=</span> <span class="n">bulk</span><span class="p">,</span> <span class="n">specific_millers</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Perform heuristic placements</span>
+    <span class="n">heuristic_adslabs_H</span> <span class="o">=</span> <span class="n">AdsorbateSlabConfig</span><span class="p">(</span><span class="n">slab</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adsorbate_H</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;heuristic&quot;</span><span class="p">)</span>
+    <span class="n">heuristic_adslabs_NNH</span> <span class="o">=</span> <span class="n">AdsorbateSlabConfig</span><span class="p">(</span><span class="n">slab</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adsorbate_NNH</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;heuristic&quot;</span><span class="p">)</span>
+
+    <span class="c1">#Run relaxations</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">old_stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="c1"># backup current stdout</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">devnull</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+    <span class="c1"># Set up the calculator</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_H</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">):</span>
+        <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">)</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_NNH</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">):</span>
+        <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">)</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">old_stdout</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 3/3 [06:21&lt;00:00, 127.14s/it]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="parse-the-trajectories-and-post-process">
+<h1>Parse the trajectories and post-process<a class="headerlink" href="#parse-the-trajectories-and-post-process" title="Permalink to this heading">#</a></h1>
+<p>As a post-processing step we check to see if:</p>
+<ol class="arabic simple">
+<li><p>the adsorbate desorbed</p></li>
+<li><p>the adsorbate disassociated</p></li>
+<li><p>the adsorbate intercalated</p></li>
+<li><p>the surface has changed</p></li>
+</ol>
+<p>We check these because the effect our referencing scheme and may result in erroneous energies. For (4), the relaxed surface should really be supplied as well. It will be necessary when correcting the SP / RX energies later. Since we don’t have it here, we will ommit supplying it, and the detector will instead compare the initial and final slab from the adsorbate-slab relaxation trajectory. If a relaxed slab is provided, the detector will compare it and the slab after the adsorbate-slab relaxation. The latter is more correct!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Iterate over trajs to extract results</span>
+<span class="n">min_E</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">file_outer</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="s2">&quot;data/*&quot;</span><span class="p">):</span>
+    <span class="n">ads</span> <span class="o">=</span> <span class="n">file_outer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">bulk</span> <span class="o">=</span> <span class="n">file_outer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file_outer</span><span class="si">}</span><span class="s2">/*.traj&quot;</span><span class="p">):</span>
+        <span class="n">rx_id</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">traj</span> <span class="o">=</span> <span class="n">ase</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check to see if the trajectory is anomolous</span>
+        <span class="n">detector</span> <span class="o">=</span> <span class="n">DetectTrajAnomaly</span><span class="p">(</span><span class="n">traj</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">traj</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">traj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_tags</span><span class="p">())</span>
+        <span class="n">anom</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">detector</span><span class="o">.</span><span class="n">is_adsorbate_dissociated</span><span class="p">()</span>
+            <span class="ow">or</span> <span class="n">detector</span><span class="o">.</span><span class="n">is_adsorbate_desorbed</span><span class="p">()</span>
+            <span class="ow">or</span> <span class="n">detector</span><span class="o">.</span><span class="n">has_surface_changed</span><span class="p">()</span>
+            <span class="ow">or</span> <span class="n">detector</span><span class="o">.</span><span class="n">is_adsorbate_intercalated</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">rx_energy</span> <span class="o">=</span> <span class="n">traj</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;relaxation_idx&quot;</span><span class="p">:</span> <span class="n">rx_id</span><span class="p">,</span> <span class="s2">&quot;relaxed_atoms&quot;</span><span class="p">:</span> <span class="n">traj</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="s2">&quot;relaxed_energy_ml&quot;</span><span class="p">:</span> <span class="n">rx_energy</span><span class="p">,</span> <span class="s2">&quot;anomolous&quot;</span><span class="p">:</span> <span class="n">anom</span><span class="p">})</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="o">.</span><span class="n">anomolous</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="n">min_e</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">relaxed_energy_ml</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="n">min_E</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;adsorbate&quot;</span><span class="p">:</span><span class="n">ads</span><span class="p">,</span> <span class="s2">&quot;bulk_id&quot;</span><span class="p">:</span><span class="n">bulk</span><span class="p">,</span> <span class="s2">&quot;min_E&quot;</span><span class="p">:</span> <span class="n">min_e</span><span class="p">})</span>
+
+<span class="n">df_h</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">adsorbate</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">]</span>
+<span class="n">df_nnh</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">adsorbate</span> <span class="o">==</span> <span class="s2">&quot;NNH&quot;</span><span class="p">]</span>
+<span class="n">df_flat</span> <span class="o">=</span> <span class="n">df_h</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_nnh</span><span class="p">,</span> <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;bulk_id&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper">
+<h1>Make parity plots for values obtained by ML v. reported in the paper<a class="headerlink" href="#make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add literature data to the dataframe</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;literature_data.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">literature_data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">df_all</span> <span class="o">=</span> <span class="n">df_flat</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">literature_data</span><span class="p">),</span> <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;bulk_id&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">set_figheight</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">df_all</span><span class="o">.</span><span class="n">min_E_x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_all</span><span class="o">.</span><span class="n">E_lit_H</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;*H parity&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">se</span> <span class="o">=</span> <span class="n">linregress</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="p">[</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="p">[</span>
+        <span class="o">-</span><span class="mf">3.5</span> <span class="o">*</span> <span class="n">slope</span> <span class="o">+</span> <span class="n">intercept</span><span class="p">,</span>
+        <span class="mi">2</span> <span class="o">*</span> <span class="n">slope</span> <span class="o">+</span> <span class="n">intercept</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;k--&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;y = x&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;y = </span><span class="si">{</span><span class="n">slope</span><span class="si">:</span><span class="s2">1.2f</span><span class="si">}</span><span class="s2"> x + </span><span class="si">{</span><span class="n">intercept</span><span class="si">:</span><span class="s2">1.2f</span><span class="si">}</span><span class="s2">, R-sq = </span><span class="si">{</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="si">:</span><span class="s2">1.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;square&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;E predicted OCP [eV]&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;E NRR paper [eV]&quot;</span><span class="p">);</span>
+
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">df_all</span><span class="o">.</span><span class="n">min_E_y</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_all</span><span class="o">.</span><span class="n">E_lit_NNH</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;*N*NH parity&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">se</span> <span class="o">=</span> <span class="n">linregress</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="p">[</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="p">[</span>
+        <span class="o">-</span><span class="mf">3.5</span> <span class="o">*</span> <span class="n">slope</span> <span class="o">+</span> <span class="n">intercept</span><span class="p">,</span>
+        <span class="mi">2</span> <span class="o">*</span> <span class="n">slope</span> <span class="o">+</span> <span class="n">intercept</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;k--&quot;</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;y = x&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;y = </span><span class="si">{</span><span class="n">slope</span><span class="si">:</span><span class="s2">1.2f</span><span class="si">}</span><span class="s2"> x + </span><span class="si">{</span><span class="n">intercept</span><span class="si">:</span><span class="s2">1.2f</span><span class="si">}</span><span class="s2">, R-sq = </span><span class="si">{</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span><span class="si">:</span><span class="s2">1.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;square&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">3.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;E predicted OCP [eV]&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;E NRR paper [eV]&quot;</span><span class="p">);</span>
+<span class="n">f</span><span class="o">.</span><span class="n">set_figwidth</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">set_figheight</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;parity.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="make-figure-6b-and-compare-to-literature-results">
+<h1>Make figure 6b and compare to literature results<a class="headerlink" href="#make-figure-6b-and-compare-to-literature-results" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;HER&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min_E_y</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;HER&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min_E_x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">comp</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;HER&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">composition</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span><span class="n">c</span><span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;HER&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">txt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">comp</span><span class="p">):</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;NRR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min_E_y</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;NRR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min_E_x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">comp</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;NRR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">composition</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span><span class="n">c</span><span class="o">=</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;NRR&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">txt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">comp</span><span class="p">):</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;E *N*NH predicted OCP [eV]&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;E *H predicted OCP [eV]&quot;</span><span class="p">)</span>
+
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;HER&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">E_lit_NNH</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;HER&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">E_lit_H</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">comp</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;HER&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">composition</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span><span class="n">c</span><span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;HER&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">txt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">comp</span><span class="p">):</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;NRR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">E_lit_NNH</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;NRR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">E_lit_H</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">comp</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">df_all</span><span class="o">.</span><span class="n">reaction</span> <span class="o">==</span> <span class="s2">&quot;NRR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">composition</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span><span class="n">c</span><span class="o">=</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;NRR&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">txt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">comp</span><span class="p">):</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">txt</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;E *N*NH literature [eV]&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;E *H literature [eV]&quot;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">set_figwidth</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">set_figheight</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;fig_6b.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./NRR"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../OCP-introduction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction to using OCP in molecular simulations</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../ocp-modules/ase-calculator.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ASE-compatible calculator for OCP</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#enumerate-the-adsorbate-slab-configurations-to-run-relaxations-on">Enumerate the adsorbate-slab configurations to run relaxations on</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-ml-relaxations">Run ML relaxations:</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-the-trajectories-and-post-process">Parse the trajectories and post-process</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper">Make parity plots for values obtained by ML v. reported in the paper</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figure-6b-and-compare-to-literature-results">Make figure 6b and compare to literature results</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The OCP Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
