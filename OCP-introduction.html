@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'OCP-introduction';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Introduction" href="NRR/NRR_example.html" />
+    <link rel="next" title="Using OCP to enumerate adsorbates on catalyst surfaces" href="NRR/NRR_example.html" />
     <link rel="prev" title="Utilizing large, graph-based, pre-trained machine learned potentials in atomistic simulations" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -156,15 +156,17 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to OCP</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction to using OCP in molecular simulations</a></li>
 
 
+
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Workshop</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Screening catalysts with OCP</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example.html">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
+
 
 
 
@@ -428,6 +430,7 @@ document.write(`
 </li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
 </ul>
 
             </nav>
@@ -442,6 +445,8 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-using-ocp-in-molecular-simulations">
 <h1>Introduction to using OCP in molecular simulations<a class="headerlink" href="#introduction-to-using-ocp-in-molecular-simulations" title="Permalink to this heading">#</a></h1>
+<p>To introduce OCP we start with using it to calculate adsorption energies for a simple, atomic adsorbate where we specify the site we want to the adsorption energy for. Conceptually, you do this like you would do it with density functional theory. You create a slab model for the surface, place an adsorbate on it as an initial guess, run a relaxation to get the lowest energy geometry, and then compute the adsorption energy using reference states for the adsorbate.</p>
+<p>You do have to be careful in the details though. Some OCP model/checkpoint combinations return a total energy like density functional theory would, but some return an “adsorption energy” directly. You have to know which one you are using.</p>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="calculating-adsorption-energies">
 <h1>Calculating adsorption energies<a class="headerlink" href="#calculating-adsorption-energies" title="Permalink to this heading">#</a></h1>
@@ -903,6 +908,9 @@ BFGS:    8 19:37:01        0.590290        0.0248
 </section>
 </section>
 </section>
+<section class="tex2jax_ignore mathjax_ignore" id="next-steps">
+<h1>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">#</a></h1>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -949,7 +957,7 @@ BFGS:    8 19:37:01        0.590290        0.0248
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Introduction</p>
+        <p class="prev-next-title">Using OCP to enumerate adsorbates on catalyst surfaces</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -983,6 +991,7 @@ BFGS:    8 19:37:01        0.590290        0.0248
 </li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
 </ul>
 
   </nav></div>
