@@ -498,24 +498,24 @@ H2O + * -&gt; O* + H2  re2  # Get from OCP as a direct calculation
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
-<span class="c1"># calc = OCPCalculator(checkpoint=os.path.expanduser(checkpoint), cpu=False)</span>
-<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">),</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">),</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># calc = OCPCalculator(checkpoint=os.path.expanduser(checkpoint), cpu=True)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: false
 cmd:
-  checkpoint_dir: /workspaces/tutorial/ocp-tutorial/checkpoints/2023-07-16-16-55-28
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/checkpoints/2023-07-16-21-00-48
   commit: ab7833d
   identifier: &#39;&#39;
-  logs_dir: /workspaces/tutorial/ocp-tutorial/logs/tensorboard/2023-07-16-16-55-28
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/logs/tensorboard/2023-07-16-21-00-48
   print_every: 100
-  results_dir: /workspaces/tutorial/ocp-tutorial/results/2023-07-16-16-55-28
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/results/2023-07-16-21-00-48
   seed: null
-  timestamp_id: 2023-07-16-16-55-28
+  timestamp_id: 2023-07-16-21-00-48
 dataset: null
-gpus: 0
+gpus: 1
 logger: tensorboard
 model: escn
 model_attributes:
@@ -623,20 +623,20 @@ trainer: forces
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Step     Time          Energy         fmax
-BFGS:    0 16:56:12        1.716396        1.6925
-BFGS:    1 16:56:14        1.560565        0.9671
-BFGS:    2 16:56:15        1.398855        0.7129
-BFGS:    3 16:56:17        1.266537        0.7936
-BFGS:    4 16:56:18        0.865641        0.7157
-BFGS:    5 16:56:20        0.814758        0.4931
-BFGS:    6 16:56:21        0.785252        0.5990
-BFGS:    7 16:56:23        0.771326        0.7512
-BFGS:    8 16:56:24        0.752816        0.5218
-BFGS:    9 16:56:25        0.740425        0.1362
-BFGS:   10 16:56:27        0.734420        0.0393
+BFGS:    0 21:00:58        1.731244        1.6980
+BFGS:    1 21:00:59        1.530763        0.9678
+BFGS:    2 21:00:59        1.354577        0.7142
+BFGS:    3 21:00:59        1.302485        0.7958
+BFGS:    4 21:00:59        0.870476        0.7217
+BFGS:    5 21:00:59        0.814818        0.4914
+BFGS:    6 21:00:59        0.785898        0.5975
+BFGS:    7 21:00:59        0.773748        0.7437
+BFGS:    8 21:01:00        0.757873        0.5324
+BFGS:    9 21:01:00        0.746731        0.1296
+BFGS:   10 21:01:00        0.738483        0.0418
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.2955802369117735
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.2915166306495665
 </pre></div>
 </div>
 </div>
@@ -656,7 +656,7 @@ BFGS:   10 16:56:27        0.734420        0.0393
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/a1b62b2acb7777bfed0c8720a2b32891be0c38a930eef96f1df719d2ddc2c7e3.png" src="_images/a1b62b2acb7777bfed0c8720a2b32891be0c38a930eef96f1df719d2ddc2c7e3.png" />
+<img alt="_images/d64bed4caa9076620e261b435441a05405ce2f6db785930bb17981265be21c01.png" src="_images/d64bed4caa9076620e261b435441a05405ce2f6db785930bb17981265be21c01.png" />
 </div>
 </div>
 <p>How did we do? We need a reference point. In the paper below, there is an atomic adsorption energy for O on Pt(111) of about -4.264 eV. This is for the reaction O + * -&gt; O*. To convert this to the dissociative adsorption energy, we have to add the reaction:</p>
@@ -757,16 +757,16 @@ O -&gt; 1/2 O2         re3 = -2.58 eV
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Step     Time          Energy         fmax
-BFGS:    0 16:56:54        0.604792        0.3345
-BFGS:    1 16:56:55        0.610378        0.2918
-BFGS:    2 16:56:56        0.603561        0.0854
-BFGS:    3 16:56:57        0.606235        0.0700
-BFGS:    4 16:56:58        0.595595        0.0835
-BFGS:    5 16:56:59        0.598752        0.0855
-BFGS:    6 16:57:01        0.595393        0.0797
-BFGS:    7 16:57:02        0.597189        0.0736
-BFGS:    8 16:57:03        0.594987        0.0268
--5.015013382434844
+BFGS:    0 21:01:01        0.609397        0.3370
+BFGS:    1 21:01:01        0.612063        0.2935
+BFGS:    2 21:01:01        0.602140        0.0915
+BFGS:    3 21:01:01        0.595091        0.0732
+BFGS:    4 21:01:01        0.597267        0.0880
+BFGS:    5 21:01:02        0.594175        0.0841
+BFGS:    6 21:01:02        0.595432        0.0670
+BFGS:    7 21:01:02        0.592953        0.0700
+BFGS:    8 21:01:02        0.593922        0.0375
+-5.0160782790184015
 </pre></div>
 </div>
 </div>
@@ -826,46 +826,46 @@ BFGS:    8 16:57:03        0.594987        0.0268
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cu
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:11&lt;00:00, 11.28s/it]
-100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:05&lt;00:00,  5.62s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.38s/it]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.46it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ag
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:10&lt;00:00, 10.14s/it]
-100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:04&lt;00:00,  4.50s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.57s/it]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.44it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pd
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:10&lt;00:00, 10.12s/it]
-100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:06&lt;00:00,  6.72s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.24s/it]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.45it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pt
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:10&lt;00:00, 10.12s/it]
-100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:03&lt;00:00,  3.41s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.24s/it]
+100%|██████████| 1/1 [00:00&lt;00:00,  2.45it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Rh
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:04&lt;00:00,  4.49s/it]
-100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:03&lt;00:00,  3.37s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  2.45it/s]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.84it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ir
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:04&lt;00:00,  4.49s/it]
-100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:04&lt;00:00,  4.50s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  1.84it/s]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.85it/s]
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Elapsed time = 78.77490043640137 seconds&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Elapsed time = 9.982844591140747 seconds&#39;
 </pre></div>
 </div>
 </div>
@@ -882,7 +882,7 @@ BFGS:    8 16:57:03        0.594987        0.0268
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/6e26ddd51522368afe976237e7f0cd6ade4bea7f4302fd6b3430404034454fb4.png" src="_images/6e26ddd51522368afe976237e7f0cd6ade4bea7f4302fd6b3430404034454fb4.png" />
+<img alt="_images/fd4304b7cc10b3e3a96c954b913ba1a698fb58297a7b77183287559a4c07cf69.png" src="_images/fd4304b7cc10b3e3a96c954b913ba1a698fb58297a7b77183287559a4c07cf69.png" />
 </div>
 </div>
 <p>Next we compare the correlation between the hcp and fcc sites. Here we see the same trends. The data falls below the parity line because the hcp sites tend to be a little weaker binding than the fcc sites.</p>
@@ -892,13 +892,13 @@ BFGS:    8 16:57:03        0.594987        0.0268
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;hcp&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;fcc&#39;</span><span class="p">],</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;k-&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$H_{ads, hcp}$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$H_{ads,fcc}$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$H_{ads, fcc}$&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;DFT (PBE)&#39;</span><span class="p">,</span> <span class="s1">&#39;OCP&#39;</span><span class="p">]);</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/5dc597e390b8275c5c9fbb889b44f8a8efc38cf197687a9e9674557418db99f5.png" src="_images/5dc597e390b8275c5c9fbb889b44f8a8efc38cf197687a9e9674557418db99f5.png" />
+<img alt="_images/cbd8c9d8b365826cdace57ba879133117999d840f3e7949c27e83b16513f6a6e.png" src="_images/cbd8c9d8b365826cdace57ba879133117999d840f3e7949c27e83b16513f6a6e.png" />
 </div>
 </div>
 <section id="id1">
