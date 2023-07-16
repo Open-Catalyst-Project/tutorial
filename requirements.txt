@@ -3,4 +3,3 @@ matplotlib
 numpy
 numpydoc
 ghp-import
-git+https://github.com/Open-Catalyst-Project/ocp.git
