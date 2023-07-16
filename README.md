@@ -1,6 +1,6 @@
 # ocp-tutorial
 
-Tutorial on using OCP.
+This tutorial was designed for an ACS workshop at the Fall ACS meeting in San Francisco on August 16, 2023. It will be a work in progress until then.
 
 ## Usage
 
@@ -22,7 +22,7 @@ A limitation of this is Codespaces does not currently provide GPUs.
 
 ## Contributors
 
-We welcome and recognize all contributions. You can see a list of current contributors in the [contributors tab](https://github.com/jkitchin/ocp_tutorial/graphs/contributors).
+We welcome and recognize all contributions. You can see a list of current contributors in the [contributors tab](https://github.com/Open-Catalyst-Project/tutorial/graphs/contributors).
 
 ## Credits
 
