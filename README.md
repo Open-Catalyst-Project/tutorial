@@ -16,7 +16,7 @@ This repo provide a Codespace for running OCP. One checkpoint is available at /h
 
 Launch jupyter lab from a Terminal in the Codespace like this:
 
-jupyter lab --ServerApp.ip="" --ServerApp.allow_origin=""
+jupyter lab --ServerApp.ip="" --ServerApp.allow_origin="*"
 
 in the VS Code terminal. Then you can click on the link in the terminal to open it in a new tab. It is also possible to run the examples in the VSCode browser tool.
 
