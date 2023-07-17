@@ -172,6 +172,7 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -428,6 +429,7 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-all-the-systems">Run all the systems</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#this-uses-a-lot-of-memory">This uses a lot of memory.</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-the-trajectories-and-post-process">Parse the trajectories and post-process</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper">Make parity plots for values obtained by ML v. reported in the paper</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figure-6b-and-compare-to-literature-results">Make figure 6b and compare to literature results</a></li>
@@ -460,15 +462,12 @@ remote: Enumerating objects: 1741, done.
 remote: Counting objects: 100% (433/433), done.
 remote: Compressing objects: 100% (212/212), done.
 remote: Total 1741 (delta 260), reused 241 (delta 221), pack-reused 1308
-Receiving objects: 100% (1741/1741), 36.87 MiB | 11.13 MiB/s, done.
+Receiving objects: 100% (1741/1741), 36.87 MiB | 1.37 MiB/s, done.
 Resolving deltas: 100% (1081/1081), done.
-Obtaining file:///home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/ocdata
+Updating files: 100% (47/47), done.
+Obtaining file:///home/mambauser/tutorial/ocp-tutorial/NRR/ocdata
   Preparing metadata (setup.py) ... ?25ldone
 ?25hInstalling collected packages: ocdata
-  Attempting uninstall: ocdata
-    Found existing installation: ocdata 0.0.1
-    Uninstalling ocdata-0.0.1:
-      Successfully uninstalled ocdata-0.0.1
   Running setup.py develop for ocdata
 Successfully installed ocdata-0.2.0
 </pre></div>
@@ -518,6 +517,13 @@ Requirement already satisfied: mpmath&gt;=0.19 in /opt/conda/lib/python3.9/site-
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/conda/lib/python3.9/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+Matplotlib is building the font cache; this may take a moment.
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="introduction">
@@ -538,7 +544,7 @@ Requirement already satisfied: mpmath&gt;=0.19 in /opt/conda/lib/python3.9/site-
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/ocdata/ocdata/databases/pkls/adsorbates.pkl&#39;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/home/mambauser/Open-Catalyst-Dataset/ocdata/databases/pkls/adsorbates.pkl&#39;)
 </pre></div>
 </div>
 </div>
@@ -561,12 +567,12 @@ Requirement already satisfied: mpmath&gt;=0.19 in /opt/conda/lib/python3.9/site-
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Slab: (Ag36Pd12, (1, 1, 1), 0.16666666666666657, True)]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Slab: (Ag36Pd12, (1, 1, 1), 0.1666666666666667, True)]
 </pre></div>
 </div>
 </div>
 </div>
-<p>We now need to generate potential placements. We use two kinds of guesses, a heuristic and a random approach.</p>
+<p>We now need to generate potential placements. We use two kinds of guesses, a heuristic and a random approach. This cell generates 13 potential adsorption geometries.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Perform heuristic placements</span>
@@ -607,7 +613,7 @@ Requirement already satisfied: mpmath&gt;=0.19 in /opt/conda/lib/python3.9/site-
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a5d2b97c567c4f4fcdd82d98c2d68596aa0f07a87fd22f93563d5491e815d8ac.png" src="../_images/a5d2b97c567c4f4fcdd82d98c2d68596aa0f07a87fd22f93563d5491e815d8ac.png" />
+<img alt="../_images/d1791de098957f107d97b4674146d8d69f7e6c12dd5ab74fa2af99f5ff723fe6.png" src="../_images/d1791de098957f107d97b4674146d8d69f7e6c12dd5ab74fa2af99f5ff723fe6.png" />
 </div>
 </div>
 <section id="run-an-ml-relaxation">
@@ -634,14 +640,14 @@ Requirement already satisfied: mpmath&gt;=0.19 in /opt/conda/lib/python3.9/site-
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: false
 cmd:
-  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/checkpoints/2023-07-16-21-30-40
+  checkpoint_dir: /home/mambauser/tutorial/ocp-tutorial/NRR/checkpoints/2023-07-16-23-13-04
   commit: ab7833d
   identifier: &#39;&#39;
-  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/logs/tensorboard/2023-07-16-21-30-40
+  logs_dir: /home/mambauser/tutorial/ocp-tutorial/NRR/logs/tensorboard/2023-07-16-23-13-04
   print_every: 100
-  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/results/2023-07-16-21-30-40
+  results_dir: /home/mambauser/tutorial/ocp-tutorial/NRR/results/2023-07-16-23-13-04
   seed: null
-  timestamp_id: 2023-07-16-21-30-40
+  timestamp_id: 2023-07-16-23-13-04
 dataset: null
 gpus: 0
 logger: tensorboard
@@ -740,14 +746,44 @@ trainer: forces
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">adslab</span> <span class="o">=</span> <span class="n">adslabs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="ne">NameError</span>: name &#39;time&#39; is not defined
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Step     Time          Energy         fmax
+BFGS:    0 23:13:00        1.030167        1.2075
+BFGS:    1 23:13:06        0.986077        1.0974
+BFGS:    2 23:13:13        0.970674        1.8434
+BFGS:    3 23:13:19        0.863732        0.3464
+BFGS:    4 23:13:25        0.857940        0.2209
+BFGS:    5 23:13:30        0.856972        0.3383
+BFGS:    6 23:13:36        0.848904        0.4230
+BFGS:    7 23:13:42        0.830491        0.3519
+BFGS:    8 23:13:47        0.825890        0.1785
+BFGS:    9 23:13:53        0.821260        0.1372
+BFGS:   10 23:13:59        0.818889        0.1592
+BFGS:   11 23:14:05        0.812978        0.2002
+BFGS:   12 23:14:10        0.806631        0.2738
+BFGS:   13 23:14:16        0.801583        0.3260
+BFGS:   14 23:14:21        0.791289        0.3024
+BFGS:   15 23:14:27        0.769616        0.2470
+BFGS:   16 23:14:32        0.755130        0.3948
+BFGS:   17 23:14:38        0.723716        0.5337
+BFGS:   18 23:14:44        0.653325        0.6335
+BFGS:   19 23:14:50        0.565822        0.6483
+BFGS:   20 23:14:56        0.476601        0.5957
+BFGS:   21 23:15:01        0.411204        0.6125
+BFGS:   22 23:15:08        0.388851        0.4670
+BFGS:   23 23:15:13        0.363892        0.3224
+BFGS:   24 23:15:19        0.352147        0.3982
+BFGS:   25 23:15:24        0.346200        0.3968
+BFGS:   26 23:15:30        0.334573        0.3370
+BFGS:   27 23:15:35        0.317498        0.2394
+BFGS:   28 23:15:40        0.298247        0.2253
+BFGS:   29 23:15:46        0.288395        0.2006
+BFGS:   30 23:15:51        0.284532        0.1768
+BFGS:   31 23:15:57        0.278942        0.1507
+BFGS:   32 23:16:02        0.278030        0.0944
+BFGS:   33 23:16:08        0.278676        0.0710
+BFGS:   34 23:16:14        0.275950        0.0549
+BFGS:   35 23:16:19        0.277190        0.0421
+Elapsed time 219.6 seconds
 </pre></div>
 </div>
 </div>
@@ -768,14 +804,44 @@ trainer: forces
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;NRR_example_bulks.pkl&quot;</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">bulks</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">bulks</span>
-
-<span class="ne">NameError</span>: name &#39;pickle&#39; is not defined
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[{&#39;atoms&#39;: Atoms(symbols=&#39;CuPd3&#39;, pbc=True, cell=[3.91276645, 3.91276645, 3.91276645], calculator=SinglePointDFTCalculator(...)),
+  &#39;src_id&#39;: &#39;oqmd-349719&#39;},
+ {&#39;atoms&#39;: Atoms(symbols=&#39;Pd3Ag&#39;, pbc=True, cell=[4.02885979, 4.02885979, 4.02885979], calculator=SinglePointDFTCalculator(...)),
+  &#39;src_id&#39;: &#39;oqmd-345911&#39;},
+ {&#39;atoms&#39;: Atoms(symbols=&#39;ScPd3&#39;, pbc=True, cell=[4.04684963, 4.04684963, 4.04684963], initial_charges=..., initial_magmoms=..., momenta=..., tags=..., calculator=SinglePointCalculator(...)),
+  &#39;src_id&#39;: &#39;mp-2677&#39;},
+ {&#39;atoms&#39;: Atoms(symbols=&#39;Mo3Pd&#39;, pbc=True, cell=[3.96898192, 3.96898192, 3.96898192], initial_charges=..., initial_magmoms=..., momenta=..., tags=..., calculator=SinglePointCalculator(...)),
+  &#39;src_id&#39;: &#39;mp-1186014&#39;},
+ {&#39;atoms&#39;: Atoms(symbols=&#39;Ag3Pd&#39;, pbc=True, cell=[4.14093081, 4.14093081, 4.14093081], calculator=SinglePointCalculator(...)),
+  &#39;src_id&#39;: &#39;oqmd-343039&#39;},
+ {&#39;src_id&#39;: &#39;oqmd-348629&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;Ag3Cu&#39;, pbc=True, cell=[4.09439099, 4.09439099, 4.09439099], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-343006&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;Ag3Mo&#39;, pbc=True, cell=[4.1665424, 4.1665424, 4.1665424], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-349813&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;AgCu3&#39;, pbc=True, cell=[3.82618693, 3.82618693, 3.82618693], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-347528&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;Cu3Ru&#39;, pbc=True, cell=[3.72399424, 3.72399424, 3.72399424], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-344251&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;PdTa3&#39;, pbc=True, cell=[4.13568646, 4.13568646, 4.13568646], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-343394&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;AgMo3&#39;, pbc=True, cell=[4.00594441, 4.00594441, 4.00594441], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-344635&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;Mo3Ru&#39;, pbc=True, cell=[3.95617571, 3.95617571, 3.95617571], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-344237&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;MoPd3&#39;, pbc=True, cell=[3.96059535, 3.96059535, 3.96059535], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-346818&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;Pd3Ru&#39;, pbc=True, cell=[3.93112559, 3.93112559, 3.93112559], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-349496&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;Pd3Ta&#39;, pbc=True, cell=[3.9907085, 3.9907085, 3.9907085], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-343615&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;MoRu3&#39;, pbc=True, cell=[3.85915122, 3.85915122, 3.85915122], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-348366&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;AgTa3&#39;, pbc=True, cell=[4.1730103, 4.1730103, 4.1730103], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-345352&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;AuHf3&#39;, pbc=True, cell=[4.36653536, 4.36653536, 4.36653536], calculator=SinglePointDFTCalculator(...))},
+ {&#39;src_id&#39;: &#39;oqmd-346653&#39;,
+  &#39;atoms&#39;: Atoms(symbols=&#39;AgHf3&#39;, pbc=True, cell=[4.39618436, 4.39618436, 4.39618436], calculator=SinglePointDFTCalculator(...))}]
 </pre></div>
 </div>
 </div>
@@ -784,36 +850,19 @@ trainer: forces
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bulk_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;src_id&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">bulks</span><span class="p">]</span>
-<span class="n">bulk_ids</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;oqmd-349719&#39;,
- &#39;oqmd-345911&#39;,
- &#39;mp-2677&#39;,
- &#39;mp-1186014&#39;,
- &#39;oqmd-343039&#39;,
- &#39;oqmd-348629&#39;,
- &#39;oqmd-343006&#39;,
- &#39;oqmd-349813&#39;,
- &#39;oqmd-347528&#39;,
- &#39;oqmd-344251&#39;,
- &#39;oqmd-343394&#39;,
- &#39;oqmd-344635&#39;,
- &#39;oqmd-344237&#39;,
- &#39;oqmd-346818&#39;,
- &#39;oqmd-349496&#39;,
- &#39;oqmd-343615&#39;,
- &#39;oqmd-348366&#39;,
- &#39;oqmd-345352&#39;,
- &#39;oqmd-346653&#39;]
 </pre></div>
 </div>
 </div>
 </div>
 <p>In theory you would run all of these, but it takes about an hour. We just run one here. We provide the relaxation logs and trajectories in the repo for the next step.</p>
 <p>These steps are embarrassingly parallel, and can be launched that way to speed things up. The only thing you need to watch is that you don’t exceed the available RAM, which will cause the Jupyter kernel to crash.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="this-uses-a-lot-of-memory">
+<h1>This uses a lot of memory.<a class="headerlink" href="#this-uses-a-lot-of-memory" title="Permalink to this heading">#</a></h1>
+<p>I stopped it at 32GB</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
@@ -824,7 +873,7 @@ trainer: forces
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running </span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
     <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
-    <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
     
 <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -842,7 +891,7 @@ trainer: forces
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">heuristic_adslabs_H</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> H slabs to compute for </span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">heuristic_adslabs_NNH</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> NNH slabs to compute for </span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="c1"># Set up the calculator</span>
     <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_H</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="n">adslab</span><span class="p">)]</span>
@@ -852,13 +901,13 @@ trainer: forces
 
 
 <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">4</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">relax_slab</span><span class="p">)(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span>
+<span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">2</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">relax_slab</span><span class="p">)(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds elapsed&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00&lt;00:00,  1.05it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|████████████████████████████████████████████████████████████████| 1/1 [00:01&lt;00:00,  1.06s/it]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9 H slabs to compute for oqmd-345911
@@ -867,12 +916,54 @@ trainer: forces
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">37</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span>         <span class="n">args</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;NNH&#39;</span><span class="p">,</span> <span class="n">adslab</span><span class="p">)]</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="ne">---&gt; </span><span class="mi">37</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">2</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">relax_slab</span><span class="p">)(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds elapsed&#39;</span><span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/joblib/parallel.py:1944,</span> in <span class="ni">Parallel.__call__</span><span class="nt">(self, iterable)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1938</span> <span class="c1"># The first item from the output is blank, but it makes the interpreter</span>
+<span class="g g-Whitespace">   </span><span class="mi">1939</span> <span class="c1"># progress until it enters the Try/Except block of the generator and</span>
+<span class="g g-Whitespace">   </span><span class="mi">1940</span> <span class="c1"># reach the first `yield` statement. This starts the aynchronous</span>
+<span class="g g-Whitespace">   </span><span class="mi">1941</span> <span class="c1"># dispatch of the tasks to the workers.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1942</span> <span class="nb">next</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1944</span> <span class="k">return</span> <span class="n">output</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_generator</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/joblib/parallel.py:1587,</span> in <span class="ni">Parallel._get_outputs</span><span class="nt">(self, iterator, pre_dispatch)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1584</span>     <span class="k">yield</span>
+<span class="g g-Whitespace">   </span><span class="mi">1586</span>     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">retrieval_context</span><span class="p">():</span>
+<span class="ne">-&gt; </span><span class="mi">1587</span>         <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retrieve</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1589</span> <span class="k">except</span> <span class="ne">GeneratorExit</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1590</span>     <span class="c1"># The generator has been garbage collected before being fully</span>
+<span class="g g-Whitespace">   </span><span class="mi">1591</span>     <span class="c1"># consumed. This aborts the remaining tasks if possible and warn</span>
+<span class="g g-Whitespace">   </span><span class="mi">1592</span>     <span class="c1"># the user if necessary.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1593</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_exception</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/joblib/parallel.py:1699,</span> in <span class="ni">Parallel._retrieve</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1694</span> <span class="c1"># If the next job is not ready for retrieval yet, we just wait for</span>
+<span class="g g-Whitespace">   </span><span class="mi">1695</span> <span class="c1"># async callbacks to progress.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1696</span> <span class="k">if</span> <span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span>
+<span class="g g-Whitespace">   </span><span class="mi">1697</span>     <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_status</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1698</span>         <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span> <span class="o">==</span> <span class="n">TASK_PENDING</span><span class="p">)):</span>
+<span class="ne">-&gt; </span><span class="mi">1699</span>     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1700</span>     <span class="k">continue</span>
+<span class="g g-Whitespace">   </span><span class="mi">1702</span> <span class="c1"># We need to be careful: the job list can be filling up as</span>
+<span class="g g-Whitespace">   </span><span class="mi">1703</span> <span class="c1"># we empty it and Python list are not thread-safe by</span>
+<span class="g g-Whitespace">   </span><span class="mi">1704</span> <span class="c1"># default hence the use of the lock</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
 </div>
 </div>
+</div>
+<p>The goal here is to relax each candidate adsorption geometry and save the results in a trajectory file we will analyze later. Each trajectory file will have the geometry and final energy of the relaxed structure. This is a quite time-consuming task.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Probably delete this cell</span>
-
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># You need at least 16GB RAM for this</span>
+<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="k">for</span> <span class="n">bulk_src_id</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">bulk_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]):</span> 
@@ -892,17 +983,33 @@ trainer: forces
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">heuristic_adslabs_NNH</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> NNH slabs to compute for </span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 
     <span class="c1"># Set up the calculator</span>
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_H</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_H</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]):</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
-        <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  Elapsed time: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds for data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_NNH</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_NNH</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]):</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
-        <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  Elapsed time: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds for data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                        | 0/1 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9 H slabs to compute for oqmd-345911
+9 NNH slabs to compute for oqmd-345911
+Running data/oqmd-345911_H/0
 </pre></div>
 </div>
 </div>
@@ -951,20 +1058,6 @@ trainer: forces
 <span class="n">df_h</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">adsorbate</span> <span class="o">==</span> <span class="s2">&quot;H&quot;</span><span class="p">]</span>
 <span class="n">df_nnh</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">adsorbate</span> <span class="o">==</span> <span class="s2">&quot;NNH&quot;</span><span class="p">]</span>
 <span class="n">df_flat</span> <span class="o">=</span> <span class="n">df_h</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_nnh</span><span class="p">,</span> <span class="n">on</span> <span class="o">=</span> <span class="s2">&quot;bulk_id&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Iterate over trajs to extract results</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">min_E</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="k">for</span> <span class="n">file_outer</span> <span class="ow">in</span> <span class="n">glob</span><span class="p">(</span><span class="s2">&quot;data/*&quot;</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">ads</span> <span class="o">=</span> <span class="n">file_outer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">bulk</span> <span class="o">=</span> <span class="n">file_outer</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="ne">NameError</span>: name &#39;glob&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1049,6 +1142,17 @@ trainer: forces
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/conda/lib/python3.9/site-packages/scipy/stats/_stats_mstats_common.py:182: RuntimeWarning: invalid value encountered in scalar divide
+  slope = ssxym / ssxm
+/opt/conda/lib/python3.9/site-packages/scipy/stats/_stats_mstats_common.py:196: RuntimeWarning: invalid value encountered in sqrt
+  t = r * np.sqrt(df / ((1.0 - r + TINY)*(1.0 + r + TINY)))
+/opt/conda/lib/python3.9/site-packages/scipy/stats/_stats_mstats_common.py:199: RuntimeWarning: invalid value encountered in scalar divide
+  slope_stderr = np.sqrt((1 - r**2) * ssym / ssxm / df)
+</pre></div>
+</div>
+<img alt="../_images/d0dcaa0afc821335d6169da157fb8897e4ba21d3e794ec4003737a0fb29fbf1c.png" src="../_images/d0dcaa0afc821335d6169da157fb8897e4ba21d3e794ec4003737a0fb29fbf1c.png" />
+</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="make-figure-6b-and-compare-to-literature-results">
@@ -1099,6 +1203,9 @@ trainer: forces
 <span class="n">f</span><span class="o">.</span><span class="n">set_figheight</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/39b6f636c2eb4ea0dec79e0754c0d0e91db3baf1e636a3f0b85dcc792244c120.png" src="../_images/39b6f636c2eb4ea0dec79e0754c0d0e91db3baf1e636a3f0b85dcc792244c120.png" />
 </div>
 </div>
 </section>
@@ -1180,6 +1287,7 @@ trainer: forces
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-all-the-systems">Run all the systems</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#this-uses-a-lot-of-memory">This uses a lot of memory.</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-the-trajectories-and-post-process">Parse the trajectories and post-process</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper">Make parity plots for values obtained by ML v. reported in the paper</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figure-6b-and-compare-to-literature-results">Make figure 6b and compare to literature results</a></li>
