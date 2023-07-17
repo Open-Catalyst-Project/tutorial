@@ -22,6 +22,21 @@ in the VS Code terminal. Then you can click on the link in the terminal to open 
 
 A limitation of this is Codespaces does not currently provide GPUs. 
 
+### On your own computer
+
+There is a Dockerfile at .devcontainer/Dockerfile. You can build it from the root of the repository like this.
+
+`docker build -t ocp-tutorial .devcontainer`
+
+Then run the image like:
+
+`docker run -it --rm -p 8888:8888 -v "${PWD}":/home/mambauser/tutorial ocp-tutorial jupyter-lab --ip=0.0.0.0 --no-browser`
+
+Open the url that looks like: http://127.0.0.1:8888/lab?token=...
+
+and browse to the tutorial folder. You can run the notebooks from there.
+
+
 ## Contributors
 
 We welcome and recognize all contributions. You can see a list of current contributors in the [contributors tab](https://github.com/Open-Catalyst-Project/tutorial/graphs/contributors).
