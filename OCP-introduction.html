@@ -172,7 +172,6 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
-
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -710,6 +709,9 @@ O -&gt; 1/2 O2         re3 = -2.58 eV
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;energies.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">edata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;structures.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">sdata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
     
 <span class="n">edata</span><span class="p">[</span><span class="s1">&#39;Pt&#39;</span><span class="p">][</span><span class="s1">&#39;O&#39;</span><span class="p">][</span><span class="s1">&#39;fcc&#39;</span><span class="p">][</span><span class="s1">&#39;0.25&#39;</span><span class="p">]</span>
 </pre></div>

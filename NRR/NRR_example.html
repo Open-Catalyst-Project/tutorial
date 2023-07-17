@@ -172,7 +172,6 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
-
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul class="nav bd-sidenav">
@@ -429,7 +428,6 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-all-the-systems">Run all the systems</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#this-uses-a-lot-of-memory">This uses a lot of memory.</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-the-trajectories-and-post-process">Parse the trajectories and post-process</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper">Make parity plots for values obtained by ML v. reported in the paper</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figure-6b-and-compare-to-literature-results">Make figure 6b and compare to literature results</a></li>
@@ -447,7 +445,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="using-ocp-to-enumerate-adsorbates-on-catalyst-surfaces">
 <h1>Using OCP to enumerate adsorbates on catalyst surfaces<a class="headerlink" href="#using-ocp-to-enumerate-adsorbates-on-catalyst-surfaces" title="Permalink to this heading">#</a></h1>
-<p>In the previous example, we constructed slab models of adsorbates on desired sites. Here we leverage code to automate this process.</p>
+<p>In the previous example, we constructed slab models of adsorbates on desired sites. Here we leverage code to automate this process. The goal in this section is to generate candidate structures, compute energetics, and then</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>rm<span class="w"> </span>-fr<span class="w"> </span>ocdata
@@ -856,109 +854,6 @@ Elapsed time 219.6 seconds
 </div>
 <p>In theory you would run all of these, but it takes about an hour. We just run one here. We provide the relaxation logs and trajectories in the repo for the next step.</p>
 <p>These steps are embarrassingly parallel, and can be launched that way to speed things up. The only thing you need to watch is that you don’t exceed the available RAM, which will cause the Jupyter kernel to crash.</p>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="this-uses-a-lot-of-memory">
-<h1>This uses a lot of memory.<a class="headerlink" href="#this-uses-a-lot-of-memory" title="Permalink to this heading">#</a></h1>
-<p>I stopped it at 32GB</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-
-<span class="k">def</span> <span class="nf">relax_slab</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">adslab</span> <span class="o">=</span> <span class="n">args</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running </span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
-    <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
-    <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
-    
-<span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
-
-<span class="k">for</span> <span class="n">bulk_src_id</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">bulk_ids</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]):</span> 
-    <span class="c1"># Enumerate slabs and establish adsorbates</span>
-    <span class="n">bulk</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">bulk_src_id_from_db</span><span class="o">=</span><span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">bulk_db_path</span><span class="o">=</span><span class="s2">&quot;NRR_example_bulks.pkl&quot;</span><span class="p">)</span>
-    <span class="n">slab</span> <span class="o">=</span> <span class="n">Slab</span><span class="o">.</span><span class="n">from_bulk_get_specific_millers</span><span class="p">(</span><span class="n">bulk</span><span class="o">=</span> <span class="n">bulk</span><span class="p">,</span> <span class="n">specific_millers</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-
-    <span class="c1"># Perform heuristic placements</span>
-    <span class="n">heuristic_adslabs_H</span> <span class="o">=</span> <span class="n">AdsorbateSlabConfig</span><span class="p">(</span><span class="n">slab</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adsorbate_H</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;heuristic&quot;</span><span class="p">)</span>
-    <span class="n">heuristic_adslabs_NNH</span> <span class="o">=</span> <span class="n">AdsorbateSlabConfig</span><span class="p">(</span><span class="n">slab</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adsorbate_NNH</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;heuristic&quot;</span><span class="p">)</span>
-    
-    <span class="c1">#Run relaxations</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">heuristic_adslabs_H</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> H slabs to compute for </span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">heuristic_adslabs_NNH</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> NNH slabs to compute for </span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="c1"># Set up the calculator</span>
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_H</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">):</span>
-        <span class="n">args</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="n">adslab</span><span class="p">)]</span>
-
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_NNH</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">):</span>
-        <span class="n">args</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;NNH&#39;</span><span class="p">,</span> <span class="n">adslab</span><span class="p">)]</span>
-
-
-<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">2</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">relax_slab</span><span class="p">)(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds elapsed&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|████████████████████████████████████████████████████████████████| 1/1 [00:01&lt;00:00,  1.06s/it]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9 H slabs to compute for oqmd-345911
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">37</span>
-<span class="g g-Whitespace">     </span><span class="mi">33</span>         <span class="n">args</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;NNH&#39;</span><span class="p">,</span> <span class="n">adslab</span><span class="p">)]</span>
-<span class="g g-Whitespace">     </span><span class="mi">36</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="ne">---&gt; </span><span class="mi">37</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="mi">2</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">relax_slab</span><span class="p">)(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds elapsed&#39;</span><span class="p">)</span>
-
-<span class="nn">File /opt/conda/lib/python3.9/site-packages/joblib/parallel.py:1944,</span> in <span class="ni">Parallel.__call__</span><span class="nt">(self, iterable)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1938</span> <span class="c1"># The first item from the output is blank, but it makes the interpreter</span>
-<span class="g g-Whitespace">   </span><span class="mi">1939</span> <span class="c1"># progress until it enters the Try/Except block of the generator and</span>
-<span class="g g-Whitespace">   </span><span class="mi">1940</span> <span class="c1"># reach the first `yield` statement. This starts the aynchronous</span>
-<span class="g g-Whitespace">   </span><span class="mi">1941</span> <span class="c1"># dispatch of the tasks to the workers.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1942</span> <span class="nb">next</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1944</span> <span class="k">return</span> <span class="n">output</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_generator</span> <span class="k">else</span> <span class="nb">list</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
-
-<span class="nn">File /opt/conda/lib/python3.9/site-packages/joblib/parallel.py:1587,</span> in <span class="ni">Parallel._get_outputs</span><span class="nt">(self, iterator, pre_dispatch)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1584</span>     <span class="k">yield</span>
-<span class="g g-Whitespace">   </span><span class="mi">1586</span>     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="o">.</span><span class="n">retrieval_context</span><span class="p">():</span>
-<span class="ne">-&gt; </span><span class="mi">1587</span>         <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retrieve</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1589</span> <span class="k">except</span> <span class="ne">GeneratorExit</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1590</span>     <span class="c1"># The generator has been garbage collected before being fully</span>
-<span class="g g-Whitespace">   </span><span class="mi">1591</span>     <span class="c1"># consumed. This aborts the remaining tasks if possible and warn</span>
-<span class="g g-Whitespace">   </span><span class="mi">1592</span>     <span class="c1"># the user if necessary.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1593</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_exception</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="nn">File /opt/conda/lib/python3.9/site-packages/joblib/parallel.py:1699,</span> in <span class="ni">Parallel._retrieve</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1694</span> <span class="c1"># If the next job is not ready for retrieval yet, we just wait for</span>
-<span class="g g-Whitespace">   </span><span class="mi">1695</span> <span class="c1"># async callbacks to progress.</span>
-<span class="g g-Whitespace">   </span><span class="mi">1696</span> <span class="k">if</span> <span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span>
-<span class="g g-Whitespace">   </span><span class="mi">1697</span>     <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_jobs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_status</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1698</span>         <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span> <span class="o">==</span> <span class="n">TASK_PENDING</span><span class="p">)):</span>
-<span class="ne">-&gt; </span><span class="mi">1699</span>     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1700</span>     <span class="k">continue</span>
-<span class="g g-Whitespace">   </span><span class="mi">1702</span> <span class="c1"># We need to be careful: the job list can be filling up as</span>
-<span class="g g-Whitespace">   </span><span class="mi">1703</span> <span class="c1"># we empty it and Python list are not thread-safe by</span>
-<span class="g g-Whitespace">   </span><span class="mi">1704</span> <span class="c1"># default hence the use of the lock</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
-</pre></div>
-</div>
-</div>
-</div>
 <p>The goal here is to relax each candidate adsorption geometry and save the results in a trajectory file we will analyze later. Each trajectory file will have the geometry and final energy of the relaxed structure. This is a quite time-consuming task.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1010,6 +905,749 @@ Elapsed time 219.6 seconds
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9 H slabs to compute for oqmd-345911
 9 NNH slabs to compute for oqmd-345911
 Running data/oqmd-345911_H/0
+  Elapsed time: 160.9 seconds for data/oqmd-345911_H/0
+Running data/oqmd-345911_H/1
+  Elapsed time: 84.6 seconds for data/oqmd-345911_H/1
+Running data/oqmd-345911_H/2
+  Elapsed time: 243.9 seconds for data/oqmd-345911_H/2
+Running data/oqmd-345911_NNH/0
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                        | 0/1 [10:37&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span> <span class="n">line</span> <span class="mi">35</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span>         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">34</span>         <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">35</span>         <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">36</span>         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  Elapsed time: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds for data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/optimize/optimize.py:269,</span> in <span class="ni">Optimizer.run</span><span class="nt">(self, fmax, steps)</span>
+<span class="g g-Whitespace">    </span><span class="mi">267</span> <span class="k">if</span> <span class="n">steps</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">268</span>     <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span> <span class="o">=</span> <span class="n">steps</span>
+<span class="ne">--&gt; </span><span class="mi">269</span> <span class="k">return</span> <span class="n">Dynamics</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/optimize/optimize.py:156,</span> in <span class="ni">Dynamics.run</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">149</span> <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">150</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Run dynamics algorithm.</span>
+<span class="g g-Whitespace">    </span><span class="mi">151</span><span class="sd"> </span>
+<span class="g g-Whitespace">    </span><span class="mi">152</span><span class="sd">     This method will return when the forces on all individual</span>
+<span class="g g-Whitespace">    </span><span class="mi">153</span><span class="sd">     atoms are less than *fmax* or when the number of steps exceeds</span>
+<span class="g g-Whitespace">    </span><span class="mi">154</span><span class="sd">     *steps*.&quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">156</span>     <span class="k">for</span> <span class="n">converged</span> <span class="ow">in</span> <span class="n">Dynamics</span><span class="o">.</span><span class="n">irun</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">157</span>         <span class="k">pass</span>
+<span class="g g-Whitespace">    </span><span class="mi">158</span>     <span class="k">return</span> <span class="n">converged</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/optimize/optimize.py:143,</span> in <span class="ni">Dynamics.irun</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">140</span>     <span class="k">yield</span> <span class="kc">False</span>
+<span class="g g-Whitespace">    </span><span class="mi">142</span>     <span class="c1"># log the step</span>
+<span class="ne">--&gt; </span><span class="mi">143</span>     <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">144</span>     <span class="bp">self</span><span class="o">.</span><span class="n">call_observers</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">146</span> <span class="c1"># finally check if algorithm was converged</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/optimize/optimize.py:283,</span> in <span class="ni">Optimizer.log</span><span class="nt">(self, forces)</span>
+<span class="g g-Whitespace">    </span><span class="mi">281</span> <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">forces</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">282</span>     <span class="k">if</span> <span class="n">forces</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">283</span>         <span class="n">forces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_forces</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">284</span>     <span class="n">fmax</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">((</span><span class="n">forces</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+<span class="g g-Whitespace">    </span><span class="mi">285</span>     <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">286</span>         <span class="n">force_consistent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">force_consistent</span>
+<span class="g g-Whitespace">    </span><span class="mi">287</span>     <span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/atoms.py:788,</span> in <span class="ni">Atoms.get_forces</span><span class="nt">(self, apply_constraint, md)</span>
+<span class="g g-Whitespace">    </span><span class="mi">786</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">787</span>     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Atoms object has no calculator.&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">788</span> <span class="n">forces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc</span><span class="o">.</span><span class="n">get_forces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">790</span> <span class="k">if</span> <span class="n">apply_constraint</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">791</span>     <span class="c1"># We need a special md flag here because for MD we want</span>
+<span class="g g-Whitespace">    </span><span class="mi">792</span>     <span class="c1"># to skip real constraints but include special &quot;constraints&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">793</span>     <span class="c1"># Like Hookean.</span>
+<span class="g g-Whitespace">    </span><span class="mi">794</span>     <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/calculators/abc.py:23,</span> in <span class="ni">GetPropertiesMixin.get_forces</span><span class="nt">(self, atoms)</span>
+<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="k">def</span> <span class="nf">get_forces</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="ne">---&gt; </span><span class="mi">23</span>     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="s1">&#39;forces&#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/calculators/calculator.py:737,</span> in <span class="ni">Calculator.get_property</span><span class="nt">(self, name, atoms, allow_calculation)</span>
+<span class="g g-Whitespace">    </span><span class="mi">735</span>     <span class="k">if</span> <span class="ow">not</span> <span class="n">allow_calculation</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">736</span>         <span class="k">return</span> <span class="kc">None</span>
+<span class="ne">--&gt; </span><span class="mi">737</span>     <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">system_changes</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">739</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">740</span>     <span class="c1"># For some reason the calculator was not able to do what we want,</span>
+<span class="g g-Whitespace">    </span><span class="mi">741</span>     <span class="c1"># and that is OK.</span>
+<span class="g g-Whitespace">    </span><span class="mi">742</span>     <span class="k">raise</span> <span class="n">PropertyNotImplementedError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> not present in this &#39;</span>
+<span class="g g-Whitespace">    </span><span class="mi">743</span>                                       <span class="s1">&#39;calculation&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+<span class="nn">File ~/ocp/ocpmodels/common/relaxation/ase_utils.py:205,</span> in <span class="ni">OCPCalculator.calculate</span><span class="nt">(self, atoms, properties, system_changes)</span>
+<span class="g g-Whitespace">    </span><span class="mi">202</span> <span class="n">data_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a2g</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">203</span> <span class="n">batch</span> <span class="o">=</span> <span class="n">data_list_collater</span><span class="p">([</span><span class="n">data_object</span><span class="p">],</span> <span class="n">otf_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">205</span> <span class="n">predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span>     <span class="n">batch</span><span class="p">,</span> <span class="n">per_image</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">disable_tqdm</span><span class="o">=</span><span class="kc">True</span>
+<span class="g g-Whitespace">    </span><span class="mi">207</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">208</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;s2ef&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">209</span>     <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">predictions</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/autograd/grad_mode.py:27,</span> in <span class="ni">_DecoratorContextManager.__call__.&lt;locals&gt;.decorate_context</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span> <span class="k">def</span> <span class="nf">decorate_context</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span>     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">clone</span><span class="p">():</span>
+<span class="ne">---&gt; </span><span class="mi">27</span>         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/ocp/ocpmodels/trainers/forces_trainer.py:195,</span> in <span class="ni">ForcesTrainer.predict</span><span class="nt">(self, data_loader, per_image, results_file, disable_tqdm)</span>
+<span class="g g-Whitespace">    </span><span class="mi">187</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch_list</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">188</span>     <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_loader</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">189</span>     <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data_loader</span><span class="p">),</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">192</span>     <span class="n">disable</span><span class="o">=</span><span class="n">disable_tqdm</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">193</span> <span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">194</span>     <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">amp</span><span class="o">.</span><span class="n">autocast</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scaler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">195</span>         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward</span><span class="p">(</span><span class="n">batch_list</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">197</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalizers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;target&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalizers</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">198</span>         <span class="n">out</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalizers</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">denorm</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">199</span>             <span class="n">out</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">200</span>         <span class="p">)</span>
+
+<span class="nn">File ~/ocp/ocpmodels/trainers/forces_trainer.py:446,</span> in <span class="ni">ForcesTrainer._forward</span><span class="nt">(self, batch_list)</span>
+<span class="g g-Whitespace">    </span><span class="mi">443</span> <span class="k">def</span> <span class="nf">_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_list</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">444</span>     <span class="c1"># forward pass.</span>
+<span class="g g-Whitespace">    </span><span class="mi">445</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;model_attributes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;regress_forces&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">446</span>         <span class="n">out_energy</span><span class="p">,</span> <span class="n">out_forces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">batch_list</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">447</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">448</span>         <span class="n">out_energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">batch_list</span><span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/nn/modules/module.py:1194,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *input, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span> <span class="c1"># this function, and just call forward.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1194</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span> <span class="c1"># Do not call functions when jit is used</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="nn">File ~/ocp/ocpmodels/common/data_parallel.py:58,</span> in <span class="ni">OCPDataParallel.forward</span><span class="nt">(self, batch_list, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span> <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">58</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">(</span><span class="n">batch_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="g g-Whitespace">     </span><span class="mi">60</span>     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">61</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">62</span>             <span class="n">batch_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cuda:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">device_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span>         <span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/nn/modules/module.py:1194,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *input, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span> <span class="c1"># this function, and just call forward.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1194</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span> <span class="c1"># Do not call functions when jit is used</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="nn">File ~/ocp/ocpmodels/common/utils.py:135,</span> in <span class="ni">conditional_grad.&lt;locals&gt;.decorator.&lt;locals&gt;.cls_method</span><span class="nt">(self, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">133</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">regress_forces</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;direct_forces&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">134</span>     <span class="n">f</span> <span class="o">=</span> <span class="n">dec</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">135</span> <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/autograd/grad_mode.py:27,</span> in <span class="ni">_DecoratorContextManager.__call__.&lt;locals&gt;.decorate_context</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span> <span class="k">def</span> <span class="nf">decorate_context</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span>     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">clone</span><span class="p">():</span>
+<span class="ne">---&gt; </span><span class="mi">27</span>         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/ocp/ocpmodels/models/escn/escn.py:296,</span> in <span class="ni">eSCN.forward</span><span class="nt">(self, data)</span>
+<span class="g g-Whitespace">    </span><span class="mi">294</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">295</span>     <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">296</span>         <span class="n">x_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layer_blocks</span><span class="p">[</span><span class="n">i</span><span class="p">](</span>
+<span class="g g-Whitespace">    </span><span class="mi">297</span>             <span class="n">x</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">298</span>             <span class="n">atomic_numbers</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">299</span>             <span class="n">edge_distance</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">300</span>             <span class="n">edge_index</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">301</span>             <span class="bp">self</span><span class="o">.</span><span class="n">SO3_edge_rot</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">302</span>             <span class="n">mappingReduced</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">303</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">305</span>         <span class="c1"># Residual layer for all layers past the first</span>
+<span class="g g-Whitespace">    </span><span class="mi">306</span>         <span class="n">x</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">embedding</span> <span class="o">+</span> <span class="n">x_message</span><span class="o">.</span><span class="n">embedding</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/nn/modules/module.py:1194,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *input, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span> <span class="c1"># this function, and just call forward.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1194</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span> <span class="c1"># Do not call functions when jit is used</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="nn">File ~/ocp/ocpmodels/models/escn/escn.py:535,</span> in <span class="ni">LayerBlock.forward</span><span class="nt">(self, x, atomic_numbers, edge_distance, edge_index, SO3_edge_rot, mappingReduced)</span>
+<span class="g g-Whitespace">    </span><span class="mi">525</span> <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">526</span>     <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">527</span>     <span class="n">x</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">533</span> <span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">534</span>     <span class="c1"># Compute messages by performing message block</span>
+<span class="ne">--&gt; </span><span class="mi">535</span>     <span class="n">x_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_block</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">536</span>         <span class="n">x</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">537</span>         <span class="n">atomic_numbers</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">538</span>         <span class="n">edge_distance</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">539</span>         <span class="n">edge_index</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">540</span>         <span class="n">SO3_edge_rot</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">541</span>         <span class="n">mappingReduced</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">542</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">544</span>     <span class="c1"># Compute point-wise spherical non-linearity on aggregated messages</span>
+<span class="g g-Whitespace">    </span><span class="mi">545</span>     <span class="n">max_lmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lmax_list</span><span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/nn/modules/module.py:1194,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *input, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span> <span class="c1"># this function, and just call forward.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1194</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span> <span class="c1"># Do not call functions when jit is used</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="nn">File ~/ocp/ocpmodels/models/escn/escn.py:664,</span> in <span class="ni">MessageBlock.forward</span><span class="nt">(self, x, atomic_numbers, edge_distance, edge_index, SO3_edge_rot, mappingReduced)</span>
+<span class="g g-Whitespace">    </span><span class="mi">662</span> <span class="c1"># Compute messages</span>
+<span class="g g-Whitespace">    </span><span class="mi">663</span> <span class="n">x_source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">so2_block_source</span><span class="p">(</span><span class="n">x_source</span><span class="p">,</span> <span class="n">x_edge</span><span class="p">,</span> <span class="n">mappingReduced</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">664</span> <span class="n">x_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">so2_block_target</span><span class="p">(</span><span class="n">x_target</span><span class="p">,</span> <span class="n">x_edge</span><span class="p">,</span> <span class="n">mappingReduced</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">666</span> <span class="c1"># Add together the source and target results</span>
+<span class="g g-Whitespace">    </span><span class="mi">667</span> <span class="n">x_target</span><span class="o">.</span><span class="n">embedding</span> <span class="o">=</span> <span class="n">x_source</span><span class="o">.</span><span class="n">embedding</span> <span class="o">+</span> <span class="n">x_target</span><span class="o">.</span><span class="n">embedding</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/nn/modules/module.py:1194,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *input, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span> <span class="c1"># this function, and just call forward.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1194</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span> <span class="c1"># Do not call functions when jit is used</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="nn">File ~/ocp/ocpmodels/models/escn/escn.py:772,</span> in <span class="ni">SO2Block.forward</span><span class="nt">(self, x, x_edge, mappingReduced)</span>
+<span class="g g-Whitespace">    </span><span class="mi">769</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">mappingReduced</span><span class="o">.</span><span class="n">m_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">770</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mmax_list</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">771</span>     <span class="c1"># Get the m order coefficients</span>
+<span class="ne">--&gt; </span><span class="mi">772</span>     <span class="n">x_m</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">embedding</span><span class="p">[</span>
+<span class="g g-Whitespace">    </span><span class="mi">773</span>         <span class="p">:,</span> <span class="n">offset</span> <span class="p">:</span> <span class="n">offset</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mappingReduced</span><span class="o">.</span><span class="n">m_size</span><span class="p">[</span><span class="n">m</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">774</span>     <span class="p">]</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">775</span>     <span class="n">x_m</span> <span class="o">=</span> <span class="n">x_m</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">num_edges</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">776</span>     <span class="c1"># Perform SO(2) convolution</span>
+
+<span class="ne">KeyboardInterrupt</span>: 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here we run all the relaxations for both adsorbates on each surface. On a CPU, it takes 60-100 minutes per bulk, which is about one day.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="n">tinit</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">bulk_src_id</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">bulk_ids</span><span class="p">):</span> 
+    <span class="c1"># Enumerate slabs and establish adsorbates</span>
+    <span class="n">bulk</span> <span class="o">=</span> <span class="n">Bulk</span><span class="p">(</span><span class="n">bulk_src_id_from_db</span><span class="o">=</span><span class="n">bulk_src_id</span><span class="p">,</span> <span class="n">bulk_db_path</span><span class="o">=</span><span class="s2">&quot;NRR_example_bulks.pkl&quot;</span><span class="p">)</span>
+    <span class="n">slab</span> <span class="o">=</span> <span class="n">Slab</span><span class="o">.</span><span class="n">from_bulk_get_specific_millers</span><span class="p">(</span><span class="n">bulk</span><span class="o">=</span> <span class="n">bulk</span><span class="p">,</span> <span class="n">specific_millers</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Perform heuristic placements</span>
+    <span class="n">heuristic_adslabs_H</span> <span class="o">=</span> <span class="n">AdsorbateSlabConfig</span><span class="p">(</span><span class="n">slab</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adsorbate_H</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;heuristic&quot;</span><span class="p">)</span>
+    <span class="n">heuristic_adslabs_NNH</span> <span class="o">=</span> <span class="n">AdsorbateSlabConfig</span><span class="p">(</span><span class="n">slab</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">adsorbate_NNH</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;heuristic&quot;</span><span class="p">)</span>
+
+    <span class="c1">#Run relaxations</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">heuristic_adslabs_H</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> H slabs to compute for </span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">heuristic_adslabs_NNH</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">)</span><span class="si">}</span><span class="s1"> NNH slabs to compute for </span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Set up the calculator</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_H</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">):</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  Elapsed time: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds for data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_H/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">adslab</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heuristic_adslabs_NNH</span><span class="o">.</span><span class="n">atoms_list</span><span class="p">):</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">adslab</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Running data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">adslab</span><span class="p">,</span> <span class="n">trajectory</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.traj&quot;</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s2">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
+        <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;  Elapsed time: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds for data/</span><span class="si">{</span><span class="n">bulk_src_id</span><span class="si">}</span><span class="s1">_NNH/</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Elapsed time: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tinit</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|                                                                       | 0/19 [00:00&lt;?, ?it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9 H slabs to compute for oqmd-349719
+9 NNH slabs to compute for oqmd-349719
+Running data/oqmd-349719_H/0
+  Elapsed time: 73.7 seconds for data/oqmd-349719_H/0
+Running data/oqmd-349719_H/1
+  Elapsed time: 115.4 seconds for data/oqmd-349719_H/1
+Running data/oqmd-349719_H/2
+  Elapsed time: 175.6 seconds for data/oqmd-349719_H/2
+Running data/oqmd-349719_H/3
+  Elapsed time: 108.3 seconds for data/oqmd-349719_H/3
+Running data/oqmd-349719_H/4
+  Elapsed time: 244.8 seconds for data/oqmd-349719_H/4
+Running data/oqmd-349719_H/5
+  Elapsed time: 71.7 seconds for data/oqmd-349719_H/5
+Running data/oqmd-349719_H/6
+  Elapsed time: 59.9 seconds for data/oqmd-349719_H/6
+Running data/oqmd-349719_H/7
+  Elapsed time: 245.2 seconds for data/oqmd-349719_H/7
+Running data/oqmd-349719_H/8
+  Elapsed time: 68.4 seconds for data/oqmd-349719_H/8
+Running data/oqmd-349719_NNH/0
+  Elapsed time: 683.5 seconds for data/oqmd-349719_NNH/0
+Running data/oqmd-349719_NNH/1
+  Elapsed time: 558.8 seconds for data/oqmd-349719_NNH/1
+Running data/oqmd-349719_NNH/2
+  Elapsed time: 547.7 seconds for data/oqmd-349719_NNH/2
+Running data/oqmd-349719_NNH/3
+  Elapsed time: 547.7 seconds for data/oqmd-349719_NNH/3
+Running data/oqmd-349719_NNH/4
+  Elapsed time: 550.4 seconds for data/oqmd-349719_NNH/4
+Running data/oqmd-349719_NNH/5
+  Elapsed time: 452.7 seconds for data/oqmd-349719_NNH/5
+Running data/oqmd-349719_NNH/6
+  Elapsed time: 549.4 seconds for data/oqmd-349719_NNH/6
+Running data/oqmd-349719_NNH/7
+  Elapsed time: 555.9 seconds for data/oqmd-349719_NNH/7
+Running data/oqmd-349719_NNH/8
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  5%|██▉                                                     | 1/19 [1:40:57&lt;30:17:16, 6057.60s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 447.4 seconds for data/oqmd-349719_NNH/8
+9 H slabs to compute for oqmd-345911
+9 NNH slabs to compute for oqmd-345911
+Running data/oqmd-345911_H/0
+  Elapsed time: 227.7 seconds for data/oqmd-345911_H/0
+Running data/oqmd-345911_H/1
+  Elapsed time: 223.7 seconds for data/oqmd-345911_H/1
+Running data/oqmd-345911_H/2
+  Elapsed time: 128.2 seconds for data/oqmd-345911_H/2
+Running data/oqmd-345911_H/3
+  Elapsed time: 108.1 seconds for data/oqmd-345911_H/3
+Running data/oqmd-345911_H/4
+  Elapsed time: 136.1 seconds for data/oqmd-345911_H/4
+Running data/oqmd-345911_H/5
+  Elapsed time: 62.8 seconds for data/oqmd-345911_H/5
+Running data/oqmd-345911_H/6
+  Elapsed time: 219.2 seconds for data/oqmd-345911_H/6
+Running data/oqmd-345911_H/7
+  Elapsed time: 104.7 seconds for data/oqmd-345911_H/7
+Running data/oqmd-345911_H/8
+  Elapsed time: 52.3 seconds for data/oqmd-345911_H/8
+Running data/oqmd-345911_NNH/0
+  Elapsed time: 551.1 seconds for data/oqmd-345911_NNH/0
+Running data/oqmd-345911_NNH/1
+  Elapsed time: 547.9 seconds for data/oqmd-345911_NNH/1
+Running data/oqmd-345911_NNH/2
+  Elapsed time: 547.5 seconds for data/oqmd-345911_NNH/2
+Running data/oqmd-345911_NNH/3
+  Elapsed time: 547.7 seconds for data/oqmd-345911_NNH/3
+Running data/oqmd-345911_NNH/4
+  Elapsed time: 549.2 seconds for data/oqmd-345911_NNH/4
+Running data/oqmd-345911_NNH/5
+  Elapsed time: 311.0 seconds for data/oqmd-345911_NNH/5
+Running data/oqmd-345911_NNH/6
+  Elapsed time: 548.7 seconds for data/oqmd-345911_NNH/6
+Running data/oqmd-345911_NNH/7
+  Elapsed time: 548.9 seconds for data/oqmd-345911_NNH/7
+Running data/oqmd-345911_NNH/8
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 11%|█████▉                                                  | 2/19 [3:20:27&lt;28:21:39, 6005.87s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 547.7 seconds for data/oqmd-345911_NNH/8
+9 H slabs to compute for mp-2677
+9 NNH slabs to compute for mp-2677
+Running data/mp-2677_H/0
+  Elapsed time: 120.5 seconds for data/mp-2677_H/0
+Running data/mp-2677_H/1
+  Elapsed time: 44.5 seconds for data/mp-2677_H/1
+Running data/mp-2677_H/2
+  Elapsed time: 83.5 seconds for data/mp-2677_H/2
+Running data/mp-2677_H/3
+  Elapsed time: 116.6 seconds for data/mp-2677_H/3
+Running data/mp-2677_H/4
+  Elapsed time: 116.7 seconds for data/mp-2677_H/4
+Running data/mp-2677_H/5
+  Elapsed time: 38.9 seconds for data/mp-2677_H/5
+Running data/mp-2677_H/6
+  Elapsed time: 78.2 seconds for data/mp-2677_H/6
+Running data/mp-2677_H/7
+  Elapsed time: 117.2 seconds for data/mp-2677_H/7
+Running data/mp-2677_H/8
+  Elapsed time: 55.9 seconds for data/mp-2677_H/8
+Running data/mp-2677_NNH/0
+  Elapsed time: 294.3 seconds for data/mp-2677_NNH/0
+Running data/mp-2677_NNH/1
+  Elapsed time: 291.0 seconds for data/mp-2677_NNH/1
+Running data/mp-2677_NNH/2
+  Elapsed time: 290.2 seconds for data/mp-2677_NNH/2
+Running data/mp-2677_NNH/3
+  Elapsed time: 290.6 seconds for data/mp-2677_NNH/3
+Running data/mp-2677_NNH/4
+  Elapsed time: 290.2 seconds for data/mp-2677_NNH/4
+Running data/mp-2677_NNH/5
+  Elapsed time: 290.2 seconds for data/mp-2677_NNH/5
+Running data/mp-2677_NNH/6
+  Elapsed time: 293.5 seconds for data/mp-2677_NNH/6
+Running data/mp-2677_NNH/7
+  Elapsed time: 297.2 seconds for data/mp-2677_NNH/7
+Running data/mp-2677_NNH/8
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 16%|████████▊                                               | 3/19 [4:17:15&lt;21:25:12, 4819.52s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 293.7 seconds for data/mp-2677_NNH/8
+9 H slabs to compute for mp-1186014
+9 NNH slabs to compute for mp-1186014
+Running data/mp-1186014_H/0
+  Elapsed time: 126.6 seconds for data/mp-1186014_H/0
+Running data/mp-1186014_H/1
+  Elapsed time: 221.5 seconds for data/mp-1186014_H/1
+Running data/mp-1186014_H/2
+  Elapsed time: 126.7 seconds for data/mp-1186014_H/2
+Running data/mp-1186014_H/3
+  Elapsed time: 221.3 seconds for data/mp-1186014_H/3
+Running data/mp-1186014_H/4
+  Elapsed time: 116.3 seconds for data/mp-1186014_H/4
+Running data/mp-1186014_H/5
+  Elapsed time: 84.4 seconds for data/mp-1186014_H/5
+Running data/mp-1186014_H/6
+  Elapsed time: 221.5 seconds for data/mp-1186014_H/6
+Running data/mp-1186014_H/7
+  Elapsed time: 221.9 seconds for data/mp-1186014_H/7
+Running data/mp-1186014_H/8
+  Elapsed time: 116.4 seconds for data/mp-1186014_H/8
+Running data/mp-1186014_NNH/0
+  Elapsed time: 547.8 seconds for data/mp-1186014_NNH/0
+Running data/mp-1186014_NNH/1
+  Elapsed time: 551.0 seconds for data/mp-1186014_NNH/1
+Running data/mp-1186014_NNH/2
+  Elapsed time: 550.3 seconds for data/mp-1186014_NNH/2
+Running data/mp-1186014_NNH/3
+  Elapsed time: 418.1 seconds for data/mp-1186014_NNH/3
+Running data/mp-1186014_NNH/4
+  Elapsed time: 546.9 seconds for data/mp-1186014_NNH/4
+Running data/mp-1186014_NNH/5
+  Elapsed time: 546.4 seconds for data/mp-1186014_NNH/5
+Running data/mp-1186014_NNH/6
+  Elapsed time: 509.1 seconds for data/mp-1186014_NNH/6
+Running data/mp-1186014_NNH/7
+  Elapsed time: 543.3 seconds for data/mp-1186014_NNH/7
+Running data/mp-1186014_NNH/8
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 21%|███████████▊                                            | 4/19 [6:00:47&lt;22:22:19, 5369.31s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 541.4 seconds for data/mp-1186014_NNH/8
+9 H slabs to compute for oqmd-343039
+9 NNH slabs to compute for oqmd-343039
+Running data/oqmd-343039_H/0
+  Elapsed time: 115.4 seconds for data/oqmd-343039_H/0
+Running data/oqmd-343039_H/1
+  Elapsed time: 60.4 seconds for data/oqmd-343039_H/1
+Running data/oqmd-343039_H/2
+  Elapsed time: 82.9 seconds for data/oqmd-343039_H/2
+Running data/oqmd-343039_H/3
+  Elapsed time: 66.7 seconds for data/oqmd-343039_H/3
+Running data/oqmd-343039_H/4
+  Elapsed time: 117.0 seconds for data/oqmd-343039_H/4
+Running data/oqmd-343039_H/5
+  Elapsed time: 72.7 seconds for data/oqmd-343039_H/5
+Running data/oqmd-343039_H/6
+  Elapsed time: 33.5 seconds for data/oqmd-343039_H/6
+Running data/oqmd-343039_H/7
+  Elapsed time: 83.5 seconds for data/oqmd-343039_H/7
+Running data/oqmd-343039_H/8
+  Elapsed time: 78.0 seconds for data/oqmd-343039_H/8
+Running data/oqmd-343039_NNH/0
+  Elapsed time: 294.1 seconds for data/oqmd-343039_NNH/0
+Running data/oqmd-343039_NNH/1
+  Elapsed time: 294.6 seconds for data/oqmd-343039_NNH/1
+Running data/oqmd-343039_NNH/2
+  Elapsed time: 294.1 seconds for data/oqmd-343039_NNH/2
+Running data/oqmd-343039_NNH/3
+  Elapsed time: 294.2 seconds for data/oqmd-343039_NNH/3
+Running data/oqmd-343039_NNH/4
+  Elapsed time: 219.2 seconds for data/oqmd-343039_NNH/4
+Running data/oqmd-343039_NNH/5
+  Elapsed time: 295.1 seconds for data/oqmd-343039_NNH/5
+Running data/oqmd-343039_NNH/6
+  Elapsed time: 286.3 seconds for data/oqmd-343039_NNH/6
+Running data/oqmd-343039_NNH/7
+  Elapsed time: 293.4 seconds for data/oqmd-343039_NNH/7
+Running data/oqmd-343039_NNH/8
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 26%|██████████████▋                                         | 5/19 [6:55:19&lt;17:56:24, 4613.15s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 290.4 seconds for data/oqmd-343039_NNH/8
+9 H slabs to compute for oqmd-348629
+9 NNH slabs to compute for oqmd-348629
+Running data/oqmd-348629_H/0
+  Elapsed time: 88.1 seconds for data/oqmd-348629_H/0
+Running data/oqmd-348629_H/1
+  Elapsed time: 44.0 seconds for data/oqmd-348629_H/1
+Running data/oqmd-348629_H/2
+  Elapsed time: 60.5 seconds for data/oqmd-348629_H/2
+Running data/oqmd-348629_H/3
+  Elapsed time: 104.3 seconds for data/oqmd-348629_H/3
+Running data/oqmd-348629_H/4
+  Elapsed time: 71.5 seconds for data/oqmd-348629_H/4
+Running data/oqmd-348629_H/5
+  Elapsed time: 54.9 seconds for data/oqmd-348629_H/5
+Running data/oqmd-348629_H/6
+  Elapsed time: 55.1 seconds for data/oqmd-348629_H/6
+Running data/oqmd-348629_H/7
+  Elapsed time: 43.9 seconds for data/oqmd-348629_H/7
+Running data/oqmd-348629_H/8
+  Elapsed time: 105.0 seconds for data/oqmd-348629_H/8
+Running data/oqmd-348629_NNH/0
+  Elapsed time: 296.1 seconds for data/oqmd-348629_NNH/0
+Running data/oqmd-348629_NNH/1
+  Elapsed time: 293.9 seconds for data/oqmd-348629_NNH/1
+Running data/oqmd-348629_NNH/2
+  Elapsed time: 288.8 seconds for data/oqmd-348629_NNH/2
+Running data/oqmd-348629_NNH/3
+  Elapsed time: 294.6 seconds for data/oqmd-348629_NNH/3
+Running data/oqmd-348629_NNH/4
+  Elapsed time: 294.2 seconds for data/oqmd-348629_NNH/4
+Running data/oqmd-348629_NNH/5
+  Elapsed time: 294.6 seconds for data/oqmd-348629_NNH/5
+Running data/oqmd-348629_NNH/6
+  Elapsed time: 294.3 seconds for data/oqmd-348629_NNH/6
+Running data/oqmd-348629_NNH/7
+  Elapsed time: 133.2 seconds for data/oqmd-348629_NNH/7
+Running data/oqmd-348629_NNH/8
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 32%|█████████████████▋                                      | 6/19 [7:47:13&lt;14:49:03, 4103.33s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 295.9 seconds for data/oqmd-348629_NNH/8
+9 H slabs to compute for oqmd-343006
+9 NNH slabs to compute for oqmd-343006
+Running data/oqmd-343006_H/0
+  Elapsed time: 27.8 seconds for data/oqmd-343006_H/0
+Running data/oqmd-343006_H/1
+  Elapsed time: 77.8 seconds for data/oqmd-343006_H/1
+Running data/oqmd-343006_H/2
+  Elapsed time: 83.3 seconds for data/oqmd-343006_H/2
+Running data/oqmd-343006_H/3
+  Elapsed time: 55.8 seconds for data/oqmd-343006_H/3
+Running data/oqmd-343006_H/4
+  Elapsed time: 117.1 seconds for data/oqmd-343006_H/4
+Running data/oqmd-343006_H/5
+  Elapsed time: 117.6 seconds for data/oqmd-343006_H/5
+Running data/oqmd-343006_H/6
+  Elapsed time: 61.3 seconds for data/oqmd-343006_H/6
+Running data/oqmd-343006_H/7
+  Elapsed time: 116.8 seconds for data/oqmd-343006_H/7
+Running data/oqmd-343006_H/8
+  Elapsed time: 117.8 seconds for data/oqmd-343006_H/8
+Running data/oqmd-343006_NNH/0
+  Elapsed time: 294.5 seconds for data/oqmd-343006_NNH/0
+Running data/oqmd-343006_NNH/1
+  Elapsed time: 294.3 seconds for data/oqmd-343006_NNH/1
+Running data/oqmd-343006_NNH/2
+  Elapsed time: 293.9 seconds for data/oqmd-343006_NNH/2
+Running data/oqmd-343006_NNH/3
+  Elapsed time: 282.7 seconds for data/oqmd-343006_NNH/3
+Running data/oqmd-343006_NNH/4
+  Elapsed time: 293.7 seconds for data/oqmd-343006_NNH/4
+Running data/oqmd-343006_NNH/5
+  Elapsed time: 294.4 seconds for data/oqmd-343006_NNH/5
+Running data/oqmd-343006_NNH/6
+  Elapsed time: 288.7 seconds for data/oqmd-343006_NNH/6
+Running data/oqmd-343006_NNH/7
+  Elapsed time: 116.1 seconds for data/oqmd-343006_NNH/7
+Running data/oqmd-343006_NNH/8
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 37%|████████████████████▋                                   | 7/19 [8:41:01&lt;12:43:26, 3817.24s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 293.8 seconds for data/oqmd-343006_NNH/8
+9 H slabs to compute for oqmd-349813
+9 NNH slabs to compute for oqmd-349813
+Running data/oqmd-349813_H/0
+  Elapsed time: 158.3 seconds for data/oqmd-349813_H/0
+Running data/oqmd-349813_H/1
+  Elapsed time: 95.1 seconds for data/oqmd-349813_H/1
+Running data/oqmd-349813_H/2
+  Elapsed time: 116.4 seconds for data/oqmd-349813_H/2
+Running data/oqmd-349813_H/3
+  Elapsed time: 64.0 seconds for data/oqmd-349813_H/3
+Running data/oqmd-349813_H/4
+  Elapsed time: 94.8 seconds for data/oqmd-349813_H/4
+Running data/oqmd-349813_H/5
+  Elapsed time: 168.5 seconds for data/oqmd-349813_H/5
+Running data/oqmd-349813_H/6
+  Elapsed time: 84.3 seconds for data/oqmd-349813_H/6
+Running data/oqmd-349813_H/7
+  Elapsed time: 116.5 seconds for data/oqmd-349813_H/7
+Running data/oqmd-349813_H/8
+  Elapsed time: 158.3 seconds for data/oqmd-349813_H/8
+Running data/oqmd-349813_NNH/0
+  Elapsed time: 548.6 seconds for data/oqmd-349813_NNH/0
+Running data/oqmd-349813_NNH/1
+  Elapsed time: 547.8 seconds for data/oqmd-349813_NNH/1
+Running data/oqmd-349813_NNH/2
+  Elapsed time: 546.9 seconds for data/oqmd-349813_NNH/2
+Running data/oqmd-349813_NNH/3
+  Elapsed time: 547.5 seconds for data/oqmd-349813_NNH/3
+Running data/oqmd-349813_NNH/4
+  Elapsed time: 549.3 seconds for data/oqmd-349813_NNH/4
+Running data/oqmd-349813_NNH/5
+  Elapsed time: 546.9 seconds for data/oqmd-349813_NNH/5
+Running data/oqmd-349813_NNH/6
+  Elapsed time: 547.8 seconds for data/oqmd-349813_NNH/6
+Running data/oqmd-349813_NNH/7
+  Elapsed time: 546.0 seconds for data/oqmd-349813_NNH/7
+Running data/oqmd-349813_NNH/8
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 42%|███████████████████████▏                               | 8/19 [10:20:09&lt;13:44:10, 4495.52s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 509.5 seconds for data/oqmd-349813_NNH/8
+9 H slabs to compute for oqmd-347528
+9 NNH slabs to compute for oqmd-347528
+Running data/oqmd-347528_H/0
+  Elapsed time: 156.8 seconds for data/oqmd-347528_H/0
+Running data/oqmd-347528_H/1
+  Elapsed time: 219.3 seconds for data/oqmd-347528_H/1
+Running data/oqmd-347528_H/2
+  Elapsed time: 104.7 seconds for data/oqmd-347528_H/2
+Running data/oqmd-347528_H/3
+  Elapsed time: 83.8 seconds for data/oqmd-347528_H/3
+Running data/oqmd-347528_H/4
+  Elapsed time: 222.4 seconds for data/oqmd-347528_H/4
+Running data/oqmd-347528_H/5
+  Elapsed time: 94.1 seconds for data/oqmd-347528_H/5
+Running data/oqmd-347528_H/6
+  Elapsed time: 219.3 seconds for data/oqmd-347528_H/6
+Running data/oqmd-347528_H/7
+  Elapsed time: 219.2 seconds for data/oqmd-347528_H/7
+Running data/oqmd-347528_H/8
+  Elapsed time: 62.9 seconds for data/oqmd-347528_H/8
+Running data/oqmd-347528_NNH/0
+  Elapsed time: 541.5 seconds for data/oqmd-347528_NNH/0
+Running data/oqmd-347528_NNH/1
+  Elapsed time: 544.1 seconds for data/oqmd-347528_NNH/1
+Running data/oqmd-347528_NNH/2
+  Elapsed time: 547.0 seconds for data/oqmd-347528_NNH/2
+Running data/oqmd-347528_NNH/3
+  Elapsed time: 550.8 seconds for data/oqmd-347528_NNH/3
+Running data/oqmd-347528_NNH/4
+  Elapsed time: 549.6 seconds for data/oqmd-347528_NNH/4
+Running data/oqmd-347528_NNH/5
+  Elapsed time: 548.0 seconds for data/oqmd-347528_NNH/5
+Running data/oqmd-347528_NNH/6
+  Elapsed time: 543.2 seconds for data/oqmd-347528_NNH/6
+Running data/oqmd-347528_NNH/7
+  Elapsed time: 566.6 seconds for data/oqmd-347528_NNH/7
+Running data/oqmd-347528_NNH/8
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 47%|██████████████████████████                             | 9/19 [12:06:07&lt;14:06:16, 5077.67s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 583.2 seconds for data/oqmd-347528_NNH/8
+9 H slabs to compute for oqmd-344251
+9 NNH slabs to compute for oqmd-344251
+Running data/oqmd-344251_H/0
+  Elapsed time: 124.0 seconds for data/oqmd-344251_H/0
+Running data/oqmd-344251_H/1
+  Elapsed time: 40.4 seconds for data/oqmd-344251_H/1
+Running data/oqmd-344251_H/2
+  Elapsed time: 56.1 seconds for data/oqmd-344251_H/2
+Running data/oqmd-344251_H/3
+  Elapsed time: 120.7 seconds for data/oqmd-344251_H/3
+Running data/oqmd-344251_H/4
+  Elapsed time: 45.2 seconds for data/oqmd-344251_H/4
+Running data/oqmd-344251_H/5
+  Elapsed time: 53.9 seconds for data/oqmd-344251_H/5
+Running data/oqmd-344251_H/6
+  Elapsed time: 123.5 seconds for data/oqmd-344251_H/6
+Running data/oqmd-344251_H/7
+  Elapsed time: 123.8 seconds for data/oqmd-344251_H/7
+Running data/oqmd-344251_H/8
+  Elapsed time: 122.2 seconds for data/oqmd-344251_H/8
+Running data/oqmd-344251_NNH/0
+  Elapsed time: 322.7 seconds for data/oqmd-344251_NNH/0
+Running data/oqmd-344251_NNH/1
+  Elapsed time: 152.6 seconds for data/oqmd-344251_NNH/1
+Running data/oqmd-344251_NNH/2
+  Elapsed time: 303.7 seconds for data/oqmd-344251_NNH/2
+Running data/oqmd-344251_NNH/3
+  Elapsed time: 308.1 seconds for data/oqmd-344251_NNH/3
+Running data/oqmd-344251_NNH/4
+  Elapsed time: 262.5 seconds for data/oqmd-344251_NNH/4
+Running data/oqmd-344251_NNH/5
+  Elapsed time: 319.9 seconds for data/oqmd-344251_NNH/5
+Running data/oqmd-344251_NNH/6
+  Elapsed time: 254.9 seconds for data/oqmd-344251_NNH/6
+Running data/oqmd-344251_NNH/7
+  Elapsed time: 325.4 seconds for data/oqmd-344251_NNH/7
+Running data/oqmd-344251_NNH/8
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 53%|████████████████████████████▍                         | 10/19 [13:03:07&lt;11:24:54, 4566.01s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 359.8 seconds for data/oqmd-344251_NNH/8
+9 H slabs to compute for oqmd-343394
+9 NNH slabs to compute for oqmd-343394
+Running data/oqmd-343394_H/0
+  Elapsed time: 268.8 seconds for data/oqmd-343394_H/0
+Running data/oqmd-343394_H/1
+  Elapsed time: 238.5 seconds for data/oqmd-343394_H/1
+Running data/oqmd-343394_H/2
+  Elapsed time: 247.4 seconds for data/oqmd-343394_H/2
+Running data/oqmd-343394_H/3
+  Elapsed time: 228.6 seconds for data/oqmd-343394_H/3
+Running data/oqmd-343394_H/4
+  Elapsed time: 268.7 seconds for data/oqmd-343394_H/4
+Running data/oqmd-343394_H/5
+  Elapsed time: 137.9 seconds for data/oqmd-343394_H/5
+Running data/oqmd-343394_H/6
+  Elapsed time: 233.2 seconds for data/oqmd-343394_H/6
+Running data/oqmd-343394_H/7
+  Elapsed time: 110.1 seconds for data/oqmd-343394_H/7
+Running data/oqmd-343394_H/8
+  Elapsed time: 88.2 seconds for data/oqmd-343394_H/8
+Running data/oqmd-343394_NNH/0
+  Elapsed time: 489.0 seconds for data/oqmd-343394_NNH/0
+Running data/oqmd-343394_NNH/1
+  Elapsed time: 561.4 seconds for data/oqmd-343394_NNH/1
+Running data/oqmd-343394_NNH/2
+  Elapsed time: 617.8 seconds for data/oqmd-343394_NNH/2
+Running data/oqmd-343394_NNH/3
+  Elapsed time: 484.5 seconds for data/oqmd-343394_NNH/3
+Running data/oqmd-343394_NNH/4
+  Elapsed time: 1026.3 seconds for data/oqmd-343394_NNH/4
+Running data/oqmd-343394_NNH/5
+  Elapsed time: 2070.2 seconds for data/oqmd-343394_NNH/5
+Running data/oqmd-343394_NNH/6
 </pre></div>
 </div>
 </div>
@@ -1287,7 +1925,6 @@ Running data/oqmd-345911_H/0
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-all-the-systems">Run all the systems</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#this-uses-a-lot-of-memory">This uses a lot of memory.</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-the-trajectories-and-post-process">Parse the trajectories and post-process</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper">Make parity plots for values obtained by ML v. reported in the paper</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figure-6b-and-compare-to-literature-results">Make figure 6b and compare to literature results</a></li>
