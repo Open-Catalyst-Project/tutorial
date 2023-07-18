@@ -450,53 +450,8 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="using-ocp-to-enumerate-adsorbates-on-catalyst-surfaces">
 <h1>Using OCP to enumerate adsorbates on catalyst surfaces<a class="headerlink" href="#using-ocp-to-enumerate-adsorbates-on-catalyst-surfaces" title="Permalink to this heading">#</a></h1>
-<p>In the previous example, we constructed slab models of adsorbates on desired sites. Here we leverage code to automate this process. The goal in this section is to generate candidate structures, compute energetics, and then</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>rm<span class="w"> </span>-fr<span class="w"> </span>ocdata
-<span class="o">!</span><span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/Open-Catalyst-Project/Open-Catalyst-Dataset.git<span class="w"> </span>ocdata
-<span class="o">!</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>ocdata<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cloning into &#39;ocdata&#39;...
-remote: Enumerating objects: 1741, done.
-remote: Counting objects: 100% (433/433), done.
-remote: Compressing objects: 100% (212/212), done.
-remote: Total 1741 (delta 260), reused 241 (delta 221), pack-reused 1308
-Receiving objects: 100% (1741/1741), 36.87 MiB | 5.26 MiB/s, done.
-Resolving deltas: 100% (1082/1082), done.
-Obtaining file:///home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/ocdata
-  Preparing metadata (setup.py) ... ?25ldone
-?25hInstalling collected packages: ocdata
-  Running setup.py develop for ocdata
-Successfully installed ocdata-0.2.0
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>e3nn
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: e3nn in /opt/conda/lib/python3.9/site-packages (0.5.1)
-Requirement already satisfied: opt-einsum-fx&gt;=0.1.4 in /opt/conda/lib/python3.9/site-packages (from e3nn) (0.1.4)
-Requirement already satisfied: torch&gt;=1.8.0 in /opt/conda/lib/python3.9/site-packages (from e3nn) (1.11.0)
-Requirement already satisfied: sympy in /opt/conda/lib/python3.9/site-packages (from e3nn) (1.11.1)
-Requirement already satisfied: scipy in /opt/conda/lib/python3.9/site-packages (from e3nn) (1.10.0)
-Requirement already satisfied: opt-einsum in /opt/conda/lib/python3.9/site-packages (from opt-einsum-fx&gt;=0.1.4-&gt;e3nn) (3.3.0)
-Requirement already satisfied: packaging in /opt/conda/lib/python3.9/site-packages (from opt-einsum-fx&gt;=0.1.4-&gt;e3nn) (22.0)
-Requirement already satisfied: typing_extensions in /opt/conda/lib/python3.9/site-packages (from torch&gt;=1.8.0-&gt;e3nn) (4.4.0)
-Requirement already satisfied: numpy&lt;1.27.0,&gt;=1.19.5 in /opt/conda/lib/python3.9/site-packages (from scipy-&gt;e3nn) (1.23.5)
-Requirement already satisfied: mpmath&gt;=0.19 in /opt/conda/lib/python3.9/site-packages (from sympy-&gt;e3nn) (1.2.1)
-</pre></div>
-</div>
-</div>
-</div>
+<p>In the previous example, we constructed slab models of adsorbates on desired sites. Here we leverage code to automate this process. The goal in this section is to generate candidate structures, compute energetics, and then filter out the most relevant ones.</p>
+<p>In this section we use one of the more recent models <code class="docutils literal notranslate"><span class="pre">escn</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
@@ -520,7 +475,7 @@ Requirement already satisfied: mpmath&gt;=0.19 in /opt/conda/lib/python3.9/site-
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h1>
-<p>Hello All! We are so glad you could join us to learn a bit more about using OCP models to accelerate chemical simulations. We will reproduce Fig 6b from the following paper: Zhou, Jing, et al. “Enhanced Catalytic Activity of Bimetallic Ordered Catalysts for Nitrogen Reduction Reaction by Perturbation of Scaling Relations.” ACS Catalysis 134 (2023): 2190-2201 (<a class="reference external" href="https://doi.org/10.1021/acscatal.2c05877">https://doi.org/10.1021/acscatal.2c05877</a>).</p>
+<p>We will reproduce Fig 6b from the following paper: Zhou, Jing, et al. “Enhanced Catalytic Activity of Bimetallic Ordered Catalysts for Nitrogen Reduction Reaction by Perturbation of Scaling Relations.” ACS Catalysis 134 (2023): 2190-2201 (<a class="reference external" href="https://doi.org/10.1021/acscatal.2c05877">https://doi.org/10.1021/acscatal.2c05877</a>).</p>
 <p>The gist of this figure is a correlation between H* and NNH* adsorbates across many different alloy surfaces. Then, they identify a dividing line between these that separates surfaces known for HER and those known for NRR.</p>
 <p>To do this, we will enumerate adsorbate-slab configurations and run ML relaxations on them to find the lowest energy configuration. We will assess parity between the model predicted values and those reported in the paper. Finally we will make the figure and assess separability of the NRR favored and HER favored domains.</p>
 </section>
