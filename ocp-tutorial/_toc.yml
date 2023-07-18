@@ -10,6 +10,8 @@ parts:
 - caption: Screening catalysts with OCP 
   chapters:
   - file: NRR/NRR_example.ipynb
+- caption: Fine-tuning a model
+  - file: fine-tuning/fine-tuning-oxides.ipynb
 - caption: Documentation
   chapters:
   - glob: ocp-modules/*
