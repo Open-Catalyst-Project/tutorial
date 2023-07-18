@@ -38,19 +38,16 @@ jobs:
         conda update conda
         conda install mamba -n base -c conda-forge
         # Install ocp conda env
-        conda create --name ocp-models --clone base
         source "$HOME"/miniconda/etc/profile.d/conda.sh
-        conda activate ocp-models
         conda install -c conda-forge conda-merge
         git clone https://github.com/Open-Catalyst-Project/ocp.git
         cd ocp && conda-merge env.common.yml env.cpu.yml > env.yml && mamba env update -n ocp-models --file env.yml
+        pip install -e .
         cd "$HOME"
-        conda init bash
 
     # Build the book
     - name: Build the book
       run: |
-        conda activate ocp-models
         jupyter-book build ocp-tutorial
 
     # Deploy the book's HTML to gh-pages branch
