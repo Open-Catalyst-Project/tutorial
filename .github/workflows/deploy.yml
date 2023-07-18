@@ -10,8 +10,8 @@ on:
 jobs:
   build-and-deploy-book:
     defaults:
-        run:
-            shell: bash -l {0}
+      run:
+        shell: bash -l {0}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
