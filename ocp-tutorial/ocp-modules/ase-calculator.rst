@@ -1,6 +1,6 @@
 ASE-compatible calculator for OCP
 =================================
 
-.. automodule:: ocpmodels.common.relaxation.ase_utils
+.. autoclass:: ocpmodels.common.relaxation.ase_utils.OCPCalculator
     :members:
  
