@@ -48,6 +48,7 @@ jobs:
     # Build the book
     - name: Build the book
       run: |
+        conda activate ocp-models
         jupyter-book build ocp-tutorial
 
     # Deploy the book's HTML to gh-pages branch
