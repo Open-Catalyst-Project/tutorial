@@ -173,6 +173,11 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Fine-tuning a model</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="fine-tuning/fine-tuning-oxides.html">Fine tuning a model</a></li>
+
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="ocp-modules/ase-calculator.html">ASE-compatible calculator for OCP</a></li>
@@ -498,28 +503,24 @@ H2O + * -&gt; O* + H2  re2  # Get from OCP as a direct calculation
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
-<span class="c1"># calc = OCPCalculator(checkpoint=os.path.expanduser(checkpoint), cpu=False)</span>
-<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">),</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">),</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="c1"># calc = OCPCalculator(checkpoint=os.path.expanduser(checkpoint), cpu=True)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/conda/lib/python3.9/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
-  from .autonotebook import tqdm as notebook_tqdm
-</pre></div>
-</div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: false
 cmd:
-  checkpoint_dir: /home/mambauser/tutorial/ocp-tutorial/checkpoints/2023-07-16-22-19-44
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/checkpoints/2023-07-18-12-48-00
   commit: ab7833d
   identifier: &#39;&#39;
-  logs_dir: /home/mambauser/tutorial/ocp-tutorial/logs/tensorboard/2023-07-16-22-19-44
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/logs/tensorboard/2023-07-18-12-48-00
   print_every: 100
-  results_dir: /home/mambauser/tutorial/ocp-tutorial/results/2023-07-16-22-19-44
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/results/2023-07-18-12-48-00
   seed: null
-  timestamp_id: 2023-07-16-22-19-44
+  timestamp_id: 2023-07-18-12-48-00
 dataset: null
-gpus: 0
+gpus: 1
 logger: tensorboard
 model: escn
 model_attributes:
@@ -627,20 +628,20 @@ trainer: forces
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Step     Time          Energy         fmax
-BFGS:    0 22:19:09        1.715910        1.6969
-BFGS:    1 22:19:12        1.541390        0.9693
-BFGS:    2 22:19:14        1.373406        0.7141
-BFGS:    3 22:19:17        1.291044        0.7900
-BFGS:    4 22:19:19        0.874835        0.7145
-BFGS:    5 22:19:22        0.816292        0.4962
-BFGS:    6 22:19:24        0.787922        0.6081
-BFGS:    7 22:19:26        0.768941        0.7397
-BFGS:    8 22:19:29        0.758261        0.5152
-BFGS:    9 22:19:31        0.737685        0.1308
-BFGS:   10 22:19:34        0.733105        0.0383
+BFGS:    0 12:47:20        1.749174        1.6849
+BFGS:    1 12:47:20        1.540854        0.9695
+BFGS:    2 12:47:20        1.353706        0.7205
+BFGS:    3 12:47:20        1.275858        0.7986
+BFGS:    4 12:47:20        0.855154        0.6865
+BFGS:    5 12:47:21        0.808235        0.4950
+BFGS:    6 12:47:21        0.778811        0.6077
+BFGS:    7 12:47:21        0.769219        0.7377
+BFGS:    8 12:47:21        0.750103        0.5009
+BFGS:    9 12:47:21        0.740156        0.1215
+BFGS:   10 12:47:21        0.733541        0.0419
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.2968953537940977
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.2964589285850523
 </pre></div>
 </div>
 </div>
@@ -660,7 +661,7 @@ BFGS:   10 22:19:34        0.733105        0.0383
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/4ea918adb21528fee3b0ac9e3426d6e86587b07426b1d2fa940b829cdf7f491a.png" src="_images/4ea918adb21528fee3b0ac9e3426d6e86587b07426b1d2fa940b829cdf7f491a.png" />
+<img alt="_images/9e5981d7d7a07d407fba57aff80fa39aa79805782353125ea0f7109fc296f540.png" src="_images/9e5981d7d7a07d407fba57aff80fa39aa79805782353125ea0f7109fc296f540.png" />
 </div>
 </div>
 <p>How did we do? We need a reference point. In the paper below, there is an atomic adsorption energy for O on Pt(111) of about -4.264 eV. This is for the reaction O + * -&gt; O*. To convert this to the dissociative adsorption energy, we have to add the reaction:</p>
@@ -764,16 +765,16 @@ O -&gt; 1/2 O2         re3 = -2.58 eV
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Step     Time          Energy         fmax
-BFGS:    0 22:19:42        0.605124        0.3385
-BFGS:    1 22:19:44        0.601236        0.2880
-BFGS:    2 22:19:46        0.595288        0.1121
-BFGS:    3 22:19:48        0.600113        0.0672
-BFGS:    4 22:19:50        0.604842        0.0800
-BFGS:    5 22:19:52        0.596031        0.0786
-BFGS:    6 22:19:54        0.593623        0.1003
-BFGS:    7 22:19:56        0.592945        0.0579
-BFGS:    8 22:19:58        0.595174        0.0289
--5.014825627803802
+BFGS:    0 12:47:23        0.607977        0.3249
+BFGS:    1 12:47:23        0.614224        0.2869
+BFGS:    2 12:47:23        0.597037        0.0965
+BFGS:    3 12:47:23        0.605701        0.0853
+BFGS:    4 12:47:23        0.594046        0.0805
+BFGS:    5 12:47:23        0.596878        0.0806
+BFGS:    6 12:47:24        0.595877        0.1267
+BFGS:    7 12:47:24        0.595115        0.0789
+BFGS:    8 12:47:24        0.588692        0.0252
+-5.021307990550994
 </pre></div>
 </div>
 </div>
@@ -833,46 +834,46 @@ BFGS:    8 22:19:58        0.595174        0.0289
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cu
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████████| 1/1 [00:20&lt;00:00, 20.96s/it]
-100%|█████████████████████████████████████████████| 1/1 [00:10&lt;00:00, 10.38s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.56s/it]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.08it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ag
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████████| 1/1 [00:13&lt;00:00, 13.13s/it]
-100%|█████████████████████████████████████████████| 1/1 [00:10&lt;00:00, 10.47s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.08s/it]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.30it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pd
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████████| 1/1 [00:19&lt;00:00, 19.00s/it]
-100%|█████████████████████████████████████████████| 1/1 [00:10&lt;00:00, 10.38s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.39s/it]
+100%|██████████| 1/1 [00:01&lt;00:00,  1.54s/it]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pt
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████████| 1/1 [00:19&lt;00:00, 19.14s/it]
-100%|█████████████████████████████████████████████| 1/1 [00:06&lt;00:00,  6.09s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.38s/it]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.28it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Rh
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████████| 1/1 [00:06&lt;00:00,  6.26s/it]
-100%|█████████████████████████████████████████████| 1/1 [00:07&lt;00:00,  7.15s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  2.11it/s]
+100%|██████████| 1/1 [00:00&lt;00:00,  2.12it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ir
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|█████████████████████████████████████████████| 1/1 [00:08&lt;00:00,  8.40s/it]
-100%|█████████████████████████████████████████████| 1/1 [00:08&lt;00:00,  8.15s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  1.59it/s]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.61it/s]
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Elapsed time = 139.54851579666138 seconds&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Elapsed time = 11.64729642868042 seconds&#39;
 </pre></div>
 </div>
 </div>
@@ -889,7 +890,7 @@ BFGS:    8 22:19:58        0.595174        0.0289
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/73baee4a3f5db5301a475f87e029da12ec506419b7003dbd0cfba026ce042dcc.png" src="_images/73baee4a3f5db5301a475f87e029da12ec506419b7003dbd0cfba026ce042dcc.png" />
+<img alt="_images/00fbda1b79a4085423d30258d67a8033d1284ee3bf2b32e252cc7f13c93c0190.png" src="_images/00fbda1b79a4085423d30258d67a8033d1284ee3bf2b32e252cc7f13c93c0190.png" />
 </div>
 </div>
 <p>Next we compare the correlation between the hcp and fcc sites. Here we see the same trends. The data falls below the parity line because the hcp sites tend to be a little weaker binding than the fcc sites.</p>
@@ -905,7 +906,7 @@ BFGS:    8 22:19:58        0.595174        0.0289
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/3225c160f202a671e0d8ef1c7d3c0e2669db688ff54e32328d31fe8643d842b1.png" src="_images/3225c160f202a671e0d8ef1c7d3c0e2669db688ff54e32328d31fe8643d842b1.png" />
+<img alt="_images/059f354f8b34d685b662e03b1966a47b79d2a2199e2d26e6c309c437c7fa853a.png" src="_images/059f354f8b34d685b662e03b1966a47b79d2a2199e2d26e6c309c437c7fa853a.png" />
 </div>
 </div>
 <section id="id1">

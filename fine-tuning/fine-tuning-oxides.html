@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; OCP tutorials</title>
+    <title>Fine tuning a model &#8212; OCP tutorials</title>
   
   
   
@@ -64,6 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'fine-tuning/fine-tuning-oxides';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ASE-compatible calculator for OCP" href="../ocp-modules/ase-calculator.html" />
+    <link rel="prev" title="Using OCP to enumerate adsorbates on catalyst surfaces" href="../NRR/NRR_example.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -169,6 +171,11 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Fine-tuning a model</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Fine tuning a model</a></li>
 
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
@@ -406,7 +413,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1><no title></h1>
+    <h1>Fine tuning a model</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -415,7 +422,14 @@ document.write(`
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fine tuning a model</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#fine-tuning-the-checkpoint">Fine tuning the checkpoint</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#train-test-val-splits">train, test, val splits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-configuration-yaml-file">Setting up the configuration yaml file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-training-job">Running the training job</a></li>
+</ul>
+</li>
 </ul>
 
             </nav>
@@ -428,7 +442,35 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <div class="cell docutils container">
+  <section class="tex2jax_ignore mathjax_ignore" id="fine-tuning-a-model">
+<h1>Fine tuning a model<a class="headerlink" href="#fine-tuning-a-model" title="Permalink to this heading">#</a></h1>
+<p>In this section we look at how to improve a model. We start by using a pre-trained model to predict the energies of several oxide polymorphs. The data here comes from this paper:</p>
+<p>Identifying Potential BO2 Oxide Polymorphs for Epitaxial Growth Candidates
+Mehta, P., Salvador, P. A., &amp; Kitchin, J. R. (2015). Identifying potential BO2 oxide polymorphs for epitaxial growth candidates. ACS Appl. Mater. Interfaces, 6(5), 3630–3639. <a class="reference external" href="http://dx.doi.org/10.1021/am4059149">http://dx.doi.org/10.1021/am4059149</a></p>
+<p>This data set shows equations of state for several oxide/polymorph combinations. I use this dataset to compare with predictions from OCP</p>
+<p>First we get the checkpoint that we want. According to the <a class="reference external" href="https://github.com/Open-Catalyst-Project/ocp/blob/main/MODELS.md#s2ef-models">MODELS</a> the GemNet-OC	OC20+OC22 combination has an energy MAE of 0.483 which seems like a good place to start. This model was trained on oxides.</p>
+<p>We get this checkpoint here.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="s1">&#39;gnoc_oc22_oc20_all_s2ef.pt&#39;</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_09/oc22/s2ef/gnoc_oc22_oc20_all_s2ef.pt&#39;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The data we need is provided in <code class="docutils literal notranslate"><span class="pre">supporting-information.json</span></code>. That file is embedded in the supporting information for the article, and is provided here in the tutorial. We load this data and explore it a little. The json file provides a dictionary with the structure:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[oxide][polymorph][xc][EOS][configurations]
+</pre></div>
+</div>
+<p>The first key is a composition, the second is a string for the polymorph structure, the third indicates which XC functional was used (we focus on PBE here), the fourth key is for the Equation of State calculations, and the last key is a list of results for the EOS.</p>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -452,13 +494,71 @@ document.write(`
 </div>
 </div>
 </div>
+<p>A specific calculation has a lot of details in it. You can use this to recreate the calculations. Shortly we will use these to compare the DFT results to OCP.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;TiO2&#39;</span><span class="p">][</span><span class="s1">&#39;rutile&#39;</span><span class="p">][</span><span class="s1">&#39;PBE&#39;</span><span class="p">][</span><span class="s1">&#39;EOS&#39;</span><span class="p">][</span><span class="s1">&#39;calculations&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;incar&#39;: {&#39;doc&#39;: &#39;INCAR parameters&#39;,
+  &#39;prec&#39;: &#39;Normal&#39;,
+  &#39;isif&#39;: 4,
+  &#39;nbands&#39;: 20,
+  &#39;ibrion&#39;: 2,
+  &#39;gga&#39;: &#39;PE&#39;,
+  &#39;encut&#39;: 520.0,
+  &#39;ismear&#39;: 0,
+  &#39;sigma&#39;: 0.001,
+  &#39;nsw&#39;: 50},
+ &#39;doc&#39;: &#39;JSON representation of a VASP calculation.\n\nenergy is in eV\nforces are in eV/\\AA\nstress is in GPa (sxx, syy, szz,  syz, sxz, sxy)\nmagnetic moments are in Bohr-magneton\nThe density of states is reported with E_f at 0 eV.\nVolume is reported in \\AA^3\nCoordinates and cell parameters are reported in \\AA\n\nIf atom-projected dos are included they are in the form:\n{ados:{energy:data, {atom index: {orbital : dos}}}\n&#39;,
+ &#39;potcar&#39;: [[&#39;O&#39;,
+   &#39;potpaw/O/POTCAR&#39;,
+   &#39;0cf2ce56049ca395c567026b700ed66c94a85161&#39;],
+  [&#39;Ti&#39;, &#39;potpaw/Ti/POTCAR&#39;, &#39;51f7f05982d6b4052becc160375a8b8b670177a7&#39;]],
+ &#39;input&#39;: {&#39;kpts&#39;: [6, 6, 6],
+  &#39;reciprocal&#39;: False,
+  &#39;xc&#39;: &#39;LDA&#39;,
+  &#39;kpts_nintersections&#39;: None,
+  &#39;setups&#39;: None,
+  &#39;txt&#39;: &#39;-&#39;,
+  &#39;gamma&#39;: False},
+ &#39;atoms&#39;: {&#39;cell&#39;: [[4.3789762519649225, 0.0, 0.0],
+   [0.0, 4.3789762519649225, 0.0],
+   [0.0, 0.0, 2.864091775985314]],
+  &#39;symbols&#39;: [&#39;Ti&#39;, &#39;Ti&#39;, &#39;O&#39;, &#39;O&#39;, &#39;O&#39;, &#39;O&#39;],
+  &#39;tags&#39;: [0, 0, 0, 0, 0, 0],
+  &#39;pbc&#39;: [True, True, True],
+  &#39;positions&#39;: [[0.0, 0.0, 0.0],
+   [2.1894881259824612, 2.1894881259824612, 1.432045887992657],
+   [1.3181554154438013, 1.3181554154438013, 0.0],
+   [3.0608208365211214, 3.0608208365211214, 0.0],
+   [3.5076435414262623, 0.87133271053866, 1.432045887992657],
+   [0.87133271053866, 3.5076435414262623, 1.432045887992657]]},
+ &#39;data&#39;: {&#39;stress&#39;: [496.18519999, 496.18519999, 502.82679392, 0.0, 0.0, 0.0],
+  &#39;doc&#39;: &#39;Data from the output of the calculation&#39;,
+  &#39;volume&#39;: 54.92019999999996,
+  &#39;total_energy&#39;: -56.230672,
+  &#39;forces&#39;: [[0.0, 0.0, 0.0],
+   [0.0, 0.0, 0.0],
+   [-0.001264, -0.001264, 0.0],
+   [0.001264, 0.001264, 0.0],
+   [-0.001264, 0.001264, 0.0],
+   [0.001264, -0.001264, 0.0]],
+  &#39;fermi_level&#39;: 3.153}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>For each result we can retrieve the atomic geometry, energy and forces from the json file. We use these to recreate an Atoms object. Here is an example.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;TiO2&#39;</span><span class="p">][</span><span class="s1">&#39;rutile&#39;</span><span class="p">][</span><span class="s1">&#39;PBE&#39;</span><span class="p">][</span><span class="s1">&#39;EOS&#39;</span><span class="p">][</span><span class="s1">&#39;calculations&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">(</span><span class="n">symbols</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;symbols&#39;</span><span class="p">],</span>
-                 <span class="n">positions</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;positions&#39;</span><span class="p">],</span>
-             <span class="n">cell</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;cell&#39;</span><span class="p">],</span>
-             <span class="n">pbc</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;pbc&#39;</span><span class="p">])</span>
+              <span class="n">positions</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;positions&#39;</span><span class="p">],</span>
+              <span class="n">cell</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;cell&#39;</span><span class="p">],</span>
+              <span class="n">pbc</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;pbc&#39;</span><span class="p">])</span>
 <span class="n">atoms</span><span class="o">.</span><span class="n">set_tags</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)))</span>
 <span class="n">atoms</span><span class="p">,</span> <span class="n">c</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;total_energy&#39;</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;forces&#39;</span><span class="p">]</span>
 </pre></div>
@@ -477,12 +577,210 @@ document.write(`
 </div>
 </div>
 </div>
+<p>Next, we will create an OCP calculator that we can use to get predictions from.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">),</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:Unable to identify OCP trainer, defaulting to `forces`. Specify the `trainer` argument into OCPCalculator if otherwise.
+WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: false
+cmd:
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/checkpoints/2023-07-18-14-28-16
+  commit: 0fd79ef
+  identifier: &#39;&#39;
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/logs/tensorboard/2023-07-18-14-28-16
+  print_every: 100
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/results/2023-07-18-14-28-16
+  seed: null
+  timestamp_id: 2023-07-18-14-28-16
+dataset: null
+gpus: 1
+logger: tensorboard
+model: gemnet_oc
+model_attributes:
+  activation: silu
+  atom_edge_interaction: true
+  atom_interaction: true
+  cbf:
+    name: spherical_harmonics
+  cutoff: 12.0
+  cutoff_aeaint: 12.0
+  cutoff_aint: 12.0
+  cutoff_qint: 12.0
+  direct_forces: true
+  edge_atom_interaction: true
+  emb_size_aint_in: 64
+  emb_size_aint_out: 64
+  emb_size_atom: 256
+  emb_size_cbf: 16
+  emb_size_edge: 512
+  emb_size_quad_in: 32
+  emb_size_quad_out: 32
+  emb_size_rbf: 16
+  emb_size_sbf: 32
+  emb_size_trip_in: 64
+  emb_size_trip_out: 64
+  envelope:
+    exponent: 5
+    name: polynomial
+  extensive: true
+  forces_coupled: false
+  max_neighbors: 30
+  max_neighbors_aeaint: 20
+  max_neighbors_aint: 1000
+  max_neighbors_qint: 8
+  num_after_skip: 2
+  num_atom: 3
+  num_atom_emb_layers: 2
+  num_before_skip: 2
+  num_blocks: 4
+  num_concat: 1
+  num_global_out_layers: 2
+  num_output_afteratom: 3
+  num_radial: 128
+  num_spherical: 7
+  otf_graph: true
+  output_init: HeOrthogonal
+  qint_tags:
+  - 1
+  - 2
+  quad_interaction: true
+  rbf:
+    name: gaussian
+  regress_forces: true
+  sbf:
+    name: legendre_outer
+  symmetric_edge_symmetrization: false
+noddp: false
+optim:
+  batch_size: 16
+  clip_grad_norm: 10
+  ema_decay: 0.999
+  energy_coefficient: 1
+  eval_batch_size: 16
+  eval_every: 5000
+  factor: 0.8
+  force_coefficient: 1
+  load_balancing: atoms
+  loss_energy: mae
+  loss_force: atomwisel2
+  lr_initial: 0.0005
+  max_epochs: 80
+  mode: min
+  num_workers: 2
+  optimizer: AdamW
+  optimizer_params:
+    amsgrad: true
+  patience: 3
+  scheduler: ReduceLROnPlateau
+  weight_decay: 0
+slurm:
+  additional_parameters:
+    constraint: volta32gb
+  cpus_per_task: 3
+  folder: /checkpoint/abhshkdz/ocp_oct1_logs/57632342
+  gpus_per_node: 8
+  job_id: &#39;57632342&#39;
+  job_name: gnoc_oc22_oc20_all_s2ef
+  mem: 480GB
+  nodes: 8
+  ntasks_per_node: 8
+  partition: ocp,learnaccel
+  time: 4320
+task:
+  dataset: oc22_lmdb
+  description: Regressing to energies and forces for DFT trajectories from OCP
+  eval_on_free_atoms: true
+  grad_input: atomic forces
+  labels:
+  - potential energy
+  metric: mae
+  primary_metric: forces_mae
+  train_on_free_atoms: true
+  type: regression
+trainer: forces
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we loop through each structure and accumulate the OCP predictions. Then, we plot the parity results.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">oxide</span> <span class="ow">in</span> <span class="n">oxides</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">polymorph</span> <span class="ow">in</span> <span class="n">polymorphs</span><span class="p">:</span>
+        <span class="n">dft</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ocp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">calculations</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">oxide</span><span class="p">][</span><span class="n">polymorph</span><span class="p">][</span><span class="s1">&#39;PBE&#39;</span><span class="p">][</span><span class="s1">&#39;EOS&#39;</span><span class="p">][</span><span class="s1">&#39;calculations&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calculations</span><span class="p">:</span>
+                        
+            <span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">(</span><span class="n">symbols</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;symbols&#39;</span><span class="p">],</span>
+                          <span class="n">positions</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;positions&#39;</span><span class="p">],</span>
+                          <span class="n">cell</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;cell&#39;</span><span class="p">],</span>
+                          <span class="n">pbc</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;pbc&#39;</span><span class="p">])</span>
+            <span class="n">atoms</span><span class="o">.</span><span class="n">set_tags</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)))</span>
+            
+            <span class="n">atoms</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">calc</span>
+            <span class="n">ocp</span> <span class="o">+=</span> <span class="p">[</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)]</span>
+            <span class="n">dft</span> <span class="o">+=</span> <span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;total_energy&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dft</span><span class="p">,</span> <span class="n">ocp</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span> <span class="k">if</span> <span class="n">oxide</span> <span class="o">==</span> <span class="s1">&#39;VO2&#39;</span> <span class="k">else</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span>
+                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">oxide</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">polymorph</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;DFT (eV/atom)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;OCP (eV/atom)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">);</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Elapsed time </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">:</span><span class="s1">1.1f</span><span class="si">}</span><span class="s1"> seconds.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time 16.3 seconds.
+</pre></div>
+</div>
+<img alt="../_images/c496886644ec383bf7ff5942dc95ef8ef408e023a2cf228c7edb242611bd3535.png" src="../_images/c496886644ec383bf7ff5942dc95ef8ef408e023a2cf228c7edb242611bd3535.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mae</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dft</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ocp</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;MAE = </span><span class="si">{</span><span class="n">mae</span><span class="si">:</span><span class="s1">1.3f</span><span class="si">}</span><span class="s1"> eV/atom&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>MAE = 1.668 eV/atom
+</pre></div>
+</div>
+</div>
+</div>
+<p>The MAE is somewhat high compared to the reported value of 0.458 eV. That is not too surprising; although OC22 was trained on oxides, it was not trained on all of these structures. It is also evident on inspection that the main issues are all the VO2 structures.</p>
+<p>We can improve this by fine-tuning the model.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="fine-tuning-the-checkpoint">
+<h1>Fine tuning the checkpoint<a class="headerlink" href="#fine-tuning-the-checkpoint" title="Permalink to this heading">#</a></h1>
+<p>There are severeal steps in fine-tuning:</p>
+<ol class="arabic simple">
+<li><p>Create train, test, val datasets</p></li>
+<li><p>Create a configuration yml file</p></li>
+<li><p>Run the training</p></li>
+<li><p>Check the results</p></li>
+</ol>
+<p>First we create the training databases. OCP supports ase databases, so we use those here. The first step is to make a database containing the data. We need to write an atoms object with an attached SinglePointCalculator for each structure.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.db</span> <span class="kn">import</span> <span class="n">connect</span>
 <span class="kn">from</span> <span class="nn">ase.calculators.singlepoint</span> <span class="kn">import</span> <span class="n">SinglePointCalculator</span>
 
-<span class="o">!</span><span class="w"> </span>rm<span class="w"> </span>-fr<span class="w"> </span>oxides.db
+<span class="o">!</span><span class="w"> </span>rm<span class="w"> </span>-fr<span class="w"> </span>oxides.db<span class="w">  </span>#<span class="w"> </span>start<span class="w"> </span>clean<span class="w"> </span>when<span class="w"> </span>you<span class="w"> </span>run<span class="w"> </span>this<span class="w"> </span>cell
 <span class="n">db</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s1">&#39;oxides.db&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -541,14 +839,10 @@ Rows: 295 (showing first 20)
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>wget<span class="w"> </span>-q<span class="w"> </span>-nc<span class="w"> </span>https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_09/oc22/s2ef/gnoc_oc22_oc20_all_s2ef.pt
-</pre></div>
-</div>
-</div>
-</div>
-<p>We need to split the ase-db into three separate databases, one for training (80%), one for testing (10%) and one for validation. We generate a list of ids and then shuffle them. Then we write the first 80% into train.db, the next 10% into test.db, and the remaining into val.db.</p>
+<section id="train-test-val-splits">
+<h2>train, test, val splits<a class="headerlink" href="#train-test-val-splits" title="Permalink to this heading">#</a></h2>
+<p>We need to split the ase-db into three separate databases, one for training (80%), one for testing (10%) and one for validation. We generate a list of ids and then shuffle them. Then we write the first 80% into <code class="docutils literal notranslate"><span class="pre">train.db</span></code>, the next 10% into <code class="docutils literal notranslate"><span class="pre">test.db</span></code>, and the remaining into <code class="docutils literal notranslate"><span class="pre">val.db</span></code>.</p>
+<p>You choose the plits you want. We take a simple approach to split the database here. We make an array of integers that correspond to the ids, randomly shuffle them, and then get each row in the randomized order and write them to a new db.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -593,7 +887,7 @@ Rows: 295 (showing first 20)
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span>
 <span class="n">test_end</span> <span class="o">=</span> <span class="n">train_end</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">)</span>
 
-<span class="o">!</span><span class="w"> </span>rm<span class="w"> </span>-fr<span class="w"> </span>train.db<span class="w"> </span>test.db<span class="w"> </span>val.db
+<span class="o">!</span><span class="w"> </span>rm<span class="w"> </span>-fr<span class="w"> </span>train.db<span class="w"> </span>test.db<span class="w"> </span>val.db<span class="w"> </span>#<span class="w"> </span>start<span class="w"> </span>clean
 
 <span class="n">train</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s1">&#39;train.db&#39;</span><span class="p">)</span>
 <span class="n">test</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s1">&#39;test.db&#39;</span><span class="p">)</span>
@@ -610,11 +904,1426 @@ Rows: 295 (showing first 20)
 <span class="k">for</span> <span class="n">_id</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">[</span><span class="n">test_end</span><span class="p">:]:</span>
     <span class="n">row</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">_id</span><span class="p">))</span>
     <span class="n">val</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">toatoms</span><span class="p">())</span>
-    
 </pre></div>
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="n">test</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="n">val</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(236, 29, 30)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="setting-up-the-configuration-yaml-file">
+<h2>Setting up the configuration yaml file<a class="headerlink" href="#setting-up-the-configuration-yaml-file" title="Permalink to this heading">#</a></h2>
+<p>We have to create a yaml configuration file for the model we are using. We derive these from files that are installed with <code class="docutils literal notranslate"><span class="pre">ocp</span></code>. Here we use Python to find them. Check the <a class="reference external" href="https://github.com/Open-Catalyst-Project/ocp/blob/main/MODELS.md">MODELS</a> page to see which config to use for the checkpoint we are using here.</p>
+<p>According to the documentation, we need configs/oc22/s2ef/gemnet-oc/gemnet_oc_oc20_oc22.yml</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">ocpmodels</span> <span class="k">as</span> <span class="nn">om</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">ocp_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ocp_root</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">ocp_root</span> <span class="o">/</span> <span class="s1">&#39;configs/oc22/s2ef/gemnet-oc&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/ocp
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;gemnet_oc_finetune.yml&#39;,
+ &#39;gemnet_oc_oc20_oc22_degen_edges.yml&#39;,
+ &#39;gemnet_oc_oc20_oc22.yml&#39;,
+ &#39;gemnet_oc.yml&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>There are many ways you could build a YAML file. Here we do it programmatically. This is more reproducible than editing the file by hand. One downside of using Python here is the order of the yaml file is not preserved, so the output files don’t look like the input files. That is ok.</p>
+<p>We write the file to run.yml in the current directory.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yaml</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">dump</span>
+<span class="kn">from</span> <span class="nn">yaml</span> <span class="kn">import</span> <span class="n">CLoader</span> <span class="k">as</span> <span class="n">Loader</span><span class="p">,</span> <span class="n">CDumper</span> <span class="k">as</span> <span class="n">Dumper</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;configs/s2ef/all/base.yml&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">yml</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">Loader</span><span class="p">)</span>
+    
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;configs/oc22/s2ef/gemnet-oc/gemnet_oc.yml&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">yml</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">Loader</span><span class="p">))</span>
+    <span class="k">del</span> <span class="n">yml</span><span class="p">[</span><span class="s1">&#39;includes&#39;</span><span class="p">]</span>  <span class="c1"># OCP uses relative paths here. We don&#39;t need an include anymore since we load base above.</span>
+    
+<span class="n">yml</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s1">&#39;ase_db&#39;</span><span class="p">),</span>
+                <span class="n">dataset</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;train.db&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()),</span>
+                                        <span class="n">a2g_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">r_energy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">r_forces</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                                        <span class="n">keep_in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                             <span class="c1"># for test, we only do predictions so we do not need to regress</span>
+                             <span class="c1"># energy or forces</span>
+                            <span class="n">test</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;test.db&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()),</span>
+                                      <span class="n">a2g_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">r_energy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">r_forces</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                                      <span class="n">keep_in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                            <span class="n">val</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;val.db&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()),</span>
+                                      <span class="n">a2g_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">r_energy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">r_forces</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                                      <span class="n">keep_in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">),)))</span>
+
+<span class="c1"># This setting determines when checkpoints are saved</span>
+<span class="k">del</span> <span class="n">yml</span><span class="p">[</span><span class="s1">&#39;optim&#39;</span><span class="p">][</span><span class="s1">&#39;eval_every&#39;</span><span class="p">]</span>
+
+<span class="n">runyml</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;run.yml&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">runyml</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dump</span><span class="p">(</span><span class="n">yml</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    
+<span class="n">runyml</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/run.yml&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>cat<span class="w"> </span>run.yml
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dataset:
+  test:
+    a2g_args:
+      r_energy: false
+      r_forces: false
+    keep_in_memory: true
+    src: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/test.db
+  train:
+    a2g_args:
+      r_energy: true
+      r_forces: true
+    keep_in_memory: true
+    src: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/train.db
+  val:
+    a2g_args:
+      r_energy: true
+      r_forces: true
+    keep_in_memory: true
+    src: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/val.db
+logger: tensorboard
+model:
+  activation: silu
+  atom_edge_interaction: true
+  atom_interaction: true
+  cbf:
+    name: spherical_harmonics
+  cutoff: 12.0
+  cutoff_aeaint: 12.0
+  cutoff_aint: 12.0
+  cutoff_qint: 12.0
+  direct_forces: true
+  edge_atom_interaction: true
+  emb_size_aint_in: 64
+  emb_size_aint_out: 64
+  emb_size_atom: 256
+  emb_size_cbf: 16
+  emb_size_edge: 512
+  emb_size_quad_in: 32
+  emb_size_quad_out: 32
+  emb_size_rbf: 16
+  emb_size_sbf: 32
+  emb_size_trip_in: 64
+  emb_size_trip_out: 64
+  envelope:
+    exponent: 5
+    name: polynomial
+  extensive: true
+  forces_coupled: false
+  max_neighbors: 30
+  max_neighbors_aeaint: 20
+  max_neighbors_aint: 1000
+  max_neighbors_qint: 8
+  name: gemnet_oc
+  num_after_skip: 2
+  num_atom: 3
+  num_atom_emb_layers: 2
+  num_before_skip: 2
+  num_blocks: 4
+  num_concat: 1
+  num_global_out_layers: 2
+  num_output_afteratom: 3
+  num_radial: 128
+  num_spherical: 7
+  otf_graph: true
+  output_init: HeOrthogonal
+  qint_tags:
+  - 1
+  - 2
+  quad_interaction: true
+  rbf:
+    name: gaussian
+  regress_forces: true
+  sbf:
+    name: legendre_outer
+optim:
+  batch_size: 16
+  clip_grad_norm: 10
+  ema_decay: 0.999
+  eval_batch_size: 16
+  load_balancing: atoms
+  lr_gamma: 0.8
+  lr_initial: 0.0005
+  lr_milestones:
+  - 64000
+  - 96000
+  - 128000
+  - 160000
+  - 192000
+  max_epochs: 80
+  num_workers: 2
+  optimizer: AdamW
+  optimizer_params:
+    amsgrad: true
+  warmup_steps: -1
+  weight_decay: 0
+task:
+  dataset: ase_db
+trainer: forces
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="running-the-training-job">
+<h2>Running the training job<a class="headerlink" href="#running-the-training-job" title="Permalink to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">ocp</span></code> provides a <code class="docutils literal notranslate"><span class="pre">main.py</span></code> file that is used for training. You have to run this file from the ocp root directory. The following cells show how to get the arguments you need to build up the command to run.</p>
+<p>You need absolute paths to your run.yml file, and to the checkpoint file.</p>
+<p>Here we construct the Python command you need to run. You need to run this cell, then copy the results into the next cell with a bash cell-magic.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;cd </span><span class="si">{</span><span class="n">ocp_root</span><span class="si">}</span><span class="s1"> </span>
+<span class="s1">python main.py --mode train </span><span class="se">\\</span>
+<span class="s1"> --config-yml </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;run.yml&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span><span class="si">}</span><span class="s1"> </span><span class="se">\\</span>
+<span class="s1"> --checkpoint </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;gnoc_oc22_oc20_all_s2ef.pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>cd /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/ocp 
+python main.py --mode train \
+ --config-yml /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/run.yml \
+ --checkpoint /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/gnoc_oc22_oc20_all_s2ef.pt
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+cd /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/ocp 
+python main.py --mode train \
+ --config-yml /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/run.yml \
+ --checkpoint /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/gnoc_oc22_oc20_all_s2ef.pt
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:07 (INFO): Project root: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/ocp
+amp: false
+cmd:
+  checkpoint_dir: ./checkpoints/2023-07-18-14-58-08
+  commit: 0fd79ef
+  identifier: &#39;&#39;
+  logs_dir: ./logs/tensorboard/2023-07-18-14-58-08
+  print_every: 10
+  results_dir: ./results/2023-07-18-14-58-08
+  seed: 0
+  timestamp_id: 2023-07-18-14-58-08
+dataset:
+  a2g_args:
+    r_energy: true
+    r_forces: true
+  keep_in_memory: true
+  src: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/train.db
+gpus: 1
+logger: tensorboard
+model: gemnet_oc
+model_attributes:
+  activation: silu
+  atom_edge_interaction: true
+  atom_interaction: true
+  cbf:
+    name: spherical_harmonics
+  cutoff: 12.0
+  cutoff_aeaint: 12.0
+  cutoff_aint: 12.0
+  cutoff_qint: 12.0
+  direct_forces: true
+  edge_atom_interaction: true
+  emb_size_aint_in: 64
+  emb_size_aint_out: 64
+  emb_size_atom: 256
+  emb_size_cbf: 16
+  emb_size_edge: 512
+  emb_size_quad_in: 32
+  emb_size_quad_out: 32
+  emb_size_rbf: 16
+  emb_size_sbf: 32
+  emb_size_trip_in: 64
+  emb_size_trip_out: 64
+  envelope:
+    exponent: 5
+    name: polynomial
+  extensive: true
+  forces_coupled: false
+  max_neighbors: 30
+  max_neighbors_aeaint: 20
+  max_neighbors_aint: 1000
+  max_neighbors_qint: 8
+  num_after_skip: 2
+  num_atom: 3
+  num_atom_emb_layers: 2
+  num_before_skip: 2
+  num_blocks: 4
+  num_concat: 1
+  num_global_out_layers: 2
+  num_output_afteratom: 3
+  num_radial: 128
+  num_spherical: 7
+  otf_graph: true
+  output_init: HeOrthogonal
+  qint_tags:
+  - 1
+  - 2
+  quad_interaction: true
+  rbf:
+    name: gaussian
+  regress_forces: true
+  sbf:
+    name: legendre_outer
+noddp: false
+optim:
+  batch_size: 16
+  clip_grad_norm: 10
+  ema_decay: 0.999
+  eval_batch_size: 16
+  load_balancing: atoms
+  lr_gamma: 0.8
+  lr_initial: 0.0005
+  lr_milestones:
+  - 64000
+  - 96000
+  - 128000
+  - 160000
+  - 192000
+  max_epochs: 80
+  num_workers: 2
+  optimizer: AdamW
+  optimizer_params:
+    amsgrad: true
+  warmup_steps: -1
+  weight_decay: 0
+slurm: {}
+task:
+  dataset: ase_db
+test_dataset:
+  a2g_args:
+    r_energy: false
+    r_forces: false
+  keep_in_memory: true
+  src: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/test.db
+trainer: forces
+val_dataset:
+  a2g_args:
+    r_energy: true
+    r_forces: true
+  keep_in_memory: true
+  src: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/val.db
+
+2023-07-18 14:58:12 (INFO): Batch balancing is disabled for single GPU training.
+2023-07-18 14:58:12 (INFO): Batch balancing is disabled for single GPU training.
+2023-07-18 14:58:12 (INFO): Batch balancing is disabled for single GPU training.
+2023-07-18 14:58:12 (INFO): Loading dataset: ase_db
+2023-07-18 14:58:12 (INFO): Loading model: gemnet_oc
+2023-07-18 14:58:15 (INFO): Loaded GemNetOC with 38864438 parameters.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:15 (WARNING): Model gradient logging to tensorboard not yet supported.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:15 (INFO): Loading checkpoint from: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/gnoc_oc22_oc20_all_s2ef.pt
+2023-07-18 14:58:16 (INFO): Overwriting scaling factors with those loaded from checkpoint. If you&#39;re generating predictions with a pretrained checkpoint, this is the correct behavior. To disable this, delete `scale_dict` from the checkpoint. 
+2023-07-18 14:58:21 (INFO): forcesx_mae: 2.85e-02, forcesy_mae: 2.33e-02, forcesz_mae: 3.25e-02, forces_mae: 2.81e-02, forces_cos: 8.09e-03, forces_magnitude: 4.38e-02, energy_mae: 4.66e+00, energy_force_within_threshold: 0.00e+00, loss: 7.18e+00, lr: 5.00e-04, epoch: 6.67e-01, step: 1.00e+01
+2023-07-18 14:58:22 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  3.38it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.44it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:23 (INFO): forcesx_mae: 0.0086, forcesy_mae: 0.0101, forcesz_mae: 0.0075, forces_mae: 0.0087, forces_cos: 0.0374, forces_magnitude: 0.0136, energy_mae: 1.5019, energy_force_within_threshold: 0.0000, loss: 2.3182, epoch: 1.0000
+2023-07-18 14:58:23 (INFO): Predicting on test.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  6.48it/s]
+/home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/ocp/ocpmodels/trainers/forces_trainer.py:263: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray.
+  predictions[&quot;forces&quot;] = np.array(predictions[&quot;forces&quot;])
+/home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/ocp/ocpmodels/trainers/base_trainer.py:794: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray.
+  np.array(gather_results[k])[idx]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:23 (INFO): Writing results to ./results/2023-07-18-14-58-08/s2ef_predictions.npz
+2023-07-18 14:58:25 (INFO): forcesx_mae: 1.32e-02, forcesy_mae: 1.30e-02, forcesz_mae: 1.29e-02, forces_mae: 1.30e-02, forces_cos: 5.47e-02, forces_magnitude: 1.76e-02, energy_mae: 3.10e+00, energy_force_within_threshold: 0.00e+00, loss: 4.28e+00, lr: 5.00e-04, epoch: 1.33e+00, step: 2.00e+01
+2023-07-18 14:58:27 (INFO): forcesx_mae: 1.35e-02, forcesy_mae: 1.16e-02, forcesz_mae: 1.11e-02, forces_mae: 1.21e-02, forces_cos: 3.76e-02, forces_magnitude: 1.45e-02, energy_mae: 1.41e+00, energy_force_within_threshold: 6.41e-03, loss: 2.49e+00, lr: 5.00e-04, epoch: 2.00e+00, step: 3.00e+01
+2023-07-18 14:58:28 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  4.20it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.08it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:28 (INFO): forcesx_mae: 0.0086, forcesy_mae: 0.0106, forcesz_mae: 0.0082, forces_mae: 0.0091, forces_cos: 0.0415, forces_magnitude: 0.0153, energy_mae: 2.3297, energy_force_within_threshold: 0.0333, loss: 3.1492, epoch: 2.0000
+2023-07-18 14:58:28 (INFO): Predicting on test.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  6.28it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  6.56it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:29 (INFO): Writing results to ./results/2023-07-18-14-58-08/s2ef_predictions.npz
+2023-07-18 14:58:31 (INFO): forcesx_mae: 9.46e-03, forcesy_mae: 9.08e-03, forcesz_mae: 9.27e-03, forces_mae: 9.27e-03, forces_cos: 3.70e-02, forces_magnitude: 1.28e-02, energy_mae: 2.15e+00, energy_force_within_threshold: 0.00e+00, loss: 2.98e+00, lr: 5.00e-04, epoch: 2.67e+00, step: 4.00e+01
+2023-07-18 14:58:33 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.28it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.84it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:33 (INFO): forcesx_mae: 0.0100, forcesy_mae: 0.0114, forcesz_mae: 0.0081, forces_mae: 0.0099, forces_cos: 0.0233, forces_magnitude: 0.0122, energy_mae: 1.4100, energy_force_within_threshold: 0.0000, loss: 2.3200, epoch: 3.0000
+2023-07-18 14:58:35 (INFO): forcesx_mae: 9.91e-03, forcesy_mae: 1.02e-02, forcesz_mae: 1.04e-02, forces_mae: 1.02e-02, forces_cos: 6.02e-02, forces_magnitude: 1.30e-02, energy_mae: 1.56e+00, energy_force_within_threshold: 0.00e+00, loss: 2.50e+00, lr: 5.00e-04, epoch: 3.33e+00, step: 5.00e+01
+2023-07-18 14:58:37 (INFO): forcesx_mae: 1.11e-02, forcesy_mae: 1.02e-02, forcesz_mae: 1.04e-02, forces_mae: 1.05e-02, forces_cos: 4.11e-02, forces_magnitude: 1.35e-02, energy_mae: 1.89e+00, energy_force_within_threshold: 1.28e-02, loss: 2.82e+00, lr: 5.00e-04, epoch: 4.00e+00, step: 6.00e+01
+2023-07-18 14:58:37 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.32it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.86it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:38 (INFO): forcesx_mae: 0.0095, forcesy_mae: 0.0109, forcesz_mae: 0.0085, forces_mae: 0.0096, forces_cos: 0.0801, forces_magnitude: 0.0136, energy_mae: 1.6991, energy_force_within_threshold: 0.0333, loss: 2.5719, epoch: 4.0000
+2023-07-18 14:58:40 (INFO): forcesx_mae: 1.03e-02, forcesy_mae: 1.01e-02, forcesz_mae: 1.08e-02, forces_mae: 1.04e-02, forces_cos: 3.93e-02, forces_magnitude: 1.19e-02, energy_mae: 1.28e+00, energy_force_within_threshold: 6.25e-03, loss: 2.19e+00, lr: 5.00e-04, epoch: 4.67e+00, step: 7.00e+01
+2023-07-18 14:58:42 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.34it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.89it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:43 (INFO): forcesx_mae: 0.0093, forcesy_mae: 0.0106, forcesz_mae: 0.0079, forces_mae: 0.0093, forces_cos: -0.0024, forces_magnitude: 0.0125, energy_mae: 0.9033, energy_force_within_threshold: 0.0000, loss: 1.7575, epoch: 5.0000
+2023-07-18 14:58:44 (INFO): forcesx_mae: 9.98e-03, forcesy_mae: 1.02e-02, forcesz_mae: 9.48e-03, forces_mae: 9.88e-03, forces_cos: 6.00e-02, forces_magnitude: 1.35e-02, energy_mae: 1.06e+00, energy_force_within_threshold: 2.56e-02, loss: 1.98e+00, lr: 5.00e-04, epoch: 5.33e+00, step: 8.00e+01
+2023-07-18 14:58:46 (INFO): forcesx_mae: 1.64e-02, forcesy_mae: 1.45e-02, forcesz_mae: 1.31e-02, forces_mae: 1.47e-02, forces_cos: -2.38e-02, forces_magnitude: 2.01e-02, energy_mae: 3.53e+01, energy_force_within_threshold: 6.41e-03, loss: 3.58e+01, lr: 5.00e-04, epoch: 6.00e+00, step: 9.00e+01
+2023-07-18 14:58:47 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.26it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.84it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:47 (INFO): forcesx_mae: 0.0105, forcesy_mae: 0.0113, forcesz_mae: 0.0094, forces_mae: 0.0104, forces_cos: -0.0441, forces_magnitude: 0.0149, energy_mae: 0.8156, energy_force_within_threshold: 0.0333, loss: 1.7459, epoch: 6.0000
+2023-07-18 14:58:50 (INFO): forcesx_mae: 1.05e-02, forcesy_mae: 9.48e-03, forcesz_mae: 9.53e-03, forces_mae: 9.82e-03, forces_cos: -2.36e-02, forces_magnitude: 1.16e-02, energy_mae: 1.60e+00, energy_force_within_threshold: 0.00e+00, loss: 2.48e+00, lr: 5.00e-04, epoch: 6.67e+00, step: 1.00e+02
+2023-07-18 14:58:51 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.36it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.88it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:52 (INFO): forcesx_mae: 0.0091, forcesy_mae: 0.0109, forcesz_mae: 0.0083, forces_mae: 0.0094, forces_cos: -0.0780, forces_magnitude: 0.0155, energy_mae: 0.9142, energy_force_within_threshold: 0.0000, loss: 1.7740, epoch: 7.0000
+2023-07-18 14:58:53 (INFO): forcesx_mae: 9.49e-03, forcesy_mae: 1.02e-02, forcesz_mae: 1.02e-02, forces_mae: 9.94e-03, forces_cos: 3.87e-02, forces_magnitude: 1.43e-02, energy_mae: 1.05e+00, energy_force_within_threshold: 1.28e-02, loss: 1.94e+00, lr: 5.00e-04, epoch: 7.33e+00, step: 1.10e+02
+2023-07-18 14:58:55 (INFO): forcesx_mae: 1.10e-02, forcesy_mae: 1.03e-02, forcesz_mae: 1.16e-02, forces_mae: 1.10e-02, forces_cos: 8.97e-03, forces_magnitude: 1.38e-02, energy_mae: 7.63e-01, energy_force_within_threshold: 1.28e-02, loss: 1.76e+00, lr: 5.00e-04, epoch: 8.00e+00, step: 1.20e+02
+2023-07-18 14:58:56 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.25it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.85it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:56 (INFO): forcesx_mae: 0.0136, forcesy_mae: 0.0159, forcesz_mae: 0.0155, forces_mae: 0.0150, forces_cos: -0.0553, forces_magnitude: 0.0183, energy_mae: 1.5011, energy_force_within_threshold: 0.0000, loss: 2.8294, epoch: 8.0000
+2023-07-18 14:58:59 (INFO): forcesx_mae: 1.41e-02, forcesy_mae: 1.19e-02, forcesz_mae: 1.37e-02, forces_mae: 1.32e-02, forces_cos: 2.25e-03, forces_magnitude: 1.54e-02, energy_mae: 9.18e-01, energy_force_within_threshold: 1.87e-02, loss: 2.09e+00, lr: 5.00e-04, epoch: 8.67e+00, step: 1.30e+02
+2023-07-18 14:59:01 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.32it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.89it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:01 (INFO): forcesx_mae: 0.0106, forcesy_mae: 0.0131, forcesz_mae: 0.0109, forces_mae: 0.0116, forces_cos: -0.0885, forces_magnitude: 0.0153, energy_mae: 0.9112, energy_force_within_threshold: 0.0000, loss: 1.9527, epoch: 9.0000
+2023-07-18 14:59:03 (INFO): forcesx_mae: 1.20e-02, forcesy_mae: 1.19e-02, forcesz_mae: 1.02e-02, forces_mae: 1.14e-02, forces_cos: 1.12e-01, forces_magnitude: 1.47e-02, energy_mae: 1.23e+00, energy_force_within_threshold: 6.41e-03, loss: 2.26e+00, lr: 5.00e-04, epoch: 9.33e+00, step: 1.40e+02
+2023-07-18 14:59:05 (INFO): forcesx_mae: 9.81e-03, forcesy_mae: 1.02e-02, forcesz_mae: 9.63e-03, forces_mae: 9.87e-03, forces_cos: -5.90e-03, forces_magnitude: 1.35e-02, energy_mae: 1.20e+00, energy_force_within_threshold: 6.41e-03, loss: 2.08e+00, lr: 5.00e-04, epoch: 1.00e+01, step: 1.50e+02
+2023-07-18 14:59:05 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.05it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.69it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:06 (INFO): forcesx_mae: 0.0109, forcesy_mae: 0.0115, forcesz_mae: 0.0079, forces_mae: 0.0101, forces_cos: 0.0126, forces_magnitude: 0.0129, energy_mae: 1.8574, energy_force_within_threshold: 0.0000, loss: 2.7894, epoch: 10.0000
+2023-07-18 14:59:08 (INFO): forcesx_mae: 1.40e-02, forcesy_mae: 1.32e-02, forcesz_mae: 1.43e-02, forces_mae: 1.38e-02, forces_cos: 2.78e-02, forces_magnitude: 1.49e-02, energy_mae: 1.31e+00, energy_force_within_threshold: 6.25e-03, loss: 2.55e+00, lr: 5.00e-04, epoch: 1.07e+01, step: 1.60e+02
+2023-07-18 14:59:10 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.22it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.73it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:10 (INFO): forcesx_mae: 0.0115, forcesy_mae: 0.0112, forcesz_mae: 0.0099, forces_mae: 0.0109, forces_cos: -0.0347, forces_magnitude: 0.0151, energy_mae: 0.5023, energy_force_within_threshold: 0.0333, loss: 1.4869, epoch: 11.0000
+2023-07-18 14:59:12 (INFO): forcesx_mae: 8.55e-03, forcesy_mae: 9.91e-03, forcesz_mae: 9.27e-03, forces_mae: 9.24e-03, forces_cos: 1.02e-01, forces_magnitude: 1.13e-02, energy_mae: 7.10e-01, energy_force_within_threshold: 1.92e-02, loss: 1.54e+00, lr: 5.00e-04, epoch: 1.13e+01, step: 1.70e+02
+2023-07-18 14:59:14 (INFO): forcesx_mae: 1.02e-02, forcesy_mae: 9.65e-03, forcesz_mae: 9.72e-03, forces_mae: 9.87e-03, forces_cos: 1.21e-01, forces_magnitude: 1.30e-02, energy_mae: 8.91e-01, energy_force_within_threshold: 1.92e-02, loss: 1.79e+00, lr: 5.00e-04, epoch: 1.20e+01, step: 1.80e+02
+2023-07-18 14:59:15 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.21it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.77it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:15 (INFO): forcesx_mae: 0.0101, forcesy_mae: 0.0119, forcesz_mae: 0.0096, forces_mae: 0.0105, forces_cos: -0.0316, forces_magnitude: 0.0124, energy_mae: 1.0997, energy_force_within_threshold: 0.0000, loss: 2.0503, epoch: 12.0000
+2023-07-18 14:59:18 (INFO): forcesx_mae: 1.03e-02, forcesy_mae: 9.82e-03, forcesz_mae: 9.62e-03, forces_mae: 9.91e-03, forces_cos: 1.16e-01, forces_magnitude: 1.27e-02, energy_mae: 1.06e+00, energy_force_within_threshold: 1.25e-02, loss: 1.95e+00, lr: 5.00e-04, epoch: 1.27e+01, step: 1.90e+02
+2023-07-18 14:59:19 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.35it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.88it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:20 (INFO): forcesx_mae: 0.0106, forcesy_mae: 0.0125, forcesz_mae: 0.0104, forces_mae: 0.0112, forces_cos: -0.0169, forces_magnitude: 0.0136, energy_mae: 1.5473, energy_force_within_threshold: 0.0333, loss: 2.5513, epoch: 13.0000
+2023-07-18 14:59:21 (INFO): forcesx_mae: 8.15e-03, forcesy_mae: 8.99e-03, forcesz_mae: 9.23e-03, forces_mae: 8.79e-03, forces_cos: 9.06e-02, forces_magnitude: 1.31e-02, energy_mae: 8.71e-01, energy_force_within_threshold: 1.28e-02, loss: 1.66e+00, lr: 5.00e-04, epoch: 1.33e+01, step: 2.00e+02
+2023-07-18 14:59:23 (INFO): forcesx_mae: 1.09e-02, forcesy_mae: 1.05e-02, forcesz_mae: 9.69e-03, forces_mae: 1.04e-02, forces_cos: 1.05e-01, forces_magnitude: 1.26e-02, energy_mae: 1.46e+00, energy_force_within_threshold: 0.00e+00, loss: 2.36e+00, lr: 5.00e-04, epoch: 1.40e+01, step: 2.10e+02
+2023-07-18 14:59:24 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.21it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.85it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:24 (INFO): forcesx_mae: 0.0089, forcesy_mae: 0.0105, forcesz_mae: 0.0080, forces_mae: 0.0091, forces_cos: -0.0137, forces_magnitude: 0.0146, energy_mae: 0.4951, energy_force_within_threshold: 0.0000, loss: 1.3331, epoch: 14.0000
+2023-07-18 14:59:27 (INFO): forcesx_mae: 1.09e-02, forcesy_mae: 1.03e-02, forcesz_mae: 1.03e-02, forces_mae: 1.05e-02, forces_cos: 1.48e-02, forces_magnitude: 1.18e-02, energy_mae: 1.03e+00, energy_force_within_threshold: 1.25e-02, loss: 1.97e+00, lr: 5.00e-04, epoch: 1.47e+01, step: 2.20e+02
+2023-07-18 14:59:28 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.20it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.77it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:29 (INFO): forcesx_mae: 0.0090, forcesy_mae: 0.0108, forcesz_mae: 0.0079, forces_mae: 0.0092, forces_cos: -0.0715, forces_magnitude: 0.0137, energy_mae: 1.1277, energy_force_within_threshold: 0.0000, loss: 1.9699, epoch: 15.0000
+2023-07-18 14:59:30 (INFO): forcesx_mae: 9.95e-03, forcesy_mae: 1.05e-02, forcesz_mae: 9.04e-03, forces_mae: 9.82e-03, forces_cos: 1.44e-01, forces_magnitude: 1.29e-02, energy_mae: 1.01e+00, energy_force_within_threshold: 1.92e-02, loss: 1.87e+00, lr: 5.00e-04, epoch: 1.53e+01, step: 2.30e+02
+2023-07-18 14:59:32 (INFO): forcesx_mae: 8.21e-03, forcesy_mae: 9.04e-03, forcesz_mae: 9.21e-03, forces_mae: 8.82e-03, forces_cos: 1.64e-01, forces_magnitude: 1.27e-02, energy_mae: 6.17e-01, energy_force_within_threshold: 3.85e-02, loss: 1.42e+00, lr: 5.00e-04, epoch: 1.60e+01, step: 2.40e+02
+2023-07-18 14:59:33 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.23it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.78it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:34 (INFO): forcesx_mae: 0.0090, forcesy_mae: 0.0105, forcesz_mae: 0.0079, forces_mae: 0.0091, forces_cos: -0.1948, forces_magnitude: 0.0149, energy_mae: 0.5141, energy_force_within_threshold: 0.0000, loss: 1.3535, epoch: 16.0000
+2023-07-18 14:59:36 (INFO): forcesx_mae: 8.13e-03, forcesy_mae: 8.06e-03, forcesz_mae: 7.67e-03, forces_mae: 7.95e-03, forces_cos: 1.40e-01, forces_magnitude: 1.06e-02, energy_mae: 5.55e-01, energy_force_within_threshold: 3.12e-02, loss: 1.26e+00, lr: 5.00e-04, epoch: 1.67e+01, step: 2.50e+02
+2023-07-18 14:59:38 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.33it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.86it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:39 (INFO): forcesx_mae: 0.0092, forcesy_mae: 0.0106, forcesz_mae: 0.0074, forces_mae: 0.0091, forces_cos: 0.0139, forces_magnitude: 0.0126, energy_mae: 1.4006, energy_force_within_threshold: 0.0000, loss: 2.2355, epoch: 17.0000
+2023-07-18 14:59:40 (INFO): forcesx_mae: 9.43e-03, forcesy_mae: 9.78e-03, forcesz_mae: 9.65e-03, forces_mae: 9.62e-03, forces_cos: 1.86e-01, forces_magnitude: 1.41e-02, energy_mae: 7.62e-01, energy_force_within_threshold: 2.56e-02, loss: 1.64e+00, lr: 5.00e-04, epoch: 1.73e+01, step: 2.60e+02
+2023-07-18 14:59:42 (INFO): forcesx_mae: 9.59e-03, forcesy_mae: 9.60e-03, forcesz_mae: 9.71e-03, forces_mae: 9.63e-03, forces_cos: 2.17e-02, forces_magnitude: 1.28e-02, energy_mae: 6.61e-01, energy_force_within_threshold: 3.85e-02, loss: 1.50e+00, lr: 5.00e-04, epoch: 1.80e+01, step: 2.70e+02
+2023-07-18 14:59:43 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.19it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.72it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:43 (INFO): forcesx_mae: 0.0088, forcesy_mae: 0.0103, forcesz_mae: 0.0081, forces_mae: 0.0091, forces_cos: 0.0070, forces_magnitude: 0.0144, energy_mae: 1.7223, energy_force_within_threshold: 0.0000, loss: 2.5328, epoch: 18.0000
+2023-07-18 14:59:46 (INFO): forcesx_mae: 8.72e-03, forcesy_mae: 9.29e-03, forcesz_mae: 8.76e-03, forces_mae: 8.92e-03, forces_cos: 1.79e-01, forces_magnitude: 1.34e-02, energy_mae: 7.88e-01, energy_force_within_threshold: 2.50e-02, loss: 1.57e+00, lr: 5.00e-04, epoch: 1.87e+01, step: 2.80e+02
+2023-07-18 14:59:48 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.14it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.80it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:48 (INFO): forcesx_mae: 0.0082, forcesy_mae: 0.0097, forcesz_mae: 0.0070, forces_mae: 0.0083, forces_cos: 0.1304, forces_magnitude: 0.0153, energy_mae: 2.4091, energy_force_within_threshold: 0.0000, loss: 3.1433, epoch: 19.0000
+2023-07-18 14:59:50 (INFO): forcesx_mae: 7.29e-03, forcesy_mae: 8.01e-03, forcesz_mae: 7.96e-03, forces_mae: 7.75e-03, forces_cos: 2.32e-01, forces_magnitude: 1.24e-02, energy_mae: 9.62e-01, energy_force_within_threshold: 1.92e-02, loss: 1.67e+00, lr: 5.00e-04, epoch: 1.93e+01, step: 2.90e+02
+2023-07-18 14:59:51 (INFO): forcesx_mae: 9.39e-03, forcesy_mae: 8.82e-03, forcesz_mae: 8.63e-03, forces_mae: 8.95e-03, forces_cos: 1.83e-01, forces_magnitude: 1.19e-02, energy_mae: 7.88e-01, energy_force_within_threshold: 1.92e-02, loss: 1.59e+00, lr: 5.00e-04, epoch: 2.00e+01, step: 3.00e+02
+2023-07-18 14:59:52 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.36it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.81it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:53 (INFO): forcesx_mae: 0.0150, forcesy_mae: 0.0153, forcesz_mae: 0.0117, forces_mae: 0.0140, forces_cos: 0.0463, forces_magnitude: 0.0180, energy_mae: 1.2688, energy_force_within_threshold: 0.0000, loss: 2.5374, epoch: 20.0000
+2023-07-18 14:59:55 (INFO): forcesx_mae: 1.16e-02, forcesy_mae: 1.09e-02, forcesz_mae: 1.07e-02, forces_mae: 1.10e-02, forces_cos: -1.64e-02, forces_magnitude: 1.32e-02, energy_mae: 1.00e+00, energy_force_within_threshold: 1.25e-02, loss: 1.98e+00, lr: 5.00e-04, epoch: 2.07e+01, step: 3.10e+02
+2023-07-18 14:59:57 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.17it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.66it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:59:57 (INFO): forcesx_mae: 0.0125, forcesy_mae: 0.0138, forcesz_mae: 0.0108, forces_mae: 0.0124, forces_cos: 0.0321, forces_magnitude: 0.0152, energy_mae: 0.8642, energy_force_within_threshold: 0.0000, loss: 2.0016, epoch: 21.0000
+2023-07-18 14:59:59 (INFO): forcesx_mae: 1.26e-02, forcesy_mae: 1.28e-02, forcesz_mae: 1.38e-02, forces_mae: 1.31e-02, forces_cos: 7.07e-02, forces_magnitude: 1.59e-02, energy_mae: 8.92e-01, energy_force_within_threshold: 6.41e-03, loss: 2.07e+00, lr: 5.00e-04, epoch: 2.13e+01, step: 3.20e+02
+2023-07-18 15:00:01 (INFO): forcesx_mae: 1.30e-02, forcesy_mae: 1.11e-02, forcesz_mae: 1.17e-02, forces_mae: 1.19e-02, forces_cos: 3.90e-02, forces_magnitude: 1.34e-02, energy_mae: 4.83e-01, energy_force_within_threshold: 1.92e-02, loss: 1.57e+00, lr: 5.00e-04, epoch: 2.20e+01, step: 3.30e+02
+2023-07-18 15:00:01 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.31it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.78it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:02 (INFO): forcesx_mae: 0.0115, forcesy_mae: 0.0130, forcesz_mae: 0.0096, forces_mae: 0.0114, forces_cos: 0.0391, forces_magnitude: 0.0137, energy_mae: 0.6045, energy_force_within_threshold: 0.0333, loss: 1.6544, epoch: 22.0000
+2023-07-18 15:00:04 (INFO): forcesx_mae: 9.63e-03, forcesy_mae: 9.39e-03, forcesz_mae: 1.02e-02, forces_mae: 9.74e-03, forces_cos: 1.34e-01, forces_magnitude: 1.20e-02, energy_mae: 6.07e-01, energy_force_within_threshold: 2.50e-02, loss: 1.48e+00, lr: 5.00e-04, epoch: 2.27e+01, step: 3.40e+02
+2023-07-18 15:00:06 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.32it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.82it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:07 (INFO): forcesx_mae: 0.0083, forcesy_mae: 0.0102, forcesz_mae: 0.0077, forces_mae: 0.0087, forces_cos: -0.1348, forces_magnitude: 0.0155, energy_mae: 0.4725, energy_force_within_threshold: 0.0000, loss: 1.2835, epoch: 23.0000
+2023-07-18 15:00:08 (INFO): forcesx_mae: 9.47e-03, forcesy_mae: 8.99e-03, forcesz_mae: 9.17e-03, forces_mae: 9.21e-03, forces_cos: 1.07e-01, forces_magnitude: 1.23e-02, energy_mae: 5.02e-01, energy_force_within_threshold: 4.49e-02, loss: 1.33e+00, lr: 5.00e-04, epoch: 2.33e+01, step: 3.50e+02
+2023-07-18 15:00:10 (INFO): forcesx_mae: 2.16e-02, forcesy_mae: 2.13e-02, forcesz_mae: 2.12e-02, forces_mae: 2.14e-02, forces_cos: 1.72e-01, forces_magnitude: 3.38e-02, energy_mae: 7.26e-01, energy_force_within_threshold: 1.28e-02, loss: 2.62e+00, lr: 5.00e-04, epoch: 2.40e+01, step: 3.60e+02
+2023-07-18 15:00:11 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.38it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.86it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:11 (INFO): forcesx_mae: 0.0084, forcesy_mae: 0.0104, forcesz_mae: 0.0075, forces_mae: 0.0088, forces_cos: 0.0038, forces_magnitude: 0.0148, energy_mae: 0.7697, energy_force_within_threshold: 0.0000, loss: 1.5841, epoch: 24.0000
+2023-07-18 15:00:14 (INFO): forcesx_mae: 9.01e-03, forcesy_mae: 9.41e-03, forcesz_mae: 8.41e-03, forces_mae: 8.95e-03, forces_cos: 1.04e-01, forces_magnitude: 1.28e-02, energy_mae: 6.94e-01, energy_force_within_threshold: 1.25e-02, loss: 1.50e+00, lr: 5.00e-04, epoch: 2.47e+01, step: 3.70e+02
+2023-07-18 15:00:16 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  4.87it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.55it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:16 (INFO): forcesx_mae: 0.0106, forcesy_mae: 0.0121, forcesz_mae: 0.0087, forces_mae: 0.0105, forces_cos: 0.0016, forces_magnitude: 0.0124, energy_mae: 1.3521, energy_force_within_threshold: 0.0000, loss: 2.3033, epoch: 25.0000
+2023-07-18 15:00:18 (INFO): forcesx_mae: 8.83e-03, forcesy_mae: 9.00e-03, forcesz_mae: 9.60e-03, forces_mae: 9.14e-03, forces_cos: 1.74e-01, forces_magnitude: 1.27e-02, energy_mae: 9.03e-01, energy_force_within_threshold: 0.00e+00, loss: 1.73e+00, lr: 5.00e-04, epoch: 2.53e+01, step: 3.80e+02
+2023-07-18 15:00:19 (INFO): forcesx_mae: 8.52e-03, forcesy_mae: 8.02e-03, forcesz_mae: 8.52e-03, forces_mae: 8.35e-03, forces_cos: 1.70e-01, forces_magnitude: 1.41e-02, energy_mae: 7.44e-01, energy_force_within_threshold: 1.92e-02, loss: 1.48e+00, lr: 5.00e-04, epoch: 2.60e+01, step: 3.90e+02
+2023-07-18 15:00:20 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  3.82it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.99it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  3.70it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:21 (INFO): forcesx_mae: 0.0095, forcesy_mae: 0.0112, forcesz_mae: 0.0081, forces_mae: 0.0096, forces_cos: 0.0412, forces_magnitude: 0.0126, energy_mae: 0.3777, energy_force_within_threshold: 0.0667, loss: 1.2634, epoch: 26.0000
+2023-07-18 15:00:21 (INFO): Predicting on test.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.69it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.90it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:21 (INFO): Writing results to ./results/2023-07-18-14-58-08/s2ef_predictions.npz
+2023-07-18 15:00:24 (INFO): forcesx_mae: 9.56e-03, forcesy_mae: 8.41e-03, forcesz_mae: 9.24e-03, forces_mae: 9.07e-03, forces_cos: 9.83e-02, forces_magnitude: 1.10e-02, energy_mae: 7.54e-01, energy_force_within_threshold: 2.50e-02, loss: 1.57e+00, lr: 5.00e-04, epoch: 2.67e+01, step: 4.00e+02
+2023-07-18 15:00:26 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.39it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.91it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:26 (INFO): forcesx_mae: 0.0084, forcesy_mae: 0.0100, forcesz_mae: 0.0075, forces_mae: 0.0086, forces_cos: -0.0033, forces_magnitude: 0.0152, energy_mae: 0.7927, energy_force_within_threshold: 0.0000, loss: 1.5851, epoch: 27.0000
+2023-07-18 15:00:28 (INFO): forcesx_mae: 1.05e-02, forcesy_mae: 1.11e-02, forcesz_mae: 1.07e-02, forces_mae: 1.08e-02, forces_cos: 6.83e-02, forces_magnitude: 1.41e-02, energy_mae: 1.19e+00, energy_force_within_threshold: 1.28e-02, loss: 2.15e+00, lr: 5.00e-04, epoch: 2.73e+01, step: 4.10e+02
+2023-07-18 15:00:30 (INFO): forcesx_mae: 1.08e-02, forcesy_mae: 1.02e-02, forcesz_mae: 9.91e-03, forces_mae: 1.03e-02, forces_cos: 6.14e-02, forces_magnitude: 1.21e-02, energy_mae: 1.16e+00, energy_force_within_threshold: 6.41e-03, loss: 2.06e+00, lr: 5.00e-04, epoch: 2.80e+01, step: 4.20e+02
+2023-07-18 15:00:30 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  4.90it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.59it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:31 (INFO): forcesx_mae: 0.0088, forcesy_mae: 0.0106, forcesz_mae: 0.0084, forces_mae: 0.0093, forces_cos: -0.0188, forces_magnitude: 0.0146, energy_mae: 1.1960, energy_force_within_threshold: 0.0000, loss: 2.0481, epoch: 28.0000
+2023-07-18 15:00:33 (INFO): forcesx_mae: 8.85e-03, forcesy_mae: 8.78e-03, forcesz_mae: 8.61e-03, forces_mae: 8.74e-03, forces_cos: 1.24e-01, forces_magnitude: 1.33e-02, energy_mae: 1.09e+00, energy_force_within_threshold: 6.25e-03, loss: 1.87e+00, lr: 5.00e-04, epoch: 2.87e+01, step: 4.30e+02
+2023-07-18 15:00:35 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.30it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.91it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:35 (INFO): forcesx_mae: 0.0082, forcesy_mae: 0.0100, forcesz_mae: 0.0076, forces_mae: 0.0086, forces_cos: -0.0759, forces_magnitude: 0.0147, energy_mae: 1.2706, energy_force_within_threshold: 0.0000, loss: 2.0552, epoch: 29.0000
+2023-07-18 15:00:37 (INFO): forcesx_mae: 8.73e-03, forcesy_mae: 8.11e-03, forcesz_mae: 8.49e-03, forces_mae: 8.44e-03, forces_cos: 2.13e-01, forces_magnitude: 1.34e-02, energy_mae: 1.01e+00, energy_force_within_threshold: 6.41e-03, loss: 1.77e+00, lr: 5.00e-04, epoch: 2.93e+01, step: 4.40e+02
+2023-07-18 15:00:39 (INFO): forcesx_mae: 7.69e-03, forcesy_mae: 9.19e-03, forcesz_mae: 7.73e-03, forces_mae: 8.21e-03, forces_cos: 2.21e-01, forces_magnitude: 1.27e-02, energy_mae: 1.12e+00, energy_force_within_threshold: 1.92e-02, loss: 1.84e+00, lr: 5.00e-04, epoch: 3.00e+01, step: 4.50e+02
+2023-07-18 15:00:40 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.24it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.67it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:40 (INFO): forcesx_mae: 0.0083, forcesy_mae: 0.0104, forcesz_mae: 0.0079, forces_mae: 0.0089, forces_cos: 0.0279, forces_magnitude: 0.0141, energy_mae: 1.0943, energy_force_within_threshold: 0.0333, loss: 1.9162, epoch: 30.0000
+2023-07-18 15:00:42 (INFO): forcesx_mae: 7.57e-03, forcesy_mae: 7.79e-03, forcesz_mae: 7.17e-03, forces_mae: 7.51e-03, forces_cos: 3.14e-01, forces_magnitude: 1.27e-02, energy_mae: 1.16e+00, energy_force_within_threshold: 1.87e-02, loss: 1.82e+00, lr: 5.00e-04, epoch: 3.07e+01, step: 4.60e+02
+2023-07-18 15:00:44 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.30it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.83it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:45 (INFO): forcesx_mae: 0.0101, forcesy_mae: 0.0117, forcesz_mae: 0.0100, forces_mae: 0.0106, forces_cos: -0.1452, forces_magnitude: 0.0144, energy_mae: 0.6256, energy_force_within_threshold: 0.0000, loss: 1.5843, epoch: 31.0000
+2023-07-18 15:00:46 (INFO): forcesx_mae: 8.68e-03, forcesy_mae: 9.41e-03, forcesz_mae: 9.43e-03, forces_mae: 9.17e-03, forces_cos: 2.47e-01, forces_magnitude: 1.24e-02, energy_mae: 7.97e-01, energy_force_within_threshold: 2.56e-02, loss: 1.61e+00, lr: 5.00e-04, epoch: 3.13e+01, step: 4.70e+02
+2023-07-18 15:00:48 (INFO): forcesx_mae: 8.48e-03, forcesy_mae: 8.38e-03, forcesz_mae: 8.08e-03, forces_mae: 8.31e-03, forces_cos: 9.44e-02, forces_magnitude: 1.35e-02, energy_mae: 9.60e-01, energy_force_within_threshold: 6.41e-03, loss: 1.68e+00, lr: 5.00e-04, epoch: 3.20e+01, step: 4.80e+02
+2023-07-18 15:00:49 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.27it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.91it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:49 (INFO): forcesx_mae: 0.0084, forcesy_mae: 0.0106, forcesz_mae: 0.0073, forces_mae: 0.0088, forces_cos: 0.0859, forces_magnitude: 0.0143, energy_mae: 1.4710, energy_force_within_threshold: 0.0000, loss: 2.2736, epoch: 32.0000
+2023-07-18 15:00:52 (INFO): forcesx_mae: 7.67e-03, forcesy_mae: 8.30e-03, forcesz_mae: 7.44e-03, forces_mae: 7.80e-03, forces_cos: 2.69e-01, forces_magnitude: 1.21e-02, energy_mae: 7.78e-01, energy_force_within_threshold: 2.50e-02, loss: 1.47e+00, lr: 5.00e-04, epoch: 3.27e+01, step: 4.90e+02
+2023-07-18 15:00:54 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.16it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.78it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:54 (INFO): forcesx_mae: 0.0085, forcesy_mae: 0.0111, forcesz_mae: 0.0072, forces_mae: 0.0089, forces_cos: -0.0249, forces_magnitude: 0.0132, energy_mae: 0.7811, energy_force_within_threshold: 0.0000, loss: 1.6002, epoch: 33.0000
+2023-07-18 15:00:55 (INFO): forcesx_mae: 8.82e-03, forcesy_mae: 8.58e-03, forcesz_mae: 8.78e-03, forces_mae: 8.73e-03, forces_cos: 1.42e-01, forces_magnitude: 1.39e-02, energy_mae: 6.42e-01, energy_force_within_threshold: 3.21e-02, loss: 1.42e+00, lr: 5.00e-04, epoch: 3.33e+01, step: 5.00e+02
+2023-07-18 15:00:57 (INFO): forcesx_mae: 7.40e-03, forcesy_mae: 7.40e-03, forcesz_mae: 7.41e-03, forces_mae: 7.40e-03, forces_cos: 3.38e-01, forces_magnitude: 1.14e-02, energy_mae: 9.26e-01, energy_force_within_threshold: 2.56e-02, loss: 1.62e+00, lr: 5.00e-04, epoch: 3.40e+01, step: 5.10e+02
+2023-07-18 15:00:58 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.28it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.83it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:00:59 (INFO): forcesx_mae: 0.0085, forcesy_mae: 0.0123, forcesz_mae: 0.0077, forces_mae: 0.0095, forces_cos: -0.0288, forces_magnitude: 0.0131, energy_mae: 0.9585, energy_force_within_threshold: 0.0667, loss: 1.8302, epoch: 34.0000
+2023-07-18 15:01:01 (INFO): forcesx_mae: 7.67e-03, forcesy_mae: 7.85e-03, forcesz_mae: 7.61e-03, forces_mae: 7.71e-03, forces_cos: 2.71e-01, forces_magnitude: 1.14e-02, energy_mae: 1.27e+00, energy_force_within_threshold: 1.25e-02, loss: 1.96e+00, lr: 5.00e-04, epoch: 3.47e+01, step: 5.20e+02
+2023-07-18 15:01:03 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.26it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.82it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:03 (INFO): forcesx_mae: 0.0086, forcesy_mae: 0.0108, forcesz_mae: 0.0078, forces_mae: 0.0091, forces_cos: -0.0654, forces_magnitude: 0.0151, energy_mae: 0.6637, energy_force_within_threshold: 0.0333, loss: 1.5040, epoch: 35.0000
+2023-07-18 15:01:05 (INFO): forcesx_mae: 7.17e-03, forcesy_mae: 7.79e-03, forcesz_mae: 7.22e-03, forces_mae: 7.39e-03, forces_cos: 2.12e-01, forces_magnitude: 1.09e-02, energy_mae: 7.07e-01, energy_force_within_threshold: 1.92e-02, loss: 1.35e+00, lr: 5.00e-04, epoch: 3.53e+01, step: 5.30e+02
+2023-07-18 15:01:07 (INFO): forcesx_mae: 9.28e-03, forcesy_mae: 8.65e-03, forcesz_mae: 8.98e-03, forces_mae: 8.97e-03, forces_cos: 2.54e-01, forces_magnitude: 1.35e-02, energy_mae: 7.69e-01, energy_force_within_threshold: 1.92e-02, loss: 1.55e+00, lr: 5.00e-04, epoch: 3.60e+01, step: 5.40e+02
+2023-07-18 15:01:08 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  4.46it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.30it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:08 (INFO): forcesx_mae: 0.0091, forcesy_mae: 0.0119, forcesz_mae: 0.0076, forces_mae: 0.0095, forces_cos: 0.0139, forces_magnitude: 0.0128, energy_mae: 0.8111, energy_force_within_threshold: 0.0000, loss: 1.6875, epoch: 36.0000
+2023-07-18 15:01:11 (INFO): forcesx_mae: 7.62e-03, forcesy_mae: 7.70e-03, forcesz_mae: 8.14e-03, forces_mae: 7.82e-03, forces_cos: 1.92e-01, forces_magnitude: 1.13e-02, energy_mae: 9.20e-01, energy_force_within_threshold: 2.50e-02, loss: 1.62e+00, lr: 5.00e-04, epoch: 3.67e+01, step: 5.50e+02
+2023-07-18 15:01:12 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.35it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.89it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:13 (INFO): forcesx_mae: 0.0086, forcesy_mae: 0.0110, forcesz_mae: 0.0075, forces_mae: 0.0090, forces_cos: 0.0955, forces_magnitude: 0.0136, energy_mae: 0.4963, energy_force_within_threshold: 0.0000, loss: 1.3304, epoch: 37.0000
+2023-07-18 15:01:14 (INFO): forcesx_mae: 8.07e-03, forcesy_mae: 9.53e-03, forcesz_mae: 8.09e-03, forces_mae: 8.56e-03, forces_cos: 2.78e-01, forces_magnitude: 1.35e-02, energy_mae: 8.56e-01, energy_force_within_threshold: 1.92e-02, loss: 1.62e+00, lr: 5.00e-04, epoch: 3.73e+01, step: 5.60e+02
+2023-07-18 15:01:16 (INFO): forcesx_mae: 7.87e-03, forcesy_mae: 6.84e-03, forcesz_mae: 7.63e-03, forces_mae: 7.45e-03, forces_cos: 2.99e-01, forces_magnitude: 1.07e-02, energy_mae: 6.57e-01, energy_force_within_threshold: 3.21e-02, loss: 1.30e+00, lr: 5.00e-04, epoch: 3.80e+01, step: 5.70e+02
+2023-07-18 15:01:17 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.21it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.75it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:17 (INFO): forcesx_mae: 0.0084, forcesy_mae: 0.0105, forcesz_mae: 0.0076, forces_mae: 0.0088, forces_cos: 0.0507, forces_magnitude: 0.0142, energy_mae: 0.3616, energy_force_within_threshold: 0.0333, loss: 1.1810, epoch: 38.0000
+2023-07-18 15:01:20 (INFO): forcesx_mae: 7.07e-03, forcesy_mae: 7.58e-03, forcesz_mae: 7.60e-03, forces_mae: 7.41e-03, forces_cos: 3.17e-01, forces_magnitude: 1.18e-02, energy_mae: 4.57e-01, energy_force_within_threshold: 3.75e-02, loss: 1.12e+00, lr: 5.00e-04, epoch: 3.87e+01, step: 5.80e+02
+2023-07-18 15:01:21 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.03it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.65it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:22 (INFO): forcesx_mae: 0.0085, forcesy_mae: 0.0102, forcesz_mae: 0.0079, forces_mae: 0.0089, forces_cos: -0.0580, forces_magnitude: 0.0148, energy_mae: 0.4956, energy_force_within_threshold: 0.0000, loss: 1.3158, epoch: 39.0000
+2023-07-18 15:01:23 (INFO): forcesx_mae: 8.28e-03, forcesy_mae: 8.19e-03, forcesz_mae: 8.31e-03, forces_mae: 8.26e-03, forces_cos: 2.83e-01, forces_magnitude: 1.30e-02, energy_mae: 4.96e-01, energy_force_within_threshold: 0.00e+00, loss: 1.24e+00, lr: 5.00e-04, epoch: 3.93e+01, step: 5.90e+02
+2023-07-18 15:01:25 (INFO): forcesx_mae: 8.39e-03, forcesy_mae: 8.22e-03, forcesz_mae: 8.37e-03, forces_mae: 8.33e-03, forces_cos: 2.13e-01, forces_magnitude: 1.35e-02, energy_mae: 6.37e-01, energy_force_within_threshold: 0.00e+00, loss: 1.36e+00, lr: 5.00e-04, epoch: 4.00e+01, step: 6.00e+02
+2023-07-18 15:01:26 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.10it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.67it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:27 (INFO): forcesx_mae: 0.0081, forcesy_mae: 0.0097, forcesz_mae: 0.0073, forces_mae: 0.0084, forces_cos: 0.0441, forces_magnitude: 0.0155, energy_mae: 0.5831, energy_force_within_threshold: 0.0333, loss: 1.3574, epoch: 40.0000
+2023-07-18 15:01:29 (INFO): forcesx_mae: 8.09e-03, forcesy_mae: 7.32e-03, forcesz_mae: 8.52e-03, forces_mae: 7.98e-03, forces_cos: 2.28e-01, forces_magnitude: 1.23e-02, energy_mae: 9.14e-01, energy_force_within_threshold: 6.25e-03, loss: 1.63e+00, lr: 5.00e-04, epoch: 4.07e+01, step: 6.10e+02
+2023-07-18 15:01:31 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  4.13it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.10it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:31 (INFO): forcesx_mae: 0.0092, forcesy_mae: 0.0107, forcesz_mae: 0.0080, forces_mae: 0.0093, forces_cos: -0.0793, forces_magnitude: 0.0136, energy_mae: 0.7651, energy_force_within_threshold: 0.0000, loss: 1.6073, epoch: 41.0000
+2023-07-18 15:01:33 (INFO): forcesx_mae: 7.75e-03, forcesy_mae: 8.21e-03, forcesz_mae: 8.27e-03, forces_mae: 8.08e-03, forces_cos: 2.47e-01, forces_magnitude: 1.23e-02, energy_mae: 9.79e-01, energy_force_within_threshold: 1.92e-02, loss: 1.70e+00, lr: 5.00e-04, epoch: 4.13e+01, step: 6.20e+02
+2023-07-18 15:01:35 (INFO): forcesx_mae: 7.70e-03, forcesy_mae: 7.81e-03, forcesz_mae: 7.29e-03, forces_mae: 7.60e-03, forces_cos: 3.02e-01, forces_magnitude: 1.17e-02, energy_mae: 7.04e-01, energy_force_within_threshold: 3.21e-02, loss: 1.40e+00, lr: 5.00e-04, epoch: 4.20e+01, step: 6.30e+02
+2023-07-18 15:01:36 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.26it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.91it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:36 (INFO): forcesx_mae: 0.0085, forcesy_mae: 0.0105, forcesz_mae: 0.0076, forces_mae: 0.0089, forces_cos: 0.0063, forces_magnitude: 0.0134, energy_mae: 0.8868, energy_force_within_threshold: 0.0000, loss: 1.7040, epoch: 42.0000
+2023-07-18 15:01:39 (INFO): forcesx_mae: 8.79e-03, forcesy_mae: 8.43e-03, forcesz_mae: 8.49e-03, forces_mae: 8.57e-03, forces_cos: 2.17e-01, forces_magnitude: 1.17e-02, energy_mae: 9.27e-01, energy_force_within_threshold: 3.12e-02, loss: 1.67e+00, lr: 5.00e-04, epoch: 4.27e+01, step: 6.40e+02
+2023-07-18 15:01:40 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.16it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.76it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:41 (INFO): forcesx_mae: 0.0089, forcesy_mae: 0.0112, forcesz_mae: 0.0083, forces_mae: 0.0094, forces_cos: 0.0189, forces_magnitude: 0.0145, energy_mae: 0.4503, energy_force_within_threshold: 0.0000, loss: 1.3146, epoch: 43.0000
+2023-07-18 15:01:42 (INFO): forcesx_mae: 7.44e-03, forcesy_mae: 8.72e-03, forcesz_mae: 8.01e-03, forces_mae: 8.06e-03, forces_cos: 2.93e-01, forces_magnitude: 1.18e-02, energy_mae: 8.09e-01, energy_force_within_threshold: 3.21e-02, loss: 1.53e+00, lr: 5.00e-04, epoch: 4.33e+01, step: 6.50e+02
+2023-07-18 15:01:44 (INFO): forcesx_mae: 8.35e-03, forcesy_mae: 8.19e-03, forcesz_mae: 8.13e-03, forces_mae: 8.22e-03, forces_cos: 3.45e-01, forces_magnitude: 1.25e-02, energy_mae: 6.19e-01, energy_force_within_threshold: 1.92e-02, loss: 1.35e+00, lr: 5.00e-04, epoch: 4.40e+01, step: 6.60e+02
+2023-07-18 15:01:45 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.29it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.81it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:45 (INFO): forcesx_mae: 0.0081, forcesy_mae: 0.0102, forcesz_mae: 0.0072, forces_mae: 0.0085, forces_cos: 0.0669, forces_magnitude: 0.0145, energy_mae: 1.3143, energy_force_within_threshold: 0.0000, loss: 2.0814, epoch: 44.0000
+2023-07-18 15:01:48 (INFO): forcesx_mae: 7.92e-03, forcesy_mae: 7.72e-03, forcesz_mae: 7.52e-03, forces_mae: 7.72e-03, forces_cos: 2.66e-01, forces_magnitude: 1.24e-02, energy_mae: 7.35e-01, energy_force_within_threshold: 1.25e-02, loss: 1.43e+00, lr: 5.00e-04, epoch: 4.47e+01, step: 6.70e+02
+2023-07-18 15:01:50 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.25it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.83it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:50 (INFO): forcesx_mae: 0.0086, forcesy_mae: 0.0109, forcesz_mae: 0.0081, forces_mae: 0.0092, forces_cos: -0.0334, forces_magnitude: 0.0147, energy_mae: 0.6982, energy_force_within_threshold: 0.0000, loss: 1.5400, epoch: 45.0000
+2023-07-18 15:01:51 (INFO): forcesx_mae: 7.61e-03, forcesy_mae: 7.98e-03, forcesz_mae: 8.55e-03, forces_mae: 8.05e-03, forces_cos: 3.33e-01, forces_magnitude: 1.32e-02, energy_mae: 7.57e-01, energy_force_within_threshold: 6.41e-03, loss: 1.49e+00, lr: 5.00e-04, epoch: 4.53e+01, step: 6.80e+02
+2023-07-18 15:01:53 (INFO): forcesx_mae: 7.75e-03, forcesy_mae: 7.95e-03, forcesz_mae: 7.75e-03, forces_mae: 7.82e-03, forces_cos: 2.99e-01, forces_magnitude: 1.19e-02, energy_mae: 7.90e-01, energy_force_within_threshold: 6.41e-03, loss: 1.49e+00, lr: 5.00e-04, epoch: 4.60e+01, step: 6.90e+02
+2023-07-18 15:01:54 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.30it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.81it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:55 (INFO): forcesx_mae: 0.0081, forcesy_mae: 0.0103, forcesz_mae: 0.0073, forces_mae: 0.0086, forces_cos: 0.0529, forces_magnitude: 0.0147, energy_mae: 0.4636, energy_force_within_threshold: 0.0000, loss: 1.2530, epoch: 46.0000
+2023-07-18 15:01:57 (INFO): forcesx_mae: 7.36e-03, forcesy_mae: 7.35e-03, forcesz_mae: 7.31e-03, forces_mae: 7.34e-03, forces_cos: 3.53e-01, forces_magnitude: 1.27e-02, energy_mae: 4.19e-01, energy_force_within_threshold: 3.75e-02, loss: 1.06e+00, lr: 5.00e-04, epoch: 4.67e+01, step: 7.00e+02
+2023-07-18 15:01:59 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.20it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.68it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:01:59 (INFO): forcesx_mae: 0.0101, forcesy_mae: 0.0121, forcesz_mae: 0.0095, forces_mae: 0.0105, forces_cos: 0.0376, forces_magnitude: 0.0136, energy_mae: 0.4532, energy_force_within_threshold: 0.0000, loss: 1.4107, epoch: 47.0000
+2023-07-18 15:02:01 (INFO): forcesx_mae: 8.80e-03, forcesy_mae: 7.50e-03, forcesz_mae: 8.66e-03, forces_mae: 8.32e-03, forces_cos: 3.20e-01, forces_magnitude: 1.12e-02, energy_mae: 6.47e-01, energy_force_within_threshold: 3.85e-02, loss: 1.39e+00, lr: 5.00e-04, epoch: 4.73e+01, step: 7.10e+02
+2023-07-18 15:02:03 (INFO): forcesx_mae: 7.48e-03, forcesy_mae: 8.48e-03, forcesz_mae: 7.18e-03, forces_mae: 7.71e-03, forces_cos: 2.44e-01, forces_magnitude: 1.17e-02, energy_mae: 5.79e-01, energy_force_within_threshold: 3.21e-02, loss: 1.28e+00, lr: 5.00e-04, epoch: 4.80e+01, step: 7.20e+02
+2023-07-18 15:02:04 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.19it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.67it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:05 (INFO): forcesx_mae: 0.0079, forcesy_mae: 0.0101, forcesz_mae: 0.0074, forces_mae: 0.0085, forces_cos: -0.0308, forces_magnitude: 0.0152, energy_mae: 0.7896, energy_force_within_threshold: 0.0000, loss: 1.5638, epoch: 48.0000
+2023-07-18 15:02:07 (INFO): forcesx_mae: 8.06e-03, forcesy_mae: 7.96e-03, forcesz_mae: 7.60e-03, forces_mae: 7.87e-03, forces_cos: 3.04e-01, forces_magnitude: 1.41e-02, energy_mae: 4.27e-01, energy_force_within_threshold: 6.25e-02, loss: 1.13e+00, lr: 5.00e-04, epoch: 4.87e+01, step: 7.30e+02
+2023-07-18 15:02:09 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.33it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.86it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:09 (INFO): forcesx_mae: 0.0085, forcesy_mae: 0.0103, forcesz_mae: 0.0074, forces_mae: 0.0087, forces_cos: 0.0234, forces_magnitude: 0.0127, energy_mae: 0.4051, energy_force_within_threshold: 0.0000, loss: 1.2073, epoch: 49.0000
+2023-07-18 15:02:11 (INFO): forcesx_mae: 6.48e-03, forcesy_mae: 7.49e-03, forcesz_mae: 7.29e-03, forces_mae: 7.09e-03, forces_cos: 3.44e-01, forces_magnitude: 9.87e-03, energy_mae: 5.85e-01, energy_force_within_threshold: 1.28e-02, loss: 1.22e+00, lr: 5.00e-04, epoch: 4.93e+01, step: 7.40e+02
+2023-07-18 15:02:13 (INFO): forcesx_mae: 8.25e-03, forcesy_mae: 8.27e-03, forcesz_mae: 8.58e-03, forces_mae: 8.37e-03, forces_cos: 2.66e-01, forces_magnitude: 1.29e-02, energy_mae: 5.11e-01, energy_force_within_threshold: 1.28e-02, loss: 1.26e+00, lr: 5.00e-04, epoch: 5.00e+01, step: 7.50e+02
+2023-07-18 15:02:14 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.29it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.92it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:14 (INFO): forcesx_mae: 0.0086, forcesy_mae: 0.0123, forcesz_mae: 0.0084, forces_mae: 0.0098, forces_cos: -0.0598, forces_magnitude: 0.0131, energy_mae: 0.3840, energy_force_within_threshold: 0.0333, loss: 1.2860, epoch: 50.0000
+2023-07-18 15:02:17 (INFO): forcesx_mae: 8.22e-03, forcesy_mae: 8.16e-03, forcesz_mae: 8.48e-03, forces_mae: 8.29e-03, forces_cos: 2.47e-01, forces_magnitude: 1.39e-02, energy_mae: 8.77e-01, energy_force_within_threshold: 1.25e-02, loss: 1.59e+00, lr: 5.00e-04, epoch: 5.07e+01, step: 7.60e+02
+2023-07-18 15:02:18 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.20it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.78it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:19 (INFO): forcesx_mae: 0.0087, forcesy_mae: 0.0104, forcesz_mae: 0.0078, forces_mae: 0.0090, forces_cos: -0.1102, forces_magnitude: 0.0151, energy_mae: 0.4556, energy_force_within_threshold: 0.0333, loss: 1.2765, epoch: 51.0000
+2023-07-18 15:02:20 (INFO): forcesx_mae: 7.38e-03, forcesy_mae: 6.90e-03, forcesz_mae: 7.42e-03, forces_mae: 7.24e-03, forces_cos: 3.55e-01, forces_magnitude: 1.27e-02, energy_mae: 9.12e-01, energy_force_within_threshold: 1.28e-02, loss: 1.57e+00, lr: 5.00e-04, epoch: 5.13e+01, step: 7.70e+02
+2023-07-18 15:02:22 (INFO): forcesx_mae: 7.22e-03, forcesy_mae: 7.95e-03, forcesz_mae: 8.15e-03, forces_mae: 7.77e-03, forces_cos: 3.23e-01, forces_magnitude: 1.05e-02, energy_mae: 5.83e-01, energy_force_within_threshold: 3.21e-02, loss: 1.27e+00, lr: 5.00e-04, epoch: 5.20e+01, step: 7.80e+02
+2023-07-18 15:02:23 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.25it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.81it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:23 (INFO): forcesx_mae: 0.0094, forcesy_mae: 0.0114, forcesz_mae: 0.0082, forces_mae: 0.0097, forces_cos: -0.0910, forces_magnitude: 0.0142, energy_mae: 0.4660, energy_force_within_threshold: 0.0667, loss: 1.3497, epoch: 52.0000
+2023-07-18 15:02:26 (INFO): forcesx_mae: 7.00e-03, forcesy_mae: 7.29e-03, forcesz_mae: 7.49e-03, forces_mae: 7.26e-03, forces_cos: 3.38e-01, forces_magnitude: 1.13e-02, energy_mae: 5.27e-01, energy_force_within_threshold: 3.75e-02, loss: 1.18e+00, lr: 5.00e-04, epoch: 5.27e+01, step: 7.90e+02
+2023-07-18 15:02:28 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.19it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.78it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:28 (INFO): forcesx_mae: 0.0096, forcesy_mae: 0.0108, forcesz_mae: 0.0088, forces_mae: 0.0098, forces_cos: -0.0386, forces_magnitude: 0.0143, energy_mae: 1.9735, energy_force_within_threshold: 0.0000, loss: 2.8473, epoch: 53.0000
+2023-07-18 15:02:29 (INFO): forcesx_mae: 8.27e-03, forcesy_mae: 7.84e-03, forcesz_mae: 7.66e-03, forces_mae: 7.92e-03, forces_cos: 2.31e-01, forces_magnitude: 1.21e-02, energy_mae: 8.53e-01, energy_force_within_threshold: 1.92e-02, loss: 1.57e+00, lr: 5.00e-04, epoch: 5.33e+01, step: 8.00e+02
+2023-07-18 15:02:32 (INFO): forcesx_mae: 7.56e-03, forcesy_mae: 7.89e-03, forcesz_mae: 7.88e-03, forces_mae: 7.78e-03, forces_cos: 2.97e-01, forces_magnitude: 1.18e-02, energy_mae: 5.56e-01, energy_force_within_threshold: 5.77e-02, loss: 1.24e+00, lr: 5.00e-04, epoch: 5.40e+01, step: 8.10e+02
+2023-07-18 15:02:32 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.29it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.85it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:33 (INFO): forcesx_mae: 0.0088, forcesy_mae: 0.0114, forcesz_mae: 0.0082, forces_mae: 0.0095, forces_cos: -0.1364, forces_magnitude: 0.0138, energy_mae: 0.6259, energy_force_within_threshold: 0.0333, loss: 1.4852, epoch: 54.0000
+2023-07-18 15:02:35 (INFO): forcesx_mae: 7.85e-03, forcesy_mae: 8.29e-03, forcesz_mae: 7.52e-03, forces_mae: 7.88e-03, forces_cos: 3.50e-01, forces_magnitude: 1.28e-02, energy_mae: 4.50e-01, energy_force_within_threshold: 1.87e-02, loss: 1.15e+00, lr: 5.00e-04, epoch: 5.47e+01, step: 8.20e+02
+2023-07-18 15:02:37 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.29it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.79it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:37 (INFO): forcesx_mae: 0.0084, forcesy_mae: 0.0106, forcesz_mae: 0.0073, forces_mae: 0.0087, forces_cos: 0.0376, forces_magnitude: 0.0146, energy_mae: 0.7154, energy_force_within_threshold: 0.0333, loss: 1.5110, epoch: 55.0000
+2023-07-18 15:02:39 (INFO): forcesx_mae: 6.77e-03, forcesy_mae: 6.95e-03, forcesz_mae: 7.76e-03, forces_mae: 7.16e-03, forces_cos: 3.39e-01, forces_magnitude: 1.12e-02, energy_mae: 5.48e-01, energy_force_within_threshold: 1.92e-02, loss: 1.18e+00, lr: 5.00e-04, epoch: 5.53e+01, step: 8.30e+02
+2023-07-18 15:02:41 (INFO): forcesx_mae: 7.85e-03, forcesy_mae: 7.56e-03, forcesz_mae: 7.71e-03, forces_mae: 7.71e-03, forces_cos: 3.62e-01, forces_magnitude: 1.22e-02, energy_mae: 5.05e-01, energy_force_within_threshold: 3.85e-02, loss: 1.21e+00, lr: 5.00e-04, epoch: 5.60e+01, step: 8.40e+02
+2023-07-18 15:02:42 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.36it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.74it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:42 (INFO): forcesx_mae: 0.0108, forcesy_mae: 0.0124, forcesz_mae: 0.0092, forces_mae: 0.0108, forces_cos: -0.1481, forces_magnitude: 0.0150, energy_mae: 0.5016, energy_force_within_threshold: 0.0000, loss: 1.4780, epoch: 56.0000
+2023-07-18 15:02:45 (INFO): forcesx_mae: 7.03e-03, forcesy_mae: 8.06e-03, forcesz_mae: 7.20e-03, forces_mae: 7.43e-03, forces_cos: 4.01e-01, forces_magnitude: 1.19e-02, energy_mae: 3.67e-01, energy_force_within_threshold: 2.50e-02, loss: 1.03e+00, lr: 5.00e-04, epoch: 5.67e+01, step: 8.50e+02
+2023-07-18 15:02:46 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.41it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.93it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:47 (INFO): forcesx_mae: 0.0092, forcesy_mae: 0.0112, forcesz_mae: 0.0085, forces_mae: 0.0097, forces_cos: -0.0570, forces_magnitude: 0.0135, energy_mae: 0.6166, energy_force_within_threshold: 0.0333, loss: 1.4874, epoch: 57.0000
+2023-07-18 15:02:48 (INFO): forcesx_mae: 6.89e-03, forcesy_mae: 6.72e-03, forcesz_mae: 7.01e-03, forces_mae: 6.88e-03, forces_cos: 3.30e-01, forces_magnitude: 9.72e-03, energy_mae: 5.76e-01, energy_force_within_threshold: 1.92e-02, loss: 1.18e+00, lr: 5.00e-04, epoch: 5.73e+01, step: 8.60e+02
+2023-07-18 15:02:50 (INFO): forcesx_mae: 7.56e-03, forcesy_mae: 7.02e-03, forcesz_mae: 7.58e-03, forces_mae: 7.39e-03, forces_cos: 4.07e-01, forces_magnitude: 1.17e-02, energy_mae: 7.18e-01, energy_force_within_threshold: 1.92e-02, loss: 1.40e+00, lr: 5.00e-04, epoch: 5.80e+01, step: 8.70e+02
+2023-07-18 15:02:51 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.35it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.82it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:51 (INFO): forcesx_mae: 0.0088, forcesy_mae: 0.0100, forcesz_mae: 0.0077, forces_mae: 0.0089, forces_cos: -0.1119, forces_magnitude: 0.0140, energy_mae: 0.5222, energy_force_within_threshold: 0.0000, loss: 1.3331, epoch: 58.0000
+2023-07-18 15:02:54 (INFO): forcesx_mae: 6.45e-03, forcesy_mae: 6.98e-03, forcesz_mae: 6.95e-03, forces_mae: 6.80e-03, forces_cos: 3.35e-01, forces_magnitude: 1.05e-02, energy_mae: 4.34e-01, energy_force_within_threshold: 3.12e-02, loss: 1.04e+00, lr: 5.00e-04, epoch: 5.87e+01, step: 8.80e+02
+2023-07-18 15:02:56 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.22it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.80it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:02:56 (INFO): forcesx_mae: 0.0094, forcesy_mae: 0.0108, forcesz_mae: 0.0092, forces_mae: 0.0098, forces_cos: 0.0030, forces_magnitude: 0.0136, energy_mae: 0.3388, energy_force_within_threshold: 0.0333, loss: 1.2360, epoch: 59.0000
+2023-07-18 15:02:58 (INFO): forcesx_mae: 7.17e-03, forcesy_mae: 6.75e-03, forcesz_mae: 7.34e-03, forces_mae: 7.09e-03, forces_cos: 5.04e-01, forces_magnitude: 1.11e-02, energy_mae: 5.79e-01, energy_force_within_threshold: 1.28e-02, loss: 1.22e+00, lr: 5.00e-04, epoch: 5.93e+01, step: 8.90e+02
+2023-07-18 15:03:00 (INFO): forcesx_mae: 6.14e-03, forcesy_mae: 6.72e-03, forcesz_mae: 6.35e-03, forces_mae: 6.41e-03, forces_cos: 4.01e-01, forces_magnitude: 9.68e-03, energy_mae: 5.36e-01, energy_force_within_threshold: 2.56e-02, loss: 1.11e+00, lr: 5.00e-04, epoch: 6.00e+01, step: 9.00e+02
+2023-07-18 15:03:00 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.35it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.88it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:01 (INFO): forcesx_mae: 0.0096, forcesy_mae: 0.0101, forcesz_mae: 0.0089, forces_mae: 0.0095, forces_cos: -0.0285, forces_magnitude: 0.0133, energy_mae: 0.3237, energy_force_within_threshold: 0.0000, loss: 1.1897, epoch: 60.0000
+2023-07-18 15:03:03 (INFO): forcesx_mae: 6.24e-03, forcesy_mae: 6.40e-03, forcesz_mae: 6.20e-03, forces_mae: 6.28e-03, forces_cos: 4.12e-01, forces_magnitude: 8.67e-03, energy_mae: 4.94e-01, energy_force_within_threshold: 4.37e-02, loss: 1.06e+00, lr: 5.00e-04, epoch: 6.07e+01, step: 9.10e+02
+2023-07-18 15:03:05 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.29it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.81it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:06 (INFO): forcesx_mae: 0.0091, forcesy_mae: 0.0108, forcesz_mae: 0.0087, forces_mae: 0.0095, forces_cos: -0.0861, forces_magnitude: 0.0130, energy_mae: 0.3706, energy_force_within_threshold: 0.0000, loss: 1.2274, epoch: 61.0000
+2023-07-18 15:03:07 (INFO): forcesx_mae: 6.79e-03, forcesy_mae: 7.39e-03, forcesz_mae: 8.51e-03, forces_mae: 7.56e-03, forces_cos: 4.61e-01, forces_magnitude: 1.10e-02, energy_mae: 4.32e-01, energy_force_within_threshold: 3.21e-02, loss: 1.11e+00, lr: 5.00e-04, epoch: 6.13e+01, step: 9.20e+02
+2023-07-18 15:03:09 (INFO): forcesx_mae: 7.37e-03, forcesy_mae: 7.00e-03, forcesz_mae: 6.70e-03, forces_mae: 7.02e-03, forces_cos: 3.80e-01, forces_magnitude: 1.11e-02, energy_mae: 4.36e-01, energy_force_within_threshold: 2.56e-02, loss: 1.06e+00, lr: 5.00e-04, epoch: 6.20e+01, step: 9.30e+02
+2023-07-18 15:03:10 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.30it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.84it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:10 (INFO): forcesx_mae: 0.0087, forcesy_mae: 0.0105, forcesz_mae: 0.0083, forces_mae: 0.0092, forces_cos: -0.0297, forces_magnitude: 0.0130, energy_mae: 0.7166, energy_force_within_threshold: 0.0000, loss: 1.5651, epoch: 62.0000
+2023-07-18 15:03:13 (INFO): forcesx_mae: 7.75e-03, forcesy_mae: 7.86e-03, forcesz_mae: 7.88e-03, forces_mae: 7.83e-03, forces_cos: 3.42e-01, forces_magnitude: 1.10e-02, energy_mae: 6.49e-01, energy_force_within_threshold: 1.87e-02, loss: 1.35e+00, lr: 5.00e-04, epoch: 6.27e+01, step: 9.40e+02
+2023-07-18 15:03:14 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.35it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.87it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:15 (INFO): forcesx_mae: 0.0091, forcesy_mae: 0.0103, forcesz_mae: 0.0083, forces_mae: 0.0092, forces_cos: -0.1070, forces_magnitude: 0.0139, energy_mae: 0.6558, energy_force_within_threshold: 0.0333, loss: 1.4912, epoch: 63.0000
+2023-07-18 15:03:16 (INFO): forcesx_mae: 8.01e-03, forcesy_mae: 8.18e-03, forcesz_mae: 8.11e-03, forces_mae: 8.10e-03, forces_cos: 2.76e-01, forces_magnitude: 1.10e-02, energy_mae: 5.56e-01, energy_force_within_threshold: 1.28e-02, loss: 1.29e+00, lr: 5.00e-04, epoch: 6.33e+01, step: 9.50e+02
+2023-07-18 15:03:18 (INFO): forcesx_mae: 7.73e-03, forcesy_mae: 7.67e-03, forcesz_mae: 7.25e-03, forces_mae: 7.55e-03, forces_cos: 3.71e-01, forces_magnitude: 1.16e-02, energy_mae: 4.80e-01, energy_force_within_threshold: 3.21e-02, loss: 1.16e+00, lr: 5.00e-04, epoch: 6.40e+01, step: 9.60e+02
+2023-07-18 15:03:19 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.30it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.83it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:20 (INFO): forcesx_mae: 0.0097, forcesy_mae: 0.0111, forcesz_mae: 0.0092, forces_mae: 0.0100, forces_cos: -0.1483, forces_magnitude: 0.0139, energy_mae: 0.6471, energy_force_within_threshold: 0.0333, loss: 1.5361, epoch: 64.0000
+2023-07-18 15:03:22 (INFO): forcesx_mae: 7.96e-03, forcesy_mae: 7.35e-03, forcesz_mae: 7.26e-03, forces_mae: 7.52e-03, forces_cos: 3.84e-01, forces_magnitude: 1.07e-02, energy_mae: 7.01e-01, energy_force_within_threshold: 1.25e-02, loss: 1.37e+00, lr: 5.00e-04, epoch: 6.47e+01, step: 9.70e+02
+2023-07-18 15:03:24 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.21it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.78it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:24 (INFO): forcesx_mae: 0.0127, forcesy_mae: 0.0137, forcesz_mae: 0.0113, forces_mae: 0.0126, forces_cos: 0.0119, forces_magnitude: 0.0162, energy_mae: 0.5852, energy_force_within_threshold: 0.0667, loss: 1.7305, epoch: 65.0000
+2023-07-18 15:03:26 (INFO): forcesx_mae: 9.78e-03, forcesy_mae: 8.88e-03, forcesz_mae: 9.39e-03, forces_mae: 9.35e-03, forces_cos: 2.16e-01, forces_magnitude: 9.92e-03, energy_mae: 5.96e-01, energy_force_within_threshold: 1.92e-02, loss: 1.44e+00, lr: 5.00e-04, epoch: 6.53e+01, step: 9.80e+02
+2023-07-18 15:03:28 (INFO): forcesx_mae: 7.22e-03, forcesy_mae: 7.22e-03, forcesz_mae: 7.75e-03, forces_mae: 7.40e-03, forces_cos: 4.27e-01, forces_magnitude: 1.14e-02, energy_mae: 3.21e-01, energy_force_within_threshold: 2.56e-02, loss: 1.01e+00, lr: 5.00e-04, epoch: 6.60e+01, step: 9.90e+02
+2023-07-18 15:03:28 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.26it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.82it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:29 (INFO): forcesx_mae: 0.0102, forcesy_mae: 0.0097, forcesz_mae: 0.0095, forces_mae: 0.0098, forces_cos: 0.0171, forces_magnitude: 0.0133, energy_mae: 0.2510, energy_force_within_threshold: 0.0667, loss: 1.1518, epoch: 66.0000
+2023-07-18 15:03:32 (INFO): forcesx_mae: 6.90e-03, forcesy_mae: 6.96e-03, forcesz_mae: 7.50e-03, forces_mae: 7.12e-03, forces_cos: 4.42e-01, forces_magnitude: 1.08e-02, energy_mae: 4.06e-01, energy_force_within_threshold: 5.00e-02, loss: 1.06e+00, lr: 5.00e-04, epoch: 6.67e+01, step: 1.00e+03
+2023-07-18 15:03:33 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.20it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.80it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:34 (INFO): forcesx_mae: 0.0089, forcesy_mae: 0.0099, forcesz_mae: 0.0086, forces_mae: 0.0091, forces_cos: -0.0224, forces_magnitude: 0.0128, energy_mae: 1.0097, energy_force_within_threshold: 0.0000, loss: 1.8379, epoch: 67.0000
+2023-07-18 15:03:35 (INFO): forcesx_mae: 6.88e-03, forcesy_mae: 7.59e-03, forcesz_mae: 6.24e-03, forces_mae: 6.90e-03, forces_cos: 3.49e-01, forces_magnitude: 1.05e-02, energy_mae: 5.75e-01, energy_force_within_threshold: 1.92e-02, loss: 1.20e+00, lr: 5.00e-04, epoch: 6.73e+01, step: 1.01e+03
+2023-07-18 15:03:37 (INFO): forcesx_mae: 6.97e-03, forcesy_mae: 6.61e-03, forcesz_mae: 8.02e-03, forces_mae: 7.20e-03, forces_cos: 4.09e-01, forces_magnitude: 1.08e-02, energy_mae: 3.72e-01, energy_force_within_threshold: 5.13e-02, loss: 1.02e+00, lr: 5.00e-04, epoch: 6.80e+01, step: 1.02e+03
+2023-07-18 15:03:38 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.36it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.94it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:38 (INFO): forcesx_mae: 0.0103, forcesy_mae: 0.0105, forcesz_mae: 0.0096, forces_mae: 0.0102, forces_cos: -0.0227, forces_magnitude: 0.0142, energy_mae: 0.3034, energy_force_within_threshold: 0.1333, loss: 1.2232, epoch: 68.0000
+2023-07-18 15:03:39 (INFO): Predicting on test.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  6.17it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  6.32it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:39 (INFO): Writing results to ./results/2023-07-18-14-58-08/s2ef_predictions.npz
+2023-07-18 15:03:42 (INFO): forcesx_mae: 6.57e-03, forcesy_mae: 6.38e-03, forcesz_mae: 7.24e-03, forces_mae: 6.73e-03, forces_cos: 4.49e-01, forces_magnitude: 1.05e-02, energy_mae: 6.40e-01, energy_force_within_threshold: 2.50e-02, loss: 1.23e+00, lr: 5.00e-04, epoch: 6.87e+01, step: 1.03e+03
+2023-07-18 15:03:43 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.34it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.92it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:44 (INFO): forcesx_mae: 0.0087, forcesy_mae: 0.0097, forcesz_mae: 0.0086, forces_mae: 0.0090, forces_cos: 0.0831, forces_magnitude: 0.0127, energy_mae: 0.3495, energy_force_within_threshold: 0.0333, loss: 1.1632, epoch: 69.0000
+2023-07-18 15:03:45 (INFO): forcesx_mae: 6.82e-03, forcesy_mae: 6.14e-03, forcesz_mae: 7.18e-03, forces_mae: 6.71e-03, forces_cos: 3.96e-01, forces_magnitude: 1.03e-02, energy_mae: 9.69e-01, energy_force_within_threshold: 1.28e-02, loss: 1.55e+00, lr: 5.00e-04, epoch: 6.93e+01, step: 1.04e+03
+2023-07-18 15:03:47 (INFO): forcesx_mae: 7.05e-03, forcesy_mae: 7.58e-03, forcesz_mae: 6.43e-03, forces_mae: 7.02e-03, forces_cos: 4.51e-01, forces_magnitude: 1.05e-02, energy_mae: 5.44e-01, energy_force_within_threshold: 1.28e-02, loss: 1.17e+00, lr: 5.00e-04, epoch: 7.00e+01, step: 1.05e+03
+2023-07-18 15:03:48 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.35it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.89it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:48 (INFO): forcesx_mae: 0.0096, forcesy_mae: 0.0104, forcesz_mae: 0.0090, forces_mae: 0.0097, forces_cos: 0.0624, forces_magnitude: 0.0131, energy_mae: 0.2899, energy_force_within_threshold: 0.0333, loss: 1.1694, epoch: 70.0000
+2023-07-18 15:03:51 (INFO): forcesx_mae: 7.46e-03, forcesy_mae: 6.64e-03, forcesz_mae: 6.67e-03, forces_mae: 6.92e-03, forces_cos: 4.26e-01, forces_magnitude: 1.01e-02, energy_mae: 5.00e-01, energy_force_within_threshold: 2.50e-02, loss: 1.11e+00, lr: 5.00e-04, epoch: 7.07e+01, step: 1.06e+03
+2023-07-18 15:03:52 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.32it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.92it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:53 (INFO): forcesx_mae: 0.0104, forcesy_mae: 0.0114, forcesz_mae: 0.0099, forces_mae: 0.0106, forces_cos: -0.0577, forces_magnitude: 0.0133, energy_mae: 0.9730, energy_force_within_threshold: 0.0000, loss: 1.9311, epoch: 71.0000
+2023-07-18 15:03:54 (INFO): forcesx_mae: 7.60e-03, forcesy_mae: 7.37e-03, forcesz_mae: 6.98e-03, forces_mae: 7.32e-03, forces_cos: 4.51e-01, forces_magnitude: 1.04e-02, energy_mae: 8.50e-01, energy_force_within_threshold: 6.41e-03, loss: 1.53e+00, lr: 5.00e-04, epoch: 7.13e+01, step: 1.07e+03
+2023-07-18 15:03:56 (INFO): forcesx_mae: 5.28e-03, forcesy_mae: 5.99e-03, forcesz_mae: 6.00e-03, forces_mae: 5.76e-03, forces_cos: 5.09e-01, forces_magnitude: 9.57e-03, energy_mae: 6.90e-01, energy_force_within_threshold: 1.28e-02, loss: 1.21e+00, lr: 5.00e-04, epoch: 7.20e+01, step: 1.08e+03
+2023-07-18 15:03:57 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.36it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.88it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:03:58 (INFO): forcesx_mae: 0.0086, forcesy_mae: 0.0099, forcesz_mae: 0.0071, forces_mae: 0.0086, forces_cos: -0.0281, forces_magnitude: 0.0147, energy_mae: 0.6089, energy_force_within_threshold: 0.0000, loss: 1.3877, epoch: 72.0000
+2023-07-18 15:04:00 (INFO): forcesx_mae: 6.64e-03, forcesy_mae: 6.33e-03, forcesz_mae: 6.84e-03, forces_mae: 6.60e-03, forces_cos: 4.63e-01, forces_magnitude: 1.07e-02, energy_mae: 7.43e-01, energy_force_within_threshold: 6.25e-03, loss: 1.32e+00, lr: 5.00e-04, epoch: 7.27e+01, step: 1.09e+03
+2023-07-18 15:04:02 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.41it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.83it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:04:02 (INFO): forcesx_mae: 0.0111, forcesy_mae: 0.0107, forcesz_mae: 0.0098, forces_mae: 0.0105, forces_cos: 0.0394, forces_magnitude: 0.0149, energy_mae: 0.5194, energy_force_within_threshold: 0.0000, loss: 1.4644, epoch: 73.0000
+2023-07-18 15:04:04 (INFO): forcesx_mae: 5.65e-03, forcesy_mae: 6.58e-03, forcesz_mae: 6.01e-03, forces_mae: 6.08e-03, forces_cos: 4.97e-01, forces_magnitude: 9.33e-03, energy_mae: 6.40e-01, energy_force_within_threshold: 2.56e-02, loss: 1.19e+00, lr: 5.00e-04, epoch: 7.33e+01, step: 1.10e+03
+2023-07-18 15:04:06 (INFO): forcesx_mae: 5.79e-03, forcesy_mae: 5.93e-03, forcesz_mae: 5.81e-03, forces_mae: 5.84e-03, forces_cos: 5.08e-01, forces_magnitude: 9.51e-03, energy_mae: 6.61e-01, energy_force_within_threshold: 1.28e-02, loss: 1.19e+00, lr: 5.00e-04, epoch: 7.40e+01, step: 1.11e+03
+2023-07-18 15:04:07 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.27it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.88it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:04:07 (INFO): forcesx_mae: 0.0089, forcesy_mae: 0.0102, forcesz_mae: 0.0080, forces_mae: 0.0090, forces_cos: 0.0987, forces_magnitude: 0.0142, energy_mae: 0.5561, energy_force_within_threshold: 0.0000, loss: 1.3731, epoch: 74.0000
+2023-07-18 15:04:10 (INFO): forcesx_mae: 5.31e-03, forcesy_mae: 5.90e-03, forcesz_mae: 5.97e-03, forces_mae: 5.73e-03, forces_cos: 5.43e-01, forces_magnitude: 8.89e-03, energy_mae: 4.62e-01, energy_force_within_threshold: 2.50e-02, loss: 9.80e-01, lr: 5.00e-04, epoch: 7.47e+01, step: 1.12e+03
+2023-07-18 15:04:11 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.24it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.82it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:04:12 (INFO): forcesx_mae: 0.0093, forcesy_mae: 0.0104, forcesz_mae: 0.0085, forces_mae: 0.0094, forces_cos: -0.0036, forces_magnitude: 0.0141, energy_mae: 0.3967, energy_force_within_threshold: 0.0333, loss: 1.2483, epoch: 75.0000
+2023-07-18 15:04:13 (INFO): forcesx_mae: 6.59e-03, forcesy_mae: 5.39e-03, forcesz_mae: 5.97e-03, forces_mae: 5.98e-03, forces_cos: 4.15e-01, forces_magnitude: 9.61e-03, energy_mae: 2.63e-01, energy_force_within_threshold: 7.69e-02, loss: 7.82e-01, lr: 5.00e-04, epoch: 7.53e+01, step: 1.13e+03
+2023-07-18 15:04:15 (INFO): forcesx_mae: 7.06e-03, forcesy_mae: 7.17e-03, forcesz_mae: 7.39e-03, forces_mae: 7.21e-03, forces_cos: 4.28e-01, forces_magnitude: 1.07e-02, energy_mae: 2.81e-01, energy_force_within_threshold: 5.77e-02, loss: 9.31e-01, lr: 5.00e-04, epoch: 7.60e+01, step: 1.14e+03
+2023-07-18 15:04:16 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.22it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.75it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:04:17 (INFO): forcesx_mae: 0.0101, forcesy_mae: 0.0096, forcesz_mae: 0.0099, forces_mae: 0.0098, forces_cos: -0.0166, forces_magnitude: 0.0143, energy_mae: 0.4527, energy_force_within_threshold: 0.0000, loss: 1.3317, epoch: 76.0000
+2023-07-18 15:04:19 (INFO): forcesx_mae: 6.90e-03, forcesy_mae: 7.11e-03, forcesz_mae: 7.22e-03, forces_mae: 7.08e-03, forces_cos: 4.81e-01, forces_magnitude: 1.05e-02, energy_mae: 7.44e-01, energy_force_within_threshold: 6.25e-03, loss: 1.37e+00, lr: 5.00e-04, epoch: 7.67e+01, step: 1.15e+03
+2023-07-18 15:04:21 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.39it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.91it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:04:21 (INFO): forcesx_mae: 0.0091, forcesy_mae: 0.0101, forcesz_mae: 0.0081, forces_mae: 0.0091, forces_cos: -0.0199, forces_magnitude: 0.0147, energy_mae: 0.4988, energy_force_within_threshold: 0.0333, loss: 1.3190, epoch: 77.0000
+2023-07-18 15:04:23 (INFO): forcesx_mae: 6.47e-03, forcesy_mae: 6.95e-03, forcesz_mae: 6.62e-03, forces_mae: 6.68e-03, forces_cos: 4.57e-01, forces_magnitude: 1.13e-02, energy_mae: 5.21e-01, energy_force_within_threshold: 3.21e-02, loss: 1.10e+00, lr: 5.00e-04, epoch: 7.73e+01, step: 1.16e+03
+2023-07-18 15:04:25 (INFO): forcesx_mae: 6.19e-03, forcesy_mae: 5.93e-03, forcesz_mae: 6.08e-03, forces_mae: 6.07e-03, forces_cos: 5.36e-01, forces_magnitude: 8.80e-03, energy_mae: 3.19e-01, energy_force_within_threshold: 6.41e-02, loss: 8.55e-01, lr: 5.00e-04, epoch: 7.80e+01, step: 1.17e+03
+2023-07-18 15:04:26 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.33it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.83it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:04:26 (INFO): forcesx_mae: 0.0088, forcesy_mae: 0.0092, forcesz_mae: 0.0082, forces_mae: 0.0087, forces_cos: 0.0650, forces_magnitude: 0.0135, energy_mae: 0.3255, energy_force_within_threshold: 0.0333, loss: 1.1181, epoch: 78.0000
+2023-07-18 15:04:28 (INFO): forcesx_mae: 5.28e-03, forcesy_mae: 5.76e-03, forcesz_mae: 5.74e-03, forces_mae: 5.59e-03, forces_cos: 4.88e-01, forces_magnitude: 8.92e-03, energy_mae: 3.82e-01, energy_force_within_threshold: 2.50e-02, loss: 8.78e-01, lr: 5.00e-04, epoch: 7.87e+01, step: 1.18e+03
+2023-07-18 15:04:30 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.32it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.82it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:04:31 (INFO): forcesx_mae: 0.0089, forcesy_mae: 0.0097, forcesz_mae: 0.0087, forces_mae: 0.0091, forces_cos: 0.1353, forces_magnitude: 0.0128, energy_mae: 0.4238, energy_force_within_threshold: 0.0333, loss: 1.2363, epoch: 79.0000
+2023-07-18 15:04:32 (INFO): forcesx_mae: 7.54e-03, forcesy_mae: 7.22e-03, forcesz_mae: 8.17e-03, forces_mae: 7.64e-03, forces_cos: 4.24e-01, forces_magnitude: 1.15e-02, energy_mae: 5.01e-01, energy_force_within_threshold: 3.21e-02, loss: 1.17e+00, lr: 5.00e-04, epoch: 7.93e+01, step: 1.19e+03
+2023-07-18 15:04:34 (INFO): forcesx_mae: 7.57e-03, forcesy_mae: 6.72e-03, forcesz_mae: 7.33e-03, forces_mae: 7.21e-03, forces_cos: 3.73e-01, forces_magnitude: 1.28e-02, energy_mae: 5.62e-01, energy_force_within_threshold: 1.28e-02, loss: 1.18e+00, lr: 5.00e-04, epoch: 8.00e+01, step: 1.20e+03
+2023-07-18 15:04:35 (INFO): Evaluating on val.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>device 0:   0%|          | 0/2 [00:00&lt;?, ?it/s]
+device 0:  50%|█████     | 1/2 [00:00&lt;00:00,  5.32it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.81it/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-07-18 15:04:35 (INFO): forcesx_mae: 0.0081, forcesy_mae: 0.0099, forcesz_mae: 0.0073, forces_mae: 0.0084, forces_cos: 0.0260, forces_magnitude: 0.0145, energy_mae: 0.2130, energy_force_within_threshold: 0.0667, loss: 0.9877, epoch: 80.0000
+2023-07-18 15:04:36 (INFO): Total time taken: 380.09229469299316
+</pre></div>
+</div>
+</div>
+</div>
+<p>When the training is done, you will find checkpoints in the checkpoints directory of ocp. They are time-stamped, so you want to look for one near the starting point. In the example above, the first line starts with</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-18 14:58:07 (INFO): Project root: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/ocp
+</pre></div>
+</div>
+<p>The closest one below is  ‘2023-07-18-14-58-08’</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">ocp_root</span> <span class="o">/</span> <span class="s1">&#39;checkpoints&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;2023-07-18-14-51-44&#39;,
+ &#39;2023-07-18-13-47-44&#39;,
+ &#39;2023-07-18-14-45-20&#39;,
+ &#39;2023-07-18-14-43-12&#39;,
+ &#39;2023-07-18-13-49-52&#39;,
+ &#39;2023-07-18-14-58-08&#39;,
+ &#39;2023-07-18-14-47-28&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">newckpt</span> <span class="o">=</span> <span class="n">ocp_root</span> <span class="o">/</span> <span class="s1">&#39;checkpoints&#39;</span> <span class="o">/</span> <span class="s1">&#39;2023-07-18-14-58-08/checkpoint.pt&#39;</span>
+<span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+<span class="n">newcalc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">newckpt</span><span class="p">),</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: false
+cmd:
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/checkpoints/2023-07-18-15-08-48
+  commit: 0fd79ef
+  identifier: &#39;&#39;
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/logs/tensorboard/2023-07-18-15-08-48
+  print_every: 100
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/results/2023-07-18-15-08-48
+  seed: null
+  timestamp_id: 2023-07-18-15-08-48
+dataset: null
+gpus: 1
+logger: tensorboard
+model: gemnet_oc
+model_attributes:
+  activation: silu
+  atom_edge_interaction: true
+  atom_interaction: true
+  cbf:
+    name: spherical_harmonics
+  cutoff: 12.0
+  cutoff_aeaint: 12.0
+  cutoff_aint: 12.0
+  cutoff_qint: 12.0
+  direct_forces: true
+  edge_atom_interaction: true
+  emb_size_aint_in: 64
+  emb_size_aint_out: 64
+  emb_size_atom: 256
+  emb_size_cbf: 16
+  emb_size_edge: 512
+  emb_size_quad_in: 32
+  emb_size_quad_out: 32
+  emb_size_rbf: 16
+  emb_size_sbf: 32
+  emb_size_trip_in: 64
+  emb_size_trip_out: 64
+  envelope:
+    exponent: 5
+    name: polynomial
+  extensive: true
+  forces_coupled: false
+  max_neighbors: 30
+  max_neighbors_aeaint: 20
+  max_neighbors_aint: 1000
+  max_neighbors_qint: 8
+  num_after_skip: 2
+  num_atom: 3
+  num_atom_emb_layers: 2
+  num_before_skip: 2
+  num_blocks: 4
+  num_concat: 1
+  num_global_out_layers: 2
+  num_output_afteratom: 3
+  num_radial: 128
+  num_spherical: 7
+  otf_graph: true
+  output_init: HeOrthogonal
+  qint_tags:
+  - 1
+  - 2
+  quad_interaction: true
+  rbf:
+    name: gaussian
+  regress_forces: true
+  sbf:
+    name: legendre_outer
+noddp: false
+optim:
+  batch_size: 16
+  clip_grad_norm: 10
+  ema_decay: 0.999
+  eval_batch_size: 16
+  load_balancing: atoms
+  lr_gamma: 0.8
+  lr_initial: 0.0005
+  lr_milestones:
+  - 64000
+  - 96000
+  - 128000
+  - 160000
+  - 192000
+  max_epochs: 80
+  num_workers: 2
+  optimizer: AdamW
+  optimizer_params:
+    amsgrad: true
+  warmup_steps: -1
+  weight_decay: 0
+slurm: {}
+task:
+  dataset: ase_db
+trainer: forces
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="k">for</span> <span class="n">oxide</span> <span class="ow">in</span> <span class="n">oxides</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">polymorph</span> <span class="ow">in</span> <span class="n">polymorphs</span><span class="p">:</span>
+        <span class="n">dft</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">ocp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">calculations</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">oxide</span><span class="p">][</span><span class="n">polymorph</span><span class="p">][</span><span class="s1">&#39;PBE&#39;</span><span class="p">][</span><span class="s1">&#39;EOS&#39;</span><span class="p">][</span><span class="s1">&#39;calculations&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calculations</span><span class="p">:</span>
+                        
+            <span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">(</span><span class="n">symbols</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;symbols&#39;</span><span class="p">],</span>
+                          <span class="n">positions</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;positions&#39;</span><span class="p">],</span>
+                          <span class="n">cell</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;cell&#39;</span><span class="p">],</span>
+                          <span class="n">pbc</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;atoms&#39;</span><span class="p">][</span><span class="s1">&#39;pbc&#39;</span><span class="p">])</span>
+            <span class="n">atoms</span><span class="o">.</span><span class="n">set_tags</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)))</span>
+            
+            <span class="n">atoms</span><span class="o">.</span><span class="n">calc</span> <span class="o">=</span> <span class="n">newcalc</span>
+            <span class="n">ocp</span> <span class="o">+=</span> <span class="p">[</span><span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)]</span>
+            <span class="n">dft</span> <span class="o">+=</span> <span class="p">[</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="s1">&#39;total_energy&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)]</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dft</span><span class="p">,</span> <span class="n">ocp</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;s&#39;</span> <span class="k">if</span> <span class="n">oxide</span> <span class="o">==</span> <span class="s1">&#39;VO2&#39;</span> <span class="k">else</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span>
+                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">oxide</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">polymorph</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;DFT (eV/atom)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;OCP (eV/atom)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center left&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">3</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/1adcc61307c22641d44c9bb6d6d7f7654a5c1ae3357cb0b47fb7f2c02824561f.png" src="../_images/1adcc61307c22641d44c9bb6d6d7f7654a5c1ae3357cb0b47fb7f2c02824561f.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mae</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dft</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ocp</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;New MAE = </span><span class="si">{</span><span class="n">mae</span><span class="si">:</span><span class="s1">1.3f</span><span class="si">}</span><span class="s1"> eV/atom&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>New MAE = 0.021 eV/atom
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is a substantial improvement!</p>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -647,6 +2356,24 @@ Rows: 295 (showing first 20)
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="../NRR/NRR_example.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Using OCP to enumerate adsorbates on catalyst surfaces</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../ocp-modules/ase-calculator.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ASE-compatible calculator for OCP</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>
@@ -664,7 +2391,14 @@ Rows: 295 (showing first 20)
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav class="bd-toc-nav page-toc">
-    <ul class="simple visible nav section-nav flex-column">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fine tuning a model</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#fine-tuning-the-checkpoint">Fine tuning the checkpoint</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#train-test-val-splits">train, test, val splits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-the-configuration-yaml-file">Setting up the configuration yaml file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-training-job">Running the training job</a></li>
+</ul>
+</li>
 </ul>
 
   </nav></div>
