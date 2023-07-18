@@ -50,7 +50,6 @@ jobs:
     # Build the book
     - name: Build the book
       run: |
-        conda init bash
         conda activate ocp-models
         jupyter-book build ocp-tutorial
 
