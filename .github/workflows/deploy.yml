@@ -43,6 +43,7 @@ jobs:
         git clone https://github.com/Open-Catalyst-Project/ocp.git
         cd ocp && conda-merge env.common.yml env.cpu.yml > env.yml && mamba env update -n base --file env.yml
         pip install -e .
+        python -c "import ocpmodels as om; print(om.__file__)"
         cd "$HOME"
 
     # Build the book
