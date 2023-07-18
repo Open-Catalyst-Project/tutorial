@@ -41,7 +41,7 @@ jobs:
         source "$HOME"/miniconda/etc/profile.d/conda.sh
         conda install -c conda-forge conda-merge
         git clone https://github.com/Open-Catalyst-Project/ocp.git
-        cd ocp && conda-merge env.common.yml env.cpu.yml > env.yml && mamba env update -n ocp-models --file env.yml
+        cd ocp && conda-merge env.common.yml env.cpu.yml > env.yml && mamba env update -n base --file env.yml
         pip install -e .
         cd "$HOME"
 
