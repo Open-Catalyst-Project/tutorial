@@ -42,6 +42,7 @@ jobs:
         git clone https://github.com/Open-Catalyst-Project/ocp.git
         cd ocp && conda-merge env.common.yml env.cpu.yml > env.yml && mamba env update -n ocp-models --file env.yml
         cd "$HOME"
+        conda activate ocp-models
         
 
     # Build the book
