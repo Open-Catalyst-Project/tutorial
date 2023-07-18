@@ -641,14 +641,14 @@ WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: false
 cmd:
-  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/checkpoints/2023-07-18-17-25-20
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/checkpoints/2023-07-18-17-57-20
   commit: 999c1ac
   identifier: &#39;&#39;
-  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/logs/tensorboard/2023-07-18-17-25-20
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/logs/tensorboard/2023-07-18-17-57-20
   print_every: 100
-  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/results/2023-07-18-17-25-20
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/results/2023-07-18-17-57-20
   seed: null
-  timestamp_id: 2023-07-18-17-25-20
+  timestamp_id: 2023-07-18-17-57-20
 dataset: null
 gpus: 1
 logger: tensorboard
@@ -797,10 +797,10 @@ trainer: forces
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time 16.4 seconds.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time 16.2 seconds.
 </pre></div>
 </div>
-<img alt="../_images/eb4e1bfddd2ab34e50235d72c982ee2594fbcf5961c459078c07cd82dd4fdcbf.png" src="../_images/eb4e1bfddd2ab34e50235d72c982ee2594fbcf5961c459078c07cd82dd4fdcbf.png" />
+<img alt="../_images/0aa3991e2a24d3090b156582fc38137273e7ddbc02ba29c2c2f1f832aee49699.png" src="../_images/0aa3991e2a24d3090b156582fc38137273e7ddbc02ba29c2c2f1f832aee49699.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -820,18 +820,23 @@ trainer: forces
 <p>Some notable issues are with fluorite structures</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">oxide</span> <span class="ow">in</span> <span class="n">eos_data</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;pretrained-eos&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">oxide</span> <span class="ow">in</span> <span class="n">eos_data</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">polymorph</span> <span class="ow">in</span> <span class="n">eos_data</span><span class="p">[</span><span class="n">oxide</span><span class="p">]:</span>
         <span class="n">V</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">O</span> <span class="o">=</span> <span class="n">eos_data</span><span class="p">[</span><span class="n">oxide</span><span class="p">][</span><span class="n">polymorph</span><span class="p">]</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;dft&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">O</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ocp&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">oxide</span><span class="si">}</span><span class="s1"> - </span><span class="si">{</span><span class="n">polymorph</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;pretrained </span><span class="si">{</span><span class="n">oxide</span><span class="si">}</span><span class="s1"> - </span><span class="si">{</span><span class="n">polymorph</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;pretrained-eos/pretrained-</span><span class="si">{</span><span class="n">oxide</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">polymorph</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>Here is one example from <span class="xref myst">pretrained-eos</span>.</p>
+<p><img alt="img" src="../_images/pretrained-VO2-fluorite.png" /></p>
 <p>We can improve this by fine-tuning the model.</p>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="fine-tuning-the-checkpoint">
@@ -2436,7 +2441,8 @@ trainer: forces
 <p>This is a substantial improvement! We can see what it means in terms of the Equations of State. There is still not perfect agreement, but the curves are closer together. Additional fine tuning, or a better model could probably still improve this.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">oxide</span> <span class="ow">in</span> <span class="n">eos_data</span><span class="p">:</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s1">&#39;finetuned-eos&#39;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">oxide</span> <span class="ow">in</span> <span class="n">eos_data</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">polymorph</span> <span class="ow">in</span> <span class="n">eos_data</span><span class="p">[</span><span class="n">oxide</span><span class="p">]:</span>
         <span class="n">V</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">O</span> <span class="o">=</span> <span class="n">eos_data</span><span class="p">[</span><span class="n">oxide</span><span class="p">][</span><span class="n">polymorph</span><span class="p">]</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
@@ -2444,10 +2450,14 @@ trainer: forces
         <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">O</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;ocp&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">oxide</span><span class="si">}</span><span class="s1"> - </span><span class="si">{</span><span class="n">polymorph</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;finetuned-eos/</span><span class="si">{</span><span class="n">oxide</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">polymorph</span><span class="si">}</span><span class="s1">.png&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>Here is one example from <span class="xref myst">./finetuned-eos</span>.</p>
+<p><img alt="img" src="../_images/VO2-fluorite.png" /></p>
 <p>TODO: How do you continue improving this?</p>
 <p>more epochs?
 tighter criteria?
