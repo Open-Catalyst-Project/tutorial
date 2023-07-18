@@ -44,7 +44,7 @@ jobs:
         cd ocp && conda-merge env.common.yml env.cpu.yml > env.yml && mamba env update -n base --file env.yml
         pip install -e .
         python -c "import ocpmodels as om; print(om.__file__)"
-        python -c "ocpmodels.common.relaxation.ase_utils as au; print(au.__file__)"
+        python -c "import ocpmodels.common.relaxation.ase_utils as au; print(au.__file__)"
         cd "$HOME"
 
     # Build the book
