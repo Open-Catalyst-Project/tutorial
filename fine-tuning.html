@@ -423,7 +423,149 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="create-the-training-data">
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="s1">&#39;gnoc_oc22_oc20_all_s2ef.pt&#39;</span>
+
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_09/oc22/s2ef/gnoc_oc22_oc20_all_s2ef.pt&#39;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        
+<span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">),</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:Unable to identify OCP trainer, defaulting to `forces`. Specify the `trainer` argument into OCPCalculator if otherwise.
+WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: false
+cmd:
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/checkpoints/2023-07-18-20-28-48
+  commit: 999c1ac
+  identifier: &#39;&#39;
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/logs/tensorboard/2023-07-18-20-28-48
+  print_every: 100
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/results/2023-07-18-20-28-48
+  seed: null
+  timestamp_id: 2023-07-18-20-28-48
+dataset: null
+gpus: 1
+logger: tensorboard
+model: gemnet_oc
+model_attributes:
+  activation: silu
+  atom_edge_interaction: true
+  atom_interaction: true
+  cbf:
+    name: spherical_harmonics
+  cutoff: 12.0
+  cutoff_aeaint: 12.0
+  cutoff_aint: 12.0
+  cutoff_qint: 12.0
+  direct_forces: true
+  edge_atom_interaction: true
+  emb_size_aint_in: 64
+  emb_size_aint_out: 64
+  emb_size_atom: 256
+  emb_size_cbf: 16
+  emb_size_edge: 512
+  emb_size_quad_in: 32
+  emb_size_quad_out: 32
+  emb_size_rbf: 16
+  emb_size_sbf: 32
+  emb_size_trip_in: 64
+  emb_size_trip_out: 64
+  envelope:
+    exponent: 5
+    name: polynomial
+  extensive: true
+  forces_coupled: false
+  max_neighbors: 30
+  max_neighbors_aeaint: 20
+  max_neighbors_aint: 1000
+  max_neighbors_qint: 8
+  num_after_skip: 2
+  num_atom: 3
+  num_atom_emb_layers: 2
+  num_before_skip: 2
+  num_blocks: 4
+  num_concat: 1
+  num_global_out_layers: 2
+  num_output_afteratom: 3
+  num_radial: 128
+  num_spherical: 7
+  otf_graph: true
+  output_init: HeOrthogonal
+  qint_tags:
+  - 1
+  - 2
+  quad_interaction: true
+  rbf:
+    name: gaussian
+  regress_forces: true
+  sbf:
+    name: legendre_outer
+  symmetric_edge_symmetrization: false
+noddp: false
+optim:
+  batch_size: 16
+  clip_grad_norm: 10
+  ema_decay: 0.999
+  energy_coefficient: 1
+  eval_batch_size: 16
+  eval_every: 5000
+  factor: 0.8
+  force_coefficient: 1
+  load_balancing: atoms
+  loss_energy: mae
+  loss_force: atomwisel2
+  lr_initial: 0.0005
+  max_epochs: 80
+  mode: min
+  num_workers: 2
+  optimizer: AdamW
+  optimizer_params:
+    amsgrad: true
+  patience: 3
+  scheduler: ReduceLROnPlateau
+  weight_decay: 0
+slurm:
+  additional_parameters:
+    constraint: volta32gb
+  cpus_per_task: 3
+  folder: /checkpoint/abhshkdz/ocp_oct1_logs/57632342
+  gpus_per_node: 8
+  job_id: &#39;57632342&#39;
+  job_name: gnoc_oc22_oc20_all_s2ef
+  mem: 480GB
+  nodes: 8
+  ntasks_per_node: 8
+  partition: ocp,learnaccel
+  time: 4320
+task:
+  dataset: oc22_lmdb
+  description: Regressing to energies and forces for DFT trajectories from OCP
+  eval_on_free_atoms: true
+  grad_input: atomic forces
+  labels:
+  - potential energy
+  metric: mae
+  primary_metric: forces_mae
+  train_on_free_atoms: true
+  type: regression
+trainer: forces
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="create-the-training-data">
 <h1>Create the training data<a class="headerlink" href="#create-the-training-data" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -464,10 +606,94 @@ document.write(`
             <span class="n">ene</span> <span class="o">-=</span> <span class="n">re1</span> <span class="o">+</span> <span class="n">re3</span>
 
         <span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">(</span><span class="n">struc</span><span class="p">[</span><span class="s1">&#39;symbols&#39;</span><span class="p">],</span> <span class="n">positions</span><span class="o">=</span><span class="n">struc</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">],</span> <span class="n">cell</span><span class="o">=</span><span class="n">struc</span><span class="p">[</span><span class="s1">&#39;cell&#39;</span><span class="p">],</span> <span class="n">pbc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">calc</span> <span class="o">=</span> <span class="n">SinglePointCalculator</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">energy</span><span class="o">=</span><span class="n">ene</span><span class="p">,</span> <span class="n">forces</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">))</span>
-        <span class="n">atoms</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
-        <span class="n">db</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">y_relaxed</span><span class="o">=</span><span class="n">ene</span><span class="p">)</span>
+        <span class="c1"># we use fake forces</span>
+        <span class="n">atoms</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">SinglePointCalculator</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">energy</span><span class="o">=</span><span class="n">ene</span><span class="p">,</span> <span class="n">forces</span><span class="o">=</span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)))</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
                              
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>ase<span class="w"> </span>db<span class="w"> </span>coverages.db
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>id|age|formula|calculator|energy|natoms| fmax|pbc| volume|charge|    mass
+ 1| 1s|Pt16O  |unknown   | 1.346|    17|0.000|TTT|847.607| 0.000|3137.343
+ 2| 1s|Pt16O2 |unknown   | 1.439|    18|0.000|TTT|847.607| 0.000|3153.342
+ 3| 1s|Pt16O3 |unknown   | 2.321|    19|0.000|TTT|847.607| 0.000|3169.341
+ 4| 1s|Pt16O4 |unknown   | 3.900|    20|0.000|TTT|847.607| 0.000|3185.340
+ 5| 1s|Ag16O  |unknown   | 2.149|    17|0.000|TTT|935.354| 0.000|1741.890
+ 6| 1s|Ag16O2 |unknown   | 3.458|    18|0.000|TTT|935.354| 0.000|1757.889
+ 7| 1s|Ag16O3 |unknown   | 5.892|    19|0.000|TTT|935.354| 0.000|1773.888
+ 8| 1s|Ag16O4 |unknown   | 8.814|    20|0.000|TTT|935.354| 0.000|1789.887
+ 9| 1s|Ir16O  |unknown   | 0.853|    17|0.000|TTT|801.033| 0.000|3091.471
+10| 1s|Ir16O2 |unknown   | 0.159|    18|0.000|TTT|801.033| 0.000|3107.470
+11| 1s|Ir16O3 |unknown   | 0.120|    19|0.000|TTT|801.033| 0.000|3123.469
+12| 1s|Ir16O4 |unknown   | 0.787|    20|0.000|TTT|801.033| 0.000|3139.468
+13| 1s|Au16O  |unknown   | 2.565|    17|0.000|TTT|940.378| 0.000|3167.464
+14| 1s|Au16O2 |unknown   | 3.973|    18|0.000|TTT|940.378| 0.000|3183.463
+15| 1s|Au16O3 |unknown   | 6.344|    19|0.000|TTT|940.378| 0.000|3199.462
+16| 1s|Au16O4 |unknown   | 9.739|    20|0.000|TTT|940.378| 0.000|3215.461
+17| 1s|Pd16O  |unknown   | 1.237|    17|0.000|TTT|833.473| 0.000|1718.719
+18| 1s|Pd16O2 |unknown   | 1.263|    18|0.000|TTT|833.473| 0.000|1734.718
+19| 1s|Pd16O3 |unknown   | 2.066|    19|0.000|TTT|833.473| 0.000|1750.717
+20| 1s|Pd16O4 |unknown   | 3.796|    20|0.000|TTT|833.473| 0.000|1766.716
+Rows: 28 (showing first 20)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">default_rng</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">29</span><span class="p">)</span>
+<span class="n">rng</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
+<span class="n">ids</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 8, 17, 24, 23, 18,  6, 28, 25, 11, 19, 20, 10,  7, 21,  4,  1, 16,
+       22, 13, 12, 15, 27,  3,  5, 26,  2, 14,  9])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.8</span><span class="p">)</span>
+<span class="n">test_end</span> <span class="o">=</span> <span class="n">train_end</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">)</span>
+
+<span class="o">!</span><span class="w"> </span>rm<span class="w"> </span>-fr<span class="w"> </span>train.db<span class="w"> </span>test.db<span class="w"> </span>val.db<span class="w"> </span>#<span class="w"> </span>start<span class="w"> </span>clean
+
+<span class="n">train</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s1">&#39;train.db&#39;</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s1">&#39;test.db&#39;</span><span class="p">)</span>
+<span class="n">val</span> <span class="o">=</span> <span class="n">connect</span><span class="p">(</span><span class="s1">&#39;val.db&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">_id</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">train_end</span><span class="p">]:</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">_id</span><span class="p">))</span>
+    <span class="n">train</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">toatoms</span><span class="p">())</span>
+    
+<span class="k">for</span> <span class="n">_id</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">[</span><span class="n">train_end</span><span class="p">:</span><span class="n">test_end</span><span class="p">]:</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">_id</span><span class="p">))</span>
+    <span class="n">test</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">toatoms</span><span class="p">())</span>
+    
+<span class="k">for</span> <span class="n">_id</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">[</span><span class="n">test_end</span><span class="p">:]:</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">_id</span><span class="p">))</span>
+    <span class="n">val</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">toatoms</span><span class="p">())</span>
+    
+<span class="n">train</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="n">test</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span> <span class="n">val</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(22, 2, 4)
 </pre></div>
 </div>
 </div>
@@ -475,12 +701,63 @@ document.write(`
 <p>Training is done at the command line.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]]</span> <span class="o">*</span><span class="mi">3</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yaml</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">dump</span>
+<span class="kn">from</span> <span class="nn">yaml</span> <span class="kn">import</span> <span class="n">CLoader</span> <span class="k">as</span> <span class="n">Loader</span><span class="p">,</span> <span class="n">CDumper</span> <span class="k">as</span> <span class="n">Dumper</span>
+
+<span class="n">yml</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">config</span>
+
+<span class="k">del</span> <span class="n">yml</span><span class="p">[</span><span class="s1">&#39;logger&#39;</span><span class="p">]</span>
+<span class="k">del</span> <span class="n">yml</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span>
+<span class="k">del</span> <span class="n">yml</span><span class="p">[</span><span class="s1">&#39;optim&#39;</span><span class="p">][</span><span class="s1">&#39;loss_force&#39;</span><span class="p">]</span>
+<span class="n">yml</span><span class="p">[</span><span class="s1">&#39;optim&#39;</span><span class="p">][</span><span class="s1">&#39;eval_every&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">yml</span><span class="p">[</span><span class="s1">&#39;optim&#39;</span><span class="p">][</span><span class="s1">&#39;lr_initial&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-5</span>
+
+<span class="n">yml</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;task&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dataset&#39;</span><span class="p">:</span> <span class="s1">&#39;ase_db&#39;</span><span class="p">},</span>
+            <span class="s1">&#39;dataset&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;train&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;train.db&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()),</span>
+                                    <span class="s1">&#39;a2g_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;r_energy&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                                                 <span class="s1">&#39;r_forces&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+                                    <span class="s1">&#39;keep_in_memory&#39;</span> <span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+                       <span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;test.db&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()),</span>
+                                    <span class="s1">&#39;a2g_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;r_energy&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                                                 <span class="s1">&#39;r_forces&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+                                    <span class="s1">&#39;keep_in_memory&#39;</span> <span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+                       <span class="s1">&#39;val&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;val.db&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()),</span>
+                                    <span class="s1">&#39;a2g_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;r_energy&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                                                 <span class="s1">&#39;r_forces&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+                                    <span class="s1">&#39;keep_in_memory&#39;</span> <span class="p">:</span> <span class="kc">True</span><span class="p">}}})</span>
+
+<span class="n">runyml</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;run.yml&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">runyml</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dump</span><span class="p">(</span><span class="n">yml</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    
+<span class="nb">print</span><span class="p">(</span><span class="n">yml</span><span class="p">)</span>
+<span class="o">!</span><span class="w"> </span>cat<span class="w"> </span>run.yml
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">13</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">yml</span><span class="p">[</span><span class="s1">&#39;optim&#39;</span><span class="p">][</span><span class="s1">&#39;eval_every&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">yml</span><span class="p">[</span><span class="s1">&#39;optim&#39;</span><span class="p">][</span><span class="s1">&#39;lr_initial&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-5</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="n">yml</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;task&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;dataset&#39;</span><span class="p">:</span> <span class="s1">&#39;ase_db&#39;</span><span class="p">},</span>
+<span class="ne">---&gt; </span><span class="mi">13</span>             <span class="s1">&#39;dataset&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;train&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;train.db&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()),</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span>                                     <span class="s1">&#39;a2g_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;r_energy&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">15</span>                                                  <span class="s1">&#39;r_forces&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span>                                     <span class="s1">&#39;keep_in_memory&#39;</span> <span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span>                        <span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;test.db&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()),</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span>                                     <span class="s1">&#39;a2g_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;r_energy&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">19</span>                                                  <span class="s1">&#39;r_forces&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+<span class="g g-Whitespace">     </span><span class="mi">20</span>                                     <span class="s1">&#39;keep_in_memory&#39;</span> <span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<span class="g g-Whitespace">     </span><span class="mi">21</span>                        <span class="s1">&#39;val&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;src&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;val.db&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()),</span>
+<span class="g g-Whitespace">     </span><span class="mi">22</span>                                     <span class="s1">&#39;a2g_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;r_energy&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">23</span>                                                  <span class="s1">&#39;r_forces&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span>                                     <span class="s1">&#39;keep_in_memory&#39;</span> <span class="p">:</span> <span class="kc">True</span><span class="p">}}})</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span> <span class="n">runyml</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;run.yml&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">27</span> <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">runyml</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+
+<span class="ne">NameError</span>: name &#39;Path&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -489,214 +766,96 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">ocpmodels</span> <span class="k">as</span> <span class="nn">om</span>
-<span class="n">Path</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;main.py&quot;</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/home/mambauser/ocp/main.py&#39;)
-</pre></div>
-</div>
-</div>
-</div>
-<p>We are using the checkpoint <code class="docutils literal notranslate"><span class="pre">escn_l6_m3_lay20_all_md_s2ef</span></code>.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="n">Path</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;configs/s2ef/all/escn/eSCN-L6-M2-Lay12-All-MD.yml&#39;</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/home/mambauser/ocp/configs/s2ef/all/escn/eSCN-L6-M2-Lay12-All-MD.yml&#39;)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">shutil</span>
-<span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;configs/s2ef/all/escn/eSCN-L6-M2-Lay12-All-MD.yml&#39;</span><span class="p">,</span> <span class="s1">&#39;params.yml&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;params.yml&#39;
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%writefile</span> -a params.yml
+<span class="kn">import</span> <span class="nn">os</span>
 
-<span class="n">task</span><span class="p">:</span>
-  <span class="n">dataset</span><span class="p">:</span> <span class="n">ase_db</span>
+<span class="n">ocp_root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+
+
+<span class="n">cmd</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;&#39;&#39;cd </span><span class="si">{</span><span class="n">ocp_root</span><span class="si">}</span><span class="s1"> </span>
+<span class="s1">python main.py --mode train </span><span class="se">\\</span>
+<span class="s1"> --config-yml </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;run.yml&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span><span class="si">}</span><span class="s1"> </span><span class="se">\\</span>
+<span class="s1"> --checkpoint </span><span class="si">{</span><span class="n">Path</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">)</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+cd /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/ocp 
+python main.py --mode train \
+ --config-yml /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/run.yml \
+ --checkpoint /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/gnoc_oc22_oc20_all_s2ef.pt
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">newckpt</span> <span class="o">=</span> <span class="n">ocp_root</span> <span class="o">/</span> <span class="s1">&#39;./checkpoints/2023-07-18-20-01-04/checkpoint.pt&#39;</span>
+<span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+<span class="n">newcalc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">newckpt</span><span class="p">),</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">ase.optimize</span> <span class="kn">import</span> <span class="n">BFGS</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;energies.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">edata</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;structures.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    
   
-<span class="n">dataset</span><span class="p">:</span>
-  <span class="n">train</span><span class="p">:</span>
-    <span class="n">src</span><span class="p">:</span> <span class="n">coverages</span><span class="o">.</span><span class="n">db</span> <span class="c1"># The path/address to your ASE DB</span>
-    <span class="n">connect_args</span><span class="p">:</span>
-      <span class="c1"># Keyword arguments for ase.db.connect()</span>
-    <span class="n">select_args</span><span class="p">:</span>
-      <span class="c1"># Keyword arguments for ase.db.select()</span>
-      <span class="c1"># These can be used to query/filter the ASE DB</span>
-    <span class="n">a2g_args</span><span class="p">:</span>
-      <span class="n">r_energy</span><span class="p">:</span> <span class="kc">True</span>
-      <span class="n">r_forces</span><span class="p">:</span> <span class="kc">False</span>
-      <span class="c1"># Set these if you want to train on energy/forces</span>
-      <span class="c1"># Energy/force information must be in the ASE DB!</span>
-    <span class="n">keep_in_memory</span><span class="p">:</span> <span class="kc">True</span> <span class="c1"># Keeping the dataset in memory reduces random reads and is extremely fast, but this is only feasible for relatively small datasets!</span>
-  <span class="n">val</span><span class="p">:</span>
-    <span class="n">src</span><span class="p">:</span>
-    <span class="n">a2g_args</span><span class="p">:</span>
-      <span class="n">r_energy</span><span class="p">:</span> <span class="kc">True</span>
-      <span class="n">r_forces</span><span class="p">:</span> <span class="kc">True</span>
-  <span class="n">test</span><span class="p">:</span>
-    <span class="n">src</span><span class="p">:</span>
-    <span class="n">a2g_args</span><span class="p">:</span>
-      <span class="n">r_energy</span><span class="p">:</span> <span class="kc">False</span>
-      <span class="n">r_forces</span><span class="p">:</span> <span class="kc">False</span>
-      <span class="c1"># It is not necessary to have energy or forces if you are just making predictions.</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Appending to params.yml
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>python<span class="w"> </span>/home/mambauser/ocp/main.py<span class="w"> </span>--mode<span class="w"> </span>train<span class="w"> </span>--config-yml<span class="w"> </span>params.yml
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>DATASET.md		  TRAIN.md	  env.yml	       scripts
-DATASET_PER_ADSORBATE.md  configs	  licenses	       setup.py
-INSTALL.md		  docs		  main.py	       tests
-LICENSE.md		  env.common.yml  ocp_models.egg-info  tutorials
-MODELS.md		  env.cpu.yml	  ocpmodels
-README.md		  env.gpu.yml	  pyproject.toml
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">yaml</span> <span class="kn">import</span> <span class="n">load</span><span class="p">,</span> <span class="n">dump</span>
-<span class="kn">from</span> <span class="nn">yaml</span> <span class="kn">import</span> <span class="n">CLoader</span> <span class="k">as</span> <span class="n">Loader</span><span class="p">,</span> <span class="n">CDumper</span> <span class="k">as</span> <span class="n">Dumper</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;configs/s2ef/all/escn/eSCN-L6-M2-Lay12-All-MD.yml&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">Loader</span><span class="p">)</span>
-<span class="n">d</span><span class="p">[</span><span class="s1">&#39;includes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">d</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;regress_forces&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">d</span><span class="p">[</span><span class="s1">&#39;optim&#39;</span><span class="p">][</span><span class="n">force_coefficient</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-<span class="n">d</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s1">&#39;ase_db&#39;</span><span class="p">),</span>
-              <span class="n">dataset</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="s1">&#39;/home/mambauser/tutorial/ocp-tutorial/coverages.db&#39;</span><span class="p">,</span>
-                                      <span class="n">a2g_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">r_energy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">r_forces</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-                                      <span class="n">keep_in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">))))</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test.yml&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dump</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;dataset:\n  train:\n    a2g_args:\n      r_energy: true\n      r_forces: false\n    keep_in_memory: true\n    src: /home/mambauser/tutorial/ocp-tutorial/coverages.db\nincludes:\n- configs/s2ef/all/base.yml\nmodel:\n  basis_width_scalar: 2.0\n  cutoff: 12.0\n  distance_function: gaussian\n  hidden_channels: 256\n  lmax_list:\n  - 6\n  max_neighbors: 20\n  mmax_list:\n  - 2\n  name: escn\n  num_layers: 12\n  num_sphere_samples: 128\n  otf_graph: true\n  regress_forces: false\n  sphere_channels: 128\n  use_pbc: true\noptim:\n  batch_size: 6\n  clip_grad_norm: 20\n  ema_decay: 0.999\n  energy_coefficient: 4\n  eval_batch_size: 6\n  eval_every: 5000\n  force_coefficient: 100\n  loss_energy: mae\n  loss_force: l2mae\n  lr_gamma: 0.3\n  lr_initial: 0.0008\n  lr_milestones:\n  - 218750\n  - 281250\n  - 343750\n  max_epochs: 24\n  num_workers: 8\n  optimizer: AdamW\n  optimizer_params:\n    amsgrad: true\n  warmup_factor: 0.2\n  warmup_steps: 100\ntask:\n  dataset: ase_db\ntrainer: energy\n&#39;
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;configs/s2ef/all/base.yml&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">yml</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">Loader</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">time</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;configs/s2ef/all/escn/eSCN-L6-M2-Lay12-All-MD.yml&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">yml</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">Loader</span><span class="o">=</span><span class="n">Loader</span><span class="p">))</span>
-    <span class="k">del</span> <span class="n">yml</span><span class="p">[</span><span class="s1">&#39;includes&#39;</span><span class="p">]</span>
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 
-<span class="n">yml</span><span class="p">[</span><span class="s1">&#39;model&#39;</span><span class="p">][</span><span class="s1">&#39;regress_forces&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">yml</span><span class="p">[</span><span class="s1">&#39;optim&#39;</span><span class="p">][</span><span class="s1">&#39;force_coefficient&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fcc&#39;</span><span class="p">:</span> <span class="p">[],</span>
+       <span class="s1">&#39;hcp&#39;</span><span class="p">:</span> <span class="p">[]}</span>
 
-<span class="n">yml</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">task</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s1">&#39;ase_db&#39;</span><span class="p">),</span>
-                <span class="n">dataset</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">src</span><span class="o">=</span><span class="s1">&#39;/home/mambauser/tutorial/ocp-tutorial/coverages.db&#39;</span><span class="p">,</span>
-                                      <span class="n">a2g_args</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">r_energy</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">r_forces</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-                                      <span class="n">keep_in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">))))</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test.yml&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dump</span><span class="p">(</span><span class="n">yml</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>python<span class="w"> </span>....main.py<span class="w"> </span>--config-yml<span class="w"> </span>....
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>cat<span class="w"> </span>test.yml
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dataset:
-  train:
-    a2g_args:
-      r_energy: true
-      r_forces: false
-    keep_in_memory: true
-    src: /home/mambauser/tutorial/ocp-tutorial/coverages.db
-logger: tensorboard
-model:
-  basis_width_scalar: 2.0
-  cutoff: 12.0
-  distance_function: gaussian
-  hidden_channels: 256
-  lmax_list:
-  - 6
-  max_neighbors: 20
-  mmax_list:
-  - 2
-  name: escn
-  num_layers: 12
-  num_sphere_samples: 128
-  otf_graph: true
-  regress_forces: true
-  sphere_channels: 128
-  use_pbc: true
-optim:
-  batch_size: 6
-  clip_grad_norm: 20
-  ema_decay: 0.999
-  energy_coefficient: 4
-  eval_batch_size: 6
-  eval_every: 5000
-  force_coefficient: 0.0
-  loss_energy: mae
-  loss_force: l2mae
-  lr_gamma: 0.3
-  lr_initial: 0.0008
-  lr_milestones:
-  - 218750
-  - 281250
-  - 343750
-  max_epochs: 24
-  num_workers: 8
-  optimizer: AdamW
-  optimizer_params:
-    amsgrad: true
-  warmup_factor: 0.2
-  warmup_steps: 100
-task:
-  dataset: ase_db
-trainer: forces
+<span class="n">refdata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fcc&#39;</span><span class="p">:</span> <span class="p">[],</span>
+           <span class="s1">&#39;hcp&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+
+
+<span class="k">for</span> <span class="n">metal</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;Cu&#39;</span><span class="p">,</span> <span class="s1">&#39;Ag&#39;</span><span class="p">,</span> <span class="s1">&#39;Pd&#39;</span><span class="p">,</span> <span class="s1">&#39;Pt&#39;</span><span class="p">,</span> <span class="s1">&#39;Rh&#39;</span><span class="p">,</span> <span class="s1">&#39;Ir&#39;</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">metal</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">site</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;fcc&#39;</span><span class="p">,</span> <span class="s1">&#39;hcp&#39;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">adsorbate</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;O&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">coverage</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">([</span><span class="s1">&#39;0.25&#39;</span><span class="p">]):</span>
+                 
+                
+                <span class="n">entry</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">metal</span><span class="p">][</span><span class="n">adsorbate</span><span class="p">][</span><span class="n">site</span><span class="p">][</span><span class="n">coverage</span><span class="p">]</span>
+                
+                <span class="n">atoms</span> <span class="o">=</span> <span class="n">Atoms</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;symbols&#39;</span><span class="p">],</span>
+                              <span class="n">positions</span><span class="o">=</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;pos&#39;</span><span class="p">],</span>
+                              <span class="n">cell</span><span class="o">=</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;cell&#39;</span><span class="p">],</span>
+                              <span class="n">pbc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+                <span class="n">atoms</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">newcalc</span><span class="p">)</span>
+                <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># no logfile to suppress output</span>
+
+                <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+                
+                <span class="n">re2</span> <span class="o">=</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+                <span class="n">nO</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">atoms</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">atom</span><span class="o">.</span><span class="n">symbol</span> <span class="o">==</span> <span class="s1">&#39;O&#39;</span><span class="p">:</span>
+                        <span class="n">nO</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">re2</span> <span class="o">+=</span> <span class="n">re1</span> <span class="o">+</span> <span class="n">re3</span>
+                
+                <span class="n">data</span><span class="p">[</span><span class="n">site</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">re2</span> <span class="o">/</span> <span class="n">nO</span><span class="p">]</span>
+                <span class="n">refdata</span><span class="p">[</span><span class="n">site</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">edata</span><span class="p">[</span><span class="n">metal</span><span class="p">][</span><span class="n">adsorbate</span><span class="p">][</span><span class="n">site</span><span class="p">][</span><span class="n">coverage</span><span class="p">]]</span>  
+                
+<span class="sa">f</span><span class="s1">&#39;Elapsed time = </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">t0</span><span class="si">}</span><span class="s1"> seconds&#39;</span> 
 </pre></div>
 </div>
 </div>
