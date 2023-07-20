@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Train/test/val split for an ase db &#8212; OCP tutorials</title>
+    <title>Convenience function for getting checkpoints &#8212; OCP tutorials</title>
   
   
   
@@ -163,7 +163,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Screening catalysts with OCP</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example.html">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example-gemnet.html">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
 
 
 
@@ -175,10 +175,6 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="fine-tuning/fine-tuning-oxides.html">Fine tuning a model</a></li>
 
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="ocp-modules/ase-calculator.html">ASE-compatible calculator for OCP</a></li>
 </ul>
 
     </div>
@@ -411,7 +407,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Train/test/val split for an ase db</h1>
+    <h1>Convenience function for getting checkpoints</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -421,7 +417,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Train/test/val split for an ase db</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Convenience function for getting checkpoints</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#train-test-val-split-for-an-ase-db">Train/test/val split for an ase db</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-a-config-from-a-checkpoint">Generating a config from a checkpoint</a></li>
 </ul>
 
@@ -435,7 +432,105 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="train-test-val-split-for-an-ase-db">
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ocpmodels</span> <span class="k">as</span> <span class="nn">om</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="k">def</span> <span class="nf">ocp_root</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the root directory of the installed ocp package.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">om</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+
+<span class="k">def</span> <span class="nf">ocp_main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the path to ocp main.py&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ocp_root</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;main.py&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="convenience-function-for-getting-checkpoints">
+<h1>Convenience function for getting checkpoints<a class="headerlink" href="#convenience-function-for-getting-checkpoints" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">checkpoints</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># Open Catalyst 2020 (OC20)</span>
+    <span class="s1">&#39;CGCNN 200k&#39;</span>	<span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/cgcnn_200k.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;CGCNN 2M&#39;</span>	    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/cgcnn_2M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;CGCNN 20M&#39;</span>	<span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/cgcnn_20M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;CGCNN All&#39;</span>	<span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/cgcnn_all.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;DimeNet 200k&#39;</span>	<span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/dimenet_200k.pt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;DimeNet 2M&#39;</span>	<span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/dimenet_2M.pt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;SchNet 200k&#39;</span>	<span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/schnet_200k.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;SchNet 2M&#39;</span>	    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/schnet_2M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;SchNet 20M&#39;</span>	<span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/schnet_20M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;SchNet All&#39;</span>	<span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/schnet_all_large.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;DimeNet++ 200k&#39;</span>   <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_02/s2ef/dimenetpp_200k.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;DimeNet++ 2M&#39;</span>     <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_02/s2ef/dimenetpp_2M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;DimeNet++ 20M&#39;</span>    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_02/s2ef/dimenetpp_20M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;DimeNet++ All&#39;</span>    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_02/s2ef/dimenetpp_all.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;SpinConv 2M&#39;</span>    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_12/s2ef/spinconv_force_centric_2M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;SpinConv All&#39;</span>    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_08/s2ef/spinconv_force_centric_all.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;GemNet-dT 2M&#39;</span>    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_12/s2ef/gemnet_t_direct_h512_2M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;GemNet-dT All&#39;</span>    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_08/s2ef/gemnet_t_direct_h512_all.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;PaiNN All&#39;</span>    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_05/s2ef/painn_h512_s2ef_all.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;GemNet-OC 2M&#39;</span>     <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_07/s2ef/gemnet_oc_base_s2ef_2M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;GemNet-OC All&#39;</span>    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_07/s2ef/gemnet_oc_base_s2ef_all.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;GemNet-OC All+MD&#39;</span>    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/gemnet_oc_base_s2ef_all_md.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;GemNet-OC-Large All+MD&#39;</span> <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_07/s2ef/gemnet_oc_large_s2ef_all_md.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;SCN 2M&#39;</span>   <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/scn_t1_b1_s2ef_2M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;SCN-t4-b2 2M&#39;</span>    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/scn_t4_b2_s2ef_2M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;SCN All+MD&#39;</span> <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/scn_all_md_s2ef.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;eSCN-L4-M2-Lay12 2M&#39;</span>     <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/escn_l4_m2_lay12_2M_s2ef.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;eSCN-L6-M2-Lay12 2M&#39;</span>    <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/escn_l6_m2_lay12_2M_s2ef.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;eSCN-L6-M2-Lay12 All+MD&#39;</span>     <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/escn_l6_m2_lay12_all_md_s2ef.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;eSCN-L6-M3-Lay20 All+MD&#39;</span>     <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/escn_l6_m3_lay20_all_md_s2ef.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;EquiformerV2 (83M) 2M&#39;</span>     <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_06/oc20/s2ef/eq2_83M_2M.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;EquiformerV2 (31M) All+MD&#39;</span>     <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_06/oc20/s2ef/eq2_31M_ec4_allmd.pt&#39;</span><span class="p">,</span> 
+    <span class="s1">&#39;EquiformerV2 (153M) All+MD&#39;</span>     <span class="p">:</span><span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_06/oc20/s2ef/eq2_153M_ec4_allmd.pt&#39;</span><span class="p">,</span> 
+    <span class="c1"># Open Catalyst 2022 (OC22)</span>
+    <span class="s1">&#39;GemNet-dT OC22&#39;</span>	<span class="p">:</span> <span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_09/oc22/s2ef/gndt_oc22_all_s2ef.pt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;GemNet-OC OC22&#39;</span>	<span class="p">:</span> <span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_09/oc22/s2ef/gnoc_oc22_all_s2ef.pt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;GemNet-OC OC20+OC22&#39;</span>	<span class="p">:</span> <span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_09/oc22/s2ef/gnoc_oc22_oc20_all_s2ef.pt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;GemNet-OC trained with `enforce_max_neighbors_strictly=False` #467 OC20+OC22&#39;</span> <span class="p">:</span> <span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_05/oc22/s2ef/gnoc_oc22_oc20_all_s2ef.pt&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;GemNet-OC OC20-&gt;OC22&#39;</span>	<span class="p">:</span> <span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_09/oc22/s2ef/gnoc_finetune_all_s2ef.pt&#39;</span>
+                <span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">list_checkpoints</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List checkpoints that are available to download.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;See https://github.com/Open-Catalyst-Project/ocp/blob/main/MODELS.md for more details.&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">checkpoints</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Copy one of these keys to get_checkpoint(key) to download it.&#39;</span><span class="p">)</span>
+
+        
+<span class="k">def</span> <span class="nf">get_checkpoint</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download a checkpoint.</span>
+<span class="sd">    </span>
+<span class="sd">    key: string in checkpoints.</span>
+<span class="sd">    </span>
+<span class="sd">    Returns name of checkpoint that was saved.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">checkpoints</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;No url found for </span><span class="si">{key}</span><span class="s1">&#39;</span><span class="p">)</span>
+            
+    <span class="n">pt</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlparse</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+        
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pt</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Downloading </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pt</span>      
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="train-test-val-split-for-an-ase-db">
 <h1>Train/test/val split for an ase db<a class="headerlink" href="#train-test-val-split-for-an-ase-db" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -610,7 +705,8 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Train/test/val split for an ase db</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Convenience function for getting checkpoints</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#train-test-val-split-for-an-ase-db">Train/test/val split for an ase db</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-a-config-from-a-checkpoint">Generating a config from a checkpoint</a></li>
 </ul>
 

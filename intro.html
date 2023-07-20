@@ -164,7 +164,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Screening catalysts with OCP</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example.html">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example-gemnet.html">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
 
 
 
@@ -176,10 +176,6 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="fine-tuning/fine-tuning-oxides.html">Fine tuning a model</a></li>
 
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="ocp-modules/ase-calculator.html">ASE-compatible calculator for OCP</a></li>
 </ul>
 
     </div>
@@ -221,6 +217,55 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="header-article-item">
 
 <div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://lab.amdatascience.com/hub/user-redirect/git-pull?repo=https%3A//github.com/Open-Catalyst-Project/tutorial&urlpath=lab/tree/tutorial/ocp-tutorial/intro.ipynb&branch=main" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onJupyterHub"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_jupyterhub.svg">
+  </span>
+<span class="btn__text-container">JupyterHub</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/Open-Catalyst-Project/tutorial/blob/main/ocp-tutorial/intro.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
 
 
 
@@ -281,7 +326,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/intro.md" target="_blank"
+      <li><a href="_sources/intro.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -291,7 +336,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -439,14 +484,129 @@ document.write(`
 <section id="checkpoints">
 <h2>Checkpoints<a class="headerlink" href="#checkpoints" title="Permalink to this heading">#</a></h2>
 <p>To use a pre-trained model you need to have <a class="reference external" href="https://github.com/Open-Catalyst-Project/ocp">ocp</a> installed. Then you need to choose a checkpoint and config file which will be loaded to configure OCP for the predictions you want to make. There are two approaches to running OCP, via scripts in a shell, or using an ASE compatible calculator.</p>
-<p>It is possible to use the OCP framework to <a class="reference external" href="https://github.com/Open-Catalyst-Project/ocp/blob/main/TRAIN.md">train</a> on your own data using one of the models above. It is possible to do this from scratch, or using the pre-trained models as a starting point.</p>
+<p>We will focus on the ASE compatible calculator here. To facilitate using the checkpoints, there is a set of <a class="reference internal" href="ocp-tutorial.html"><span class="doc std std-doc">utilities</span></a> for this tutorial. You can list the checkpoints that are readily available here:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
+
+[ ! -d &quot;ocp&quot; ] &amp;&amp; git clone https://github.com/Open-Catalyst-Project/ocp.git
+
+cd ocp
+git pull
+git checkout main
+pip install -e .
+git rev-parse HEAD
+echo &quot;Restart the kernel&quot;
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Already up to date.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Switched to branch &#39;main&#39;
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Your branch is up to date with &#39;origin/main&#39;.
+Obtaining file:///home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/ocp
+  Installing build dependencies: started
+  Installing build dependencies: finished with status &#39;done&#39;
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status &#39;done&#39;
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status &#39;done&#39;
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status &#39;done&#39;
+Building wheels for collected packages: ocp-models
+  Building editable for ocp-models (pyproject.toml): started
+  Building editable for ocp-models (pyproject.toml): finished with status &#39;done&#39;
+  Created wheel for ocp-models: filename=ocp_models-0.0.3-0.editable-py3-none-any.whl size=3331 sha256=3c311fbde85c133b039e08e457fdf1649eb4b818df3d84e6297369083f16b71d
+  Stored in directory: /tmp/pip-ephem-wheel-cache-nb2ccc26/wheels/07/ee/07/0e00e8ad812bce6577c83a5a2463f047a87819e9eec1cc3a4b
+Successfully built ocp-models
+Installing collected packages: ocp-models
+  Attempting uninstall: ocp-models
+    Found existing installation: ocp-models 0.0.3
+    Uninstalling ocp-models-0.0.3:
+      Successfully uninstalled ocp-models-0.0.3
+Successfully installed ocp-models-0.0.3
+d2105bcd6ad6615a345ea319b0e4aaa841c79475
+Restart the kernel
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ocp-tutorial.ipynb
+
+<span class="n">list_checkpoints</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>See https://github.com/Open-Catalyst-Project/ocp/blob/main/MODELS.md for more details.
+CGCNN 200k
+CGCNN 2M
+CGCNN 20M
+CGCNN All
+DimeNet 200k
+DimeNet 2M
+SchNet 200k
+SchNet 2M
+SchNet 20M
+SchNet All
+DimeNet++ 200k
+DimeNet++ 2M
+DimeNet++ 20M
+DimeNet++ All
+SpinConv 2M
+SpinConv All
+GemNet-dT 2M
+GemNet-dT All
+PaiNN All
+GemNet-OC 2M
+GemNet-OC All
+GemNet-OC All+MD
+GemNet-OC-Large All+MD
+SCN 2M
+SCN-t4-b2 2M
+SCN All+MD
+eSCN-L4-M2-Lay12 2M
+eSCN-L6-M2-Lay12 2M
+eSCN-L6-M2-Lay12 All+MD
+eSCN-L6-M3-Lay20 All+MD
+EquiformerV2 (83M) 2M
+EquiformerV2 (31M) All+MD
+EquiformerV2 (153M) All+MD
+GemNet-dT OC22
+GemNet-OC OC22
+GemNet-OC OC20+OC22
+GemNet-OC trained with `enforce_max_neighbors_strictly=False` #467 OC20+OC22
+GemNet-OC OC20-&gt;OC22
+Copy one of these keys to get_checkpoint(key) to download it.
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can get a checkpoint file with one of the keys listed above like this. The resulting string is the name of the file downloaded, and you use that when creating an OCP calculator later.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;GemNet-OC OC20+OC22&#39;</span><span class="p">)</span>
+<span class="n">checkpoint</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;gnoc_oc22_oc20_all_s2ef.pt&#39;
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="goals-for-this-tutorial">
 <h1>Goals for this tutorial<a class="headerlink" href="#goals-for-this-tutorial" title="Permalink to this heading">#</a></h1>
-<p>This tutorial will start by using OCP in a Jupyter notebook to setup some simple calculations that use OCP to compute energy and forces, for structure optimization</p>
-<div class="toctree-wrapper compound">
-</div>
+<p>This tutorial will start by using OCP in a Jupyter notebook to setup some simple calculations that use OCP to compute energy and forces, for structure optimization, and then an example of fine-tuning a model with new data.</p>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">

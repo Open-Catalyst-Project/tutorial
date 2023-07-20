@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'OCP-introduction';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Using OCP to enumerate adsorbates on catalyst surfaces" href="NRR/NRR_example.html" />
+    <link rel="next" title="Using OCP to enumerate adsorbates on catalyst surfaces" href="NRR/NRR_example-gemnet.html" />
     <link rel="prev" title="Utilizing large, graph-based, pre-trained machine learned potentials in atomistic simulations" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -165,7 +165,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Screening catalysts with OCP</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example.html">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example-gemnet.html">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
 
 
 
@@ -177,10 +177,6 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="fine-tuning/fine-tuning-oxides.html">Fine tuning a model</a></li>
 
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="ocp-modules/ase-calculator.html">ASE-compatible calculator for OCP</a></li>
 </ul>
 
     </div>
@@ -428,7 +424,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#coverage-dependent-adsorption-energies">Coverage dependent adsorption energies</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#trends-in-adsorption-energies-across-metals">Trends in adsorption energies across metals.</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#site-correlations">Site correlations</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Exercises</a></li>
 </ul>
@@ -451,7 +447,7 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-using-ocp-in-molecular-simulations">
 <h1>Introduction to using OCP in molecular simulations<a class="headerlink" href="#introduction-to-using-ocp-in-molecular-simulations" title="Permalink to this heading">#</a></h1>
 <p>To introduce OCP we start with using it to calculate adsorption energies for a simple, atomic adsorbate where we specify the site we want to the adsorption energy for. Conceptually, you do this like you would do it with density functional theory. You create a slab model for the surface, place an adsorbate on it as an initial guess, run a relaxation to get the lowest energy geometry, and then compute the adsorption energy using reference states for the adsorbate.</p>
-<p>You do have to be careful in the details though. Some OCP model/checkpoint combinations return a total energy like density functional theory would, but some return an “adsorption energy” directly. You have to know which one you are using.</p>
+<p>You do have to be careful in the details though. Some OCP model/checkpoint combinations return a total energy like density functional theory would, but some return an “adsorption energy” directly. You have to know which one you are using. In this example, the model we use returns an “adsorption energy”.</p>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="calculating-adsorption-energies">
 <h1>Calculating adsorption energies<a class="headerlink" href="#calculating-adsorption-energies" title="Permalink to this heading">#</a></h1>
@@ -483,18 +479,13 @@ H2O + * -&gt; O* + H2  re2  # Get from OCP as a direct calculation
 </div>
 <p>is just re1 + re2.</p>
 <p>Based on <a class="reference external" href="https://atct.anl.gov/Thermochemical%20Data/version%201.118/species/?species_number=986">https://atct.anl.gov/Thermochemical Data/version 1.118/species/?species_number=986</a>, the formation energy of water is about -3.03 eV at standard state. You could also compute this using DFT.</p>
-<p>The first step is getting a checkpoint for the model we want to use. eSCN is currently the state of the art model. This next cell will download the checkpoint if you don’t have it already.</p>
+<p>The first step is getting a checkpoint for the model we want to use. eSCN is currently the state of the art model <a class="reference external" href="https://arxiv.org/abs/2302.03655"><code class="docutils literal notranslate"><span class="pre">arXiv</span></code></a>. This next cell will download the checkpoint if you don’t have it already.</p>
+<p>The different models have different compute requirements. If you find your kernel is crashing, it probably means you have exceeded the allowed amount of memory. This checkpoint works fine in this example, but it may crash your kernel if you use it in the NRR example.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">requests</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ocp-tutorial.ipynb
 
-<span class="n">checkpoint</span> <span class="o">=</span> <span class="s1">&#39;escn_l6_m3_lay20_all_md_s2ef.pt&#39;</span>
-
-<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">):</span>
-    <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/escn_l6_m3_lay20_all_md_s2ef.pt&#39;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;eSCN-L6-M3-Lay20 All+MD&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -682,8 +673,8 @@ BFGS:   10 12:47:21        0.733541        0.0419
 </ol>
 </section>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="coverage-dependent-adsorption-energies">
-<h1>Coverage dependent adsorption energies<a class="headerlink" href="#coverage-dependent-adsorption-energies" title="Permalink to this heading">#</a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="trends-in-adsorption-energies-across-metals">
+<h1>Trends in adsorption energies across metals.<a class="headerlink" href="#trends-in-adsorption-energies-across-metals" title="Permalink to this heading">#</a></h1>
 <p>Xu, Z., &amp; Kitchin, J. R. (2014). Probing the coverage dependence of site and adsorbate configurational correlations on (111) surfaces of late transition metals. J. Phys. Chem. C, 118(44), 25597–25602. <a class="reference external" href="http://dx.doi.org/10.1021/jp508805h">http://dx.doi.org/10.1021/jp508805h</a></p>
 <p><a class="reference external" href="https://pubs.acs.org/doi/suppl/10.1021/jp508805h/suppl_file/jp508805h_si_001.pdf">Supporting information</a>.</p>
 <p>These are atomic adsorption energies:</p>
@@ -913,7 +904,7 @@ BFGS:    8 12:47:24        0.588692        0.0252
 <h3>Exercises<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
 <ol class="arabic simple">
 <li><p>You can also explore a few other adsorbates: C, H, N.</p></li>
-<li><p>Explore the higher coverages. The deviations from the reference data are expected to be higher, but relative differences tend to be better.</p></li>
+<li><p>Explore the higher coverages. The deviations from the reference data are expected to be higher, but relative differences tend to be better. You probably need fine tuning to improve this performance. This data set doesn’t have forces though, so it isn’t practical to do it here.</p></li>
 </ol>
 </section>
 </section>
@@ -964,7 +955,7 @@ BFGS:    8 12:47:24        0.588692        0.0252
       </div>
     </a>
     <a class="right-next"
-       href="NRR/NRR_example.html"
+       href="NRR/NRR_example-gemnet.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
@@ -995,7 +986,7 @@ BFGS:    8 12:47:24        0.588692        0.0252
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">Exercises</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#coverage-dependent-adsorption-energies">Coverage dependent adsorption energies</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#trends-in-adsorption-energies-across-metals">Trends in adsorption energies across metals.</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#site-correlations">Site correlations</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Exercises</a></li>
 </ul>
