@@ -164,7 +164,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Screening catalysts with OCP</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example-gemnet.html">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example-gemnet.html">Using OCP to enumerate adsorbates on alloy catalyst surfaces</a></li>
+
 
 
 
@@ -426,7 +427,8 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checkpoints">Checkpoints</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-for-this-tutorial">Goals for this tutorial</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-for-this-tutorial">Goals for this tutorial</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#about-the-compute-environment">About the compute environment</a><ul class="visible nav section-nav flex-column">
 </ul>
 </li>
 </ul>
@@ -487,59 +489,14 @@ document.write(`
 <p>We will focus on the ASE compatible calculator here. To facilitate using the checkpoints, there is a set of <a class="reference internal" href="ocp-tutorial.html"><span class="doc std std-doc">utilities</span></a> for this tutorial. You can list the checkpoints that are readily available here:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
-
-[ ! -d &quot;ocp&quot; ] &amp;&amp; git clone https://github.com/Open-Catalyst-Project/ocp.git
-
-cd ocp
-git pull
-git checkout main
-pip install -e .
-git rev-parse HEAD
-echo &quot;Restart the kernel&quot;
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Already up to date.
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Switched to branch &#39;main&#39;
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Your branch is up to date with &#39;origin/main&#39;.
-Obtaining file:///home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/ocp
-  Installing build dependencies: started
-  Installing build dependencies: finished with status &#39;done&#39;
-  Checking if build backend supports build_editable: started
-  Checking if build backend supports build_editable: finished with status &#39;done&#39;
-  Getting requirements to build editable: started
-  Getting requirements to build editable: finished with status &#39;done&#39;
-  Preparing editable metadata (pyproject.toml): started
-  Preparing editable metadata (pyproject.toml): finished with status &#39;done&#39;
-Building wheels for collected packages: ocp-models
-  Building editable for ocp-models (pyproject.toml): started
-  Building editable for ocp-models (pyproject.toml): finished with status &#39;done&#39;
-  Created wheel for ocp-models: filename=ocp_models-0.0.3-0.editable-py3-none-any.whl size=3331 sha256=3c311fbde85c133b039e08e457fdf1649eb4b818df3d84e6297369083f16b71d
-  Stored in directory: /tmp/pip-ephem-wheel-cache-nb2ccc26/wheels/07/ee/07/0e00e8ad812bce6577c83a5a2463f047a87819e9eec1cc3a4b
-Successfully built ocp-models
-Installing collected packages: ocp-models
-  Attempting uninstall: ocp-models
-    Found existing installation: ocp-models 0.0.3
-    Uninstalling ocp-models-0.0.3:
-      Successfully uninstalled ocp-models-0.0.3
-Successfully installed ocp-models-0.0.3
-d2105bcd6ad6615a345ea319b0e4aaa841c79475
-Restart the kernel
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ocp-tutorial.ipynb
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ocp-tutorial.ipynb
-
-<span class="n">list_checkpoints</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">list_checkpoints</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -607,6 +564,34 @@ Copy one of these keys to get_checkpoint(key) to download it.
 <section class="tex2jax_ignore mathjax_ignore" id="goals-for-this-tutorial">
 <h1>Goals for this tutorial<a class="headerlink" href="#goals-for-this-tutorial" title="Permalink to this heading">#</a></h1>
 <p>This tutorial will start by using OCP in a Jupyter notebook to setup some simple calculations that use OCP to compute energy and forces, for structure optimization, and then an example of fine-tuning a model with new data.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="about-the-compute-environment">
+<h1>About the compute environment<a class="headerlink" href="#about-the-compute-environment" title="Permalink to this heading">#</a></h1>
+<p><a class="reference internal" href="ocp-tutorial.html"><span class="doc std std-doc">ocp-tutorial.ipynb</span></a> provides <code class="docutils literal notranslate"><span class="pre">describe_ocp</span></code> to output information that might be helpful in debugging.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">describe_ocp</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/conda/bin/python 3.9.15 | packaged by conda-forge | (main, Nov 22 2022, 15:55:03) 
+[GCC 10.4.0]
+ocp is installed at /home/jovyan/shared-scratch/jkitchin/ocp
+ocp repo is at git commit: f79a6f7
+numba: 0.57.1
+numpy: 1.24.4
+ase: 3.22.1
+e3nn: 0.4.4
+pymatgen: 2023.5.10
+torch: 1.13.1
+torch.version.cuda: 11.6
+torch.cuda: is_available: True
+torch geometric: 2.2.0
+</pre></div>
+</div>
+</div>
+</div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -681,7 +666,8 @@ Copy one of these keys to get_checkpoint(key) to download it.
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checkpoints">Checkpoints</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-for-this-tutorial">Goals for this tutorial</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-for-this-tutorial">Goals for this tutorial</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#about-the-compute-environment">About the compute environment</a><ul class="visible nav section-nav flex-column">
 </ul>
 </li>
 </ul>

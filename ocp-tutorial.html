@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Convenience function for getting checkpoints &#8212; OCP tutorials</title>
+    <title>Convenience functions for getting ocp paths &#8212; OCP tutorials</title>
   
   
   
@@ -163,7 +163,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Screening catalysts with OCP</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example-gemnet.html">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example-gemnet.html">Using OCP to enumerate adsorbates on alloy catalyst surfaces</a></li>
+
 
 
 
@@ -407,7 +408,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Convenience function for getting checkpoints</h1>
+    <h1>Convenience functions for getting ocp paths</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -417,7 +418,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Convenience function for getting checkpoints</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Convenience functions for getting ocp paths</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#convenience-function-for-getting-checkpoints">Convenience function for getting checkpoints</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#train-test-val-split-for-an-ase-db">Train/test/val split for an ase db</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-a-config-from-a-checkpoint">Generating a config from a checkpoint</a></li>
 </ul>
@@ -432,7 +434,9 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <div class="cell docutils container">
+  <section class="tex2jax_ignore mathjax_ignore" id="convenience-functions-for-getting-ocp-paths">
+<h1>Convenience functions for getting ocp paths<a class="headerlink" href="#convenience-functions-for-getting-ocp-paths" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">ocpmodels</span> <span class="k">as</span> <span class="nn">om</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
@@ -448,6 +452,53 @@ document.write(`
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numba</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">ase</span>
+<span class="kn">import</span> <span class="nn">e3nn</span>
+<span class="kn">import</span> <span class="nn">pymatgen.core</span> <span class="k">as</span> <span class="nn">pc</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.cuda</span> <span class="k">as</span> <span class="nn">tc</span>
+<span class="kn">import</span> <span class="nn">torch_geometric</span> <span class="k">as</span> <span class="nn">tg</span>
+
+
+<span class="k">def</span> <span class="nf">describe_ocp</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Print some system information that could be useful in debugging.&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>  
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ocp is installed at </span><span class="si">{</span><span class="n">ocp_root</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    
+    <span class="n">commit_hash</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="s2">&quot;git&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;-C&quot;</span><span class="p">,</span>
+                        <span class="n">om</span><span class="o">.</span><span class="n">__path__</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="s2">&quot;describe&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;--always&quot;</span><span class="p">,</span>
+                    <span class="p">]</span>
+                <span class="p">)</span>
+                <span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ocp repo is at git commit: </span><span class="si">{</span><span class="n">commit_hash</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;numba: </span><span class="si">{</span><span class="n">numba</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;numpy: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">version</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ase: </span><span class="si">{</span><span class="n">ase</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;e3nn: </span><span class="si">{</span><span class="n">e3nn</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;pymatgen: </span><span class="si">{</span><span class="n">pc</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;torch: </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;torch.version.cuda: </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">cuda</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;torch.cuda: is_available: </span><span class="si">{</span><span class="n">tc</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;torch geometric: </span><span class="si">{</span><span class="n">tg</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>        
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section class="tex2jax_ignore mathjax_ignore" id="convenience-function-for-getting-checkpoints">
 <h1>Convenience function for getting checkpoints<a class="headerlink" href="#convenience-function-for-getting-checkpoints" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
@@ -706,7 +757,8 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Convenience function for getting checkpoints</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Convenience functions for getting ocp paths</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#convenience-function-for-getting-checkpoints">Convenience function for getting checkpoints</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#train-test-val-split-for-an-ase-db">Train/test/val split for an ase db</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-a-config-from-a-checkpoint">Generating a config from a checkpoint</a></li>
 </ul>

@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'OCP-introduction';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Using OCP to enumerate adsorbates on catalyst surfaces" href="NRR/NRR_example-gemnet.html" />
+    <link rel="next" title="Using OCP to enumerate adsorbates on alloy catalyst surfaces" href="NRR/NRR_example-gemnet.html" />
     <link rel="prev" title="Utilizing large, graph-based, pre-trained machine learned potentials in atomistic simulations" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -165,7 +165,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Screening catalysts with OCP</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example-gemnet.html">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NRR/NRR_example-gemnet.html">Using OCP to enumerate adsorbates on alloy catalyst surfaces</a></li>
+
 
 
 
@@ -500,16 +501,16 @@ H2O + * -&gt; O* + H2  re2  # Get from OCP as a direct calculation
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: false
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: true
 cmd:
-  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/checkpoints/2023-07-18-12-48-00
-  commit: ab7833d
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/checkpoints/2023-07-20-20-11-44
+  commit: f79a6f7
   identifier: &#39;&#39;
-  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/logs/tensorboard/2023-07-18-12-48-00
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/logs/tensorboard/2023-07-20-20-11-44
   print_every: 100
-  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/results/2023-07-18-12-48-00
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/results/2023-07-20-20-11-44
   seed: null
-  timestamp_id: 2023-07-18-12-48-00
+  timestamp_id: 2023-07-20-20-11-44
 dataset: null
 gpus: 1
 logger: tensorboard
@@ -619,20 +620,20 @@ trainer: forces
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Step     Time          Energy         fmax
-BFGS:    0 12:47:20        1.749174        1.6849
-BFGS:    1 12:47:20        1.540854        0.9695
-BFGS:    2 12:47:20        1.353706        0.7205
-BFGS:    3 12:47:20        1.275858        0.7986
-BFGS:    4 12:47:20        0.855154        0.6865
-BFGS:    5 12:47:21        0.808235        0.4950
-BFGS:    6 12:47:21        0.778811        0.6077
-BFGS:    7 12:47:21        0.769219        0.7377
-BFGS:    8 12:47:21        0.750103        0.5009
-BFGS:    9 12:47:21        0.740156        0.1215
-BFGS:   10 12:47:21        0.733541        0.0419
+BFGS:    0 20:12:09        1.760548        1.6865
+BFGS:    1 20:12:09        1.534237        0.9638
+BFGS:    2 20:12:09        1.343823        0.7221
+BFGS:    3 20:12:09        1.279805        0.7960
+BFGS:    4 20:12:10        0.858139        0.7011
+BFGS:    5 20:12:10        0.805099        0.4904
+BFGS:    6 20:12:10        0.779147        0.6091
+BFGS:    7 20:12:10        0.762659        0.7291
+BFGS:    8 20:12:10        0.743507        0.5098
+BFGS:    9 20:12:10        0.734425        0.1280
+BFGS:   10 20:12:10        0.730592        0.0421
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.2964589285850523
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.299408285617828
 </pre></div>
 </div>
 </div>
@@ -652,7 +653,7 @@ BFGS:   10 12:47:21        0.733541        0.0419
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/9e5981d7d7a07d407fba57aff80fa39aa79805782353125ea0f7109fc296f540.png" src="_images/9e5981d7d7a07d407fba57aff80fa39aa79805782353125ea0f7109fc296f540.png" />
+<img alt="_images/b3a78976729770e93bed426a523f9598a1affb75b781eedb836e12fa8c846c34.png" src="_images/b3a78976729770e93bed426a523f9598a1affb75b781eedb836e12fa8c846c34.png" />
 </div>
 </div>
 <p>How did we do? We need a reference point. In the paper below, there is an atomic adsorption energy for O on Pt(111) of about -4.264 eV. This is for the reaction O + * -&gt; O*. To convert this to the dissociative adsorption energy, we have to add the reaction:</p>
@@ -756,16 +757,16 @@ O -&gt; 1/2 O2         re3 = -2.58 eV
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Step     Time          Energy         fmax
-BFGS:    0 12:47:23        0.607977        0.3249
-BFGS:    1 12:47:23        0.614224        0.2869
-BFGS:    2 12:47:23        0.597037        0.0965
-BFGS:    3 12:47:23        0.605701        0.0853
-BFGS:    4 12:47:23        0.594046        0.0805
-BFGS:    5 12:47:23        0.596878        0.0806
-BFGS:    6 12:47:24        0.595877        0.1267
-BFGS:    7 12:47:24        0.595115        0.0789
-BFGS:    8 12:47:24        0.588692        0.0252
--5.021307990550994
+BFGS:    0 20:12:11        0.604887        0.3249
+BFGS:    1 20:12:11        0.609885        0.2843
+BFGS:    2 20:12:12        0.596275        0.0778
+BFGS:    3 20:12:12        0.600325        0.0716
+BFGS:    4 20:12:12        0.589127        0.0940
+BFGS:    5 20:12:12        0.592868        0.0914
+BFGS:    6 20:12:12        0.592103        0.0874
+BFGS:    7 20:12:12        0.587785        0.0681
+BFGS:    8 20:12:12        0.590783        0.0244
+-5.019216940402984
 </pre></div>
 </div>
 </div>
@@ -825,46 +826,46 @@ BFGS:    8 12:47:24        0.588692        0.0252
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cu
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.56s/it]
-100%|██████████| 1/1 [00:00&lt;00:00,  1.08it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.42s/it]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.00it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ag
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.08s/it]
-100%|██████████| 1/1 [00:00&lt;00:00,  1.30it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  1.01it/s]
+100%|██████████| 1/1 [00:00&lt;00:00,  2.34it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pd
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.39s/it]
-100%|██████████| 1/1 [00:01&lt;00:00,  1.54s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.14s/it]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.17it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pt
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.38s/it]
-100%|██████████| 1/1 [00:00&lt;00:00,  1.28it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:01&lt;00:00,  1.28s/it]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.41it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Rh
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  2.11it/s]
-100%|██████████| 1/1 [00:00&lt;00:00,  2.12it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  2.34it/s]
+100%|██████████| 1/1 [00:00&lt;00:00,  2.32it/s]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ir
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  1.59it/s]
-100%|██████████| 1/1 [00:00&lt;00:00,  1.61it/s]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [00:00&lt;00:00,  2.31it/s]
+100%|██████████| 1/1 [00:00&lt;00:00,  1.75it/s]
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Elapsed time = 11.64729642868042 seconds&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Elapsed time = 9.732725858688354 seconds&#39;
 </pre></div>
 </div>
 </div>
@@ -881,7 +882,7 @@ BFGS:    8 12:47:24        0.588692        0.0252
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/00fbda1b79a4085423d30258d67a8033d1284ee3bf2b32e252cc7f13c93c0190.png" src="_images/00fbda1b79a4085423d30258d67a8033d1284ee3bf2b32e252cc7f13c93c0190.png" />
+<img alt="_images/5051975904f880cd709b48464e4157aa6fc1c5a7bfde760e85e1a415fbc87518.png" src="_images/5051975904f880cd709b48464e4157aa6fc1c5a7bfde760e85e1a415fbc87518.png" />
 </div>
 </div>
 <p>Next we compare the correlation between the hcp and fcc sites. Here we see the same trends. The data falls below the parity line because the hcp sites tend to be a little weaker binding than the fcc sites.</p>
@@ -897,7 +898,7 @@ BFGS:    8 12:47:24        0.588692        0.0252
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/059f354f8b34d685b662e03b1966a47b79d2a2199e2d26e6c309c437c7fa853a.png" src="_images/059f354f8b34d685b662e03b1966a47b79d2a2199e2d26e6c309c437c7fa853a.png" />
+<img alt="_images/87c48c7f28a8cee974fc6fadb6c4e60a36534e238d5b43fdb018d133b8c79daa.png" src="_images/87c48c7f28a8cee974fc6fadb6c4e60a36534e238d5b43fdb018d133b8c79daa.png" />
 </div>
 </div>
 <section id="id1">
@@ -911,7 +912,7 @@ BFGS:    8 12:47:24        0.588692        0.0252
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="next-steps">
 <h1>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">#</a></h1>
-<p>In the next step, we consider some more complex adsorbates in nitrogen reduction, and how we can leverage OCP to automate the search for the most stable adsorbate geometry. See <a class="reference internal" href="NRR/NRR_example.html"><span class="doc std std-doc">the next step</span></a>.</p>
+<p>In the next step, we consider some more complex adsorbates in nitrogen reduction, and how we can leverage OCP to automate the search for the most stable adsorbate geometry. See <a class="reference internal" href="NRR/NRR_example-gemnet.html"><span class="doc std std-doc">the next step</span></a>.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -959,7 +960,7 @@ BFGS:    8 12:47:24        0.588692        0.0252
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Using OCP to enumerate adsorbates on catalyst surfaces</p>
+        <p class="prev-next-title">Using OCP to enumerate adsorbates on alloy catalyst surfaces</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Using OCP to enumerate adsorbates on catalyst surfaces &#8212; OCP tutorials</title>
+    <title>Using OCP to enumerate adsorbates on alloy catalyst surfaces &#8212; OCP tutorials</title>
   
   
   
@@ -165,7 +165,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Screening catalysts with OCP</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Using OCP to enumerate adsorbates on alloy catalyst surfaces</a></li>
+
 
 
 
@@ -409,7 +410,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Using OCP to enumerate adsorbates on catalyst surfaces</h1>
+    <h1>Using OCP to enumerate adsorbates on alloy catalyst surfaces</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -419,7 +420,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Using OCP to enumerate adsorbates on alloy catalyst surfaces</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#enumerate-the-adsorbate-slab-configurations-to-run-relaxations-on">Enumerate the adsorbate-slab configurations to run relaxations on</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#work-out-a-single-example">Work out a single example</a><ul class="nav section-nav flex-column">
@@ -432,6 +433,7 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-the-trajectories-and-post-process">Parse the trajectories and post-process</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper">Make parity plots for values obtained by ML v. reported in the paper</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figure-6b-and-compare-to-literature-results">Make figure 6b and compare to literature results</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
 </ul>
 
             </nav>
@@ -444,8 +446,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="using-ocp-to-enumerate-adsorbates-on-catalyst-surfaces">
-<h1>Using OCP to enumerate adsorbates on catalyst surfaces<a class="headerlink" href="#using-ocp-to-enumerate-adsorbates-on-catalyst-surfaces" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="using-ocp-to-enumerate-adsorbates-on-alloy-catalyst-surfaces">
+<h1>Using OCP to enumerate adsorbates on alloy catalyst surfaces<a class="headerlink" href="#using-ocp-to-enumerate-adsorbates-on-alloy-catalyst-surfaces" title="Permalink to this heading">#</a></h1>
 <p>In the previous example, we constructed slab models of adsorbates on desired sites. Here we leverage code to automate this process. The goal in this section is to generate candidate structures, compute energetics, and then filter out the most relevant ones.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -473,6 +475,11 @@ document.write(`
 
 <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;GemNet-OC-Large All+MD&#39;</span><span class="p">)</span>
 <span class="n">checkpoint</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;gemnet_oc_large_s2ef_all_md.pt&#39;
 </pre></div>
 </div>
 </div>
@@ -520,7 +527,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Slab: (Ag36Pd12, (1, 1, 1), 0.16666666666666657, True)]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[Slab: (Ag36Pd12, (1, 1, 1), 0.16666666666666669, True)]
 </pre></div>
 </div>
 </div>
@@ -566,7 +573,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/e6aad3ea34a9d7f3323cb35fb3a28dd08e2b2073a39c6a73c6abf19a5b361c3c.png" src="../_images/e6aad3ea34a9d7f3323cb35fb3a28dd08e2b2073a39c6a73c6abf19a5b361c3c.png" />
+<img alt="../_images/c75c04bb2eb862c6c49b6a1b784cb23a071455298d66d8492ec83e613ebd9fc7.png" src="../_images/c75c04bb2eb862c6c49b6a1b784cb23a071455298d66d8492ec83e613ebd9fc7.png" />
 </div>
 </div>
 <section id="run-an-ml-relaxation">
@@ -589,14 +596,14 @@ document.write(`
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: true
 cmd:
-  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/checkpoints/2023-07-20-12-50-08
-  commit: cae7b96
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/checkpoints/2023-07-20-20-13-52
+  commit: f79a6f7
   identifier: &#39;&#39;
-  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/logs/tensorboard/2023-07-20-12-50-08
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/logs/tensorboard/2023-07-20-20-13-52
   print_every: 100
-  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/results/2023-07-20-12-50-08
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/NRR/results/2023-07-20-20-13-52
   seed: null
-  timestamp_id: 2023-07-20-12-50-08
+  timestamp_id: 2023-07-20-20-13-52
 dataset: null
 gpus: 1
 logger: tensorboard
@@ -723,37 +730,19 @@ trainer: forces
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Step     Time          Energy         fmax
-BFGS:    0 12:49:59        0.655569        0.4151
-BFGS:    1 12:49:59        0.627050        0.3942
-BFGS:    2 12:49:59        0.540020        0.2654
-BFGS:    3 12:49:59        0.539154        0.2619
-BFGS:    4 12:49:59        0.520989        0.2360
-BFGS:    5 12:49:59        0.519339        0.2461
-BFGS:    6 12:49:59        0.511696        0.2962
-BFGS:    7 12:49:59        0.506129        0.4065
-BFGS:    8 12:49:59        0.487648        0.6603
-BFGS:    9 12:49:59        0.454749        0.8966
-BFGS:   10 12:49:59        0.412168        1.0472
-BFGS:   11 12:50:00        0.390264        1.0580
-BFGS:   12 12:50:00        0.360911        0.9312
-BFGS:   13 12:50:00        0.338499        0.9446
-BFGS:   14 12:50:00        0.264450        0.9969
-BFGS:   15 12:50:00        0.212884        0.8842
-BFGS:   16 12:50:00        0.178773        0.9724
-BFGS:   17 12:50:00        0.158545        0.8156
-BFGS:   18 12:50:00        0.146907        0.7196
-BFGS:   19 12:50:00        0.120070        0.5485
-BFGS:   20 12:50:00        0.088528        0.3817
-BFGS:   21 12:50:01        0.057817        0.3005
-BFGS:   22 12:50:01        0.045463        0.2672
-BFGS:   23 12:50:01        0.040278        0.2261
-BFGS:   24 12:50:01        0.030780        0.1831
-BFGS:   25 12:50:01        0.015821        0.1637
-BFGS:   26 12:50:01        0.006309        0.1122
-BFGS:   27 12:50:01        0.000754        0.0712
-BFGS:   28 12:50:01       -0.000355        0.0535
-BFGS:   29 12:50:01       -0.001304        0.0497
-Elapsed time 3.2 seconds
+BFGS:    0 20:14:47        0.185308        0.7326
+BFGS:    1 20:14:47        0.150291        0.6961
+BFGS:    2 20:14:47        0.025938        0.4521
+BFGS:    3 20:14:48        0.014360        0.2323
+BFGS:    4 20:14:48        0.010407        0.1982
+BFGS:    5 20:14:48       -0.003240        0.1370
+BFGS:    6 20:14:48       -0.003685        0.1263
+BFGS:    7 20:14:48       -0.009171        0.0845
+BFGS:    8 20:14:48       -0.010415        0.0890
+BFGS:    9 20:14:48       -0.008571        0.0840
+BFGS:   10 20:14:48       -0.008951        0.0721
+BFGS:   11 20:14:48       -0.013824        0.0486
+Elapsed time 1.3 seconds
 </pre></div>
 </div>
 </div>
@@ -872,8 +861,62 @@ Elapsed time 3.2 seconds
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/1 [00:00&lt;?, ?it/s]
+</pre></div>
 </div>
-<p>This cell runs all the examples. I don’t recommend you do this during the workshop. Instead, we have saved the results for the subsequent analyses so yuo can skip this one.</p>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9 H slabs to compute for oqmd-345911
+9 NNH slabs to compute for oqmd-345911
+Running data/oqmd-345911_H/0
+  Elapsed time: 0.9 seconds for data/oqmd-345911_H/0
+Running data/oqmd-345911_H/1
+  Elapsed time: 1.6 seconds for data/oqmd-345911_H/1
+Running data/oqmd-345911_H/2
+  Elapsed time: 2.3 seconds for data/oqmd-345911_H/2
+Running data/oqmd-345911_H/3
+  Elapsed time: 1.3 seconds for data/oqmd-345911_H/3
+Running data/oqmd-345911_H/4
+  Elapsed time: 0.8 seconds for data/oqmd-345911_H/4
+Running data/oqmd-345911_H/5
+  Elapsed time: 1.8 seconds for data/oqmd-345911_H/5
+Running data/oqmd-345911_H/6
+  Elapsed time: 0.6 seconds for data/oqmd-345911_H/6
+Running data/oqmd-345911_H/7
+  Elapsed time: 1.3 seconds for data/oqmd-345911_H/7
+Running data/oqmd-345911_H/8
+  Elapsed time: 2.3 seconds for data/oqmd-345911_H/8
+Running data/oqmd-345911_NNH/0
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/0
+Running data/oqmd-345911_NNH/1
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/1
+Running data/oqmd-345911_NNH/2
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/2
+Running data/oqmd-345911_NNH/3
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/3
+Running data/oqmd-345911_NNH/4
+  Elapsed time: 4.7 seconds for data/oqmd-345911_NNH/4
+Running data/oqmd-345911_NNH/5
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/5
+Running data/oqmd-345911_NNH/6
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/6
+Running data/oqmd-345911_NNH/7
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/7
+Running data/oqmd-345911_NNH/8
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 1/1 [01:04&lt;00:00, 64.03s/it]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/8
+Elapsed time: 64.0 seconds
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This cell runs all the examples. I don’t recommend you run this during the workshop. Instead, we have saved the results for the subsequent analyses so you can skip this one.</p>
 <div class="cell tag_hide-output docutils container">
 <div class="cell_input above-output-prompt docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
@@ -929,78 +972,78 @@ Elapsed time 3.2 seconds
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9 H slabs to compute for oqmd-349719
 9 NNH slabs to compute for oqmd-349719
 Running data/oqmd-349719_H/0
-  Elapsed time: 0.7 seconds for data/oqmd-349719_H/0
+  Elapsed time: 0.6 seconds for data/oqmd-349719_H/0
 Running data/oqmd-349719_H/1
-  Elapsed time: 1.3 seconds for data/oqmd-349719_H/1
+  Elapsed time: 1.1 seconds for data/oqmd-349719_H/1
 Running data/oqmd-349719_H/2
-  Elapsed time: 2.3 seconds for data/oqmd-349719_H/2
+  Elapsed time: 0.9 seconds for data/oqmd-349719_H/2
 Running data/oqmd-349719_H/3
-  Elapsed time: 1.6 seconds for data/oqmd-349719_H/3
+  Elapsed time: 0.8 seconds for data/oqmd-349719_H/3
 Running data/oqmd-349719_H/4
-  Elapsed time: 0.6 seconds for data/oqmd-349719_H/4
+  Elapsed time: 1.7 seconds for data/oqmd-349719_H/4
 Running data/oqmd-349719_H/5
-  Elapsed time: 0.5 seconds for data/oqmd-349719_H/5
+  Elapsed time: 2.3 seconds for data/oqmd-349719_H/5
 Running data/oqmd-349719_H/6
-  Elapsed time: 1.1 seconds for data/oqmd-349719_H/6
+  Elapsed time: 1.3 seconds for data/oqmd-349719_H/6
 Running data/oqmd-349719_H/7
-  Elapsed time: 0.9 seconds for data/oqmd-349719_H/7
+  Elapsed time: 0.6 seconds for data/oqmd-349719_H/7
 Running data/oqmd-349719_H/8
-  Elapsed time: 0.6 seconds for data/oqmd-349719_H/8
+  Elapsed time: 1.0 seconds for data/oqmd-349719_H/8
 Running data/oqmd-349719_NNH/0
-  Elapsed time: 5.6 seconds for data/oqmd-349719_NNH/0
+  Elapsed time: 5.7 seconds for data/oqmd-349719_NNH/0
 Running data/oqmd-349719_NNH/1
-  Elapsed time: 5.6 seconds for data/oqmd-349719_NNH/1
+  Elapsed time: 5.7 seconds for data/oqmd-349719_NNH/1
 Running data/oqmd-349719_NNH/2
-  Elapsed time: 5.6 seconds for data/oqmd-349719_NNH/2
+  Elapsed time: 5.4 seconds for data/oqmd-349719_NNH/2
 Running data/oqmd-349719_NNH/3
-  Elapsed time: 5.1 seconds for data/oqmd-349719_NNH/3
+  Elapsed time: 5.7 seconds for data/oqmd-349719_NNH/3
 Running data/oqmd-349719_NNH/4
-  Elapsed time: 5.6 seconds for data/oqmd-349719_NNH/4
+  Elapsed time: 5.7 seconds for data/oqmd-349719_NNH/4
 Running data/oqmd-349719_NNH/5
-  Elapsed time: 5.6 seconds for data/oqmd-349719_NNH/5
+  Elapsed time: 5.7 seconds for data/oqmd-349719_NNH/5
 Running data/oqmd-349719_NNH/6
-  Elapsed time: 5.6 seconds for data/oqmd-349719_NNH/6
+  Elapsed time: 5.7 seconds for data/oqmd-349719_NNH/6
 Running data/oqmd-349719_NNH/7
   Elapsed time: 5.7 seconds for data/oqmd-349719_NNH/7
 Running data/oqmd-349719_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  5%|▌         | 1/19 [01:00&lt;18:17, 60.99s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  5%|▌         | 1/19 [01:02&lt;18:41, 62.30s/it]
 </pre></div>
 </div>
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.7 seconds for data/oqmd-349719_NNH/8
 9 H slabs to compute for oqmd-345911
 9 NNH slabs to compute for oqmd-345911
 Running data/oqmd-345911_H/0
-  Elapsed time: 2.3 seconds for data/oqmd-345911_H/0
+  Elapsed time: 0.9 seconds for data/oqmd-345911_H/0
 Running data/oqmd-345911_H/1
-  Elapsed time: 0.9 seconds for data/oqmd-345911_H/1
+  Elapsed time: 1.3 seconds for data/oqmd-345911_H/1
 Running data/oqmd-345911_H/2
-  Elapsed time: 2.2 seconds for data/oqmd-345911_H/2
+  Elapsed time: 1.3 seconds for data/oqmd-345911_H/2
 Running data/oqmd-345911_H/3
-  Elapsed time: 1.3 seconds for data/oqmd-345911_H/3
+  Elapsed time: 0.8 seconds for data/oqmd-345911_H/3
 Running data/oqmd-345911_H/4
-  Elapsed time: 1.3 seconds for data/oqmd-345911_H/4
+  Elapsed time: 0.6 seconds for data/oqmd-345911_H/4
 Running data/oqmd-345911_H/5
-  Elapsed time: 0.6 seconds for data/oqmd-345911_H/5
+  Elapsed time: 1.8 seconds for data/oqmd-345911_H/5
 Running data/oqmd-345911_H/6
   Elapsed time: 1.7 seconds for data/oqmd-345911_H/6
 Running data/oqmd-345911_H/7
-  Elapsed time: 1.6 seconds for data/oqmd-345911_H/7
+  Elapsed time: 2.3 seconds for data/oqmd-345911_H/7
 Running data/oqmd-345911_H/8
-  Elapsed time: 0.5 seconds for data/oqmd-345911_H/8
+  Elapsed time: 2.3 seconds for data/oqmd-345911_H/8
 Running data/oqmd-345911_NNH/0
-  Elapsed time: 4.9 seconds for data/oqmd-345911_NNH/0
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/0
 Running data/oqmd-345911_NNH/1
-  Elapsed time: 5.5 seconds for data/oqmd-345911_NNH/1
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/1
 Running data/oqmd-345911_NNH/2
-  Elapsed time: 5.6 seconds for data/oqmd-345911_NNH/2
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/2
 Running data/oqmd-345911_NNH/3
-  Elapsed time: 4.8 seconds for data/oqmd-345911_NNH/3
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/3
 Running data/oqmd-345911_NNH/4
-  Elapsed time: 5.6 seconds for data/oqmd-345911_NNH/4
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/4
 Running data/oqmd-345911_NNH/5
-  Elapsed time: 3.1 seconds for data/oqmd-345911_NNH/5
+  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/5
 Running data/oqmd-345911_NNH/6
   Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/6
 Running data/oqmd-345911_NNH/7
@@ -1008,569 +1051,485 @@ Running data/oqmd-345911_NNH/7
 Running data/oqmd-345911_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 11%|█         | 2/19 [02:01&lt;17:10, 60.60s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 11%|█         | 2/19 [02:07&lt;18:08, 64.01s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.6 seconds for data/oqmd-345911_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.7 seconds for data/oqmd-345911_NNH/8
 9 H slabs to compute for mp-2677
 9 NNH slabs to compute for mp-2677
 Running data/mp-2677_H/0
-  Elapsed time: 0.9 seconds for data/mp-2677_H/0
+  Elapsed time: 1.6 seconds for data/mp-2677_H/0
 Running data/mp-2677_H/1
-  Elapsed time: 1.3 seconds for data/mp-2677_H/1
+  Elapsed time: 1.7 seconds for data/mp-2677_H/1
 Running data/mp-2677_H/2
-  Elapsed time: 0.5 seconds for data/mp-2677_H/2
+  Elapsed time: 0.4 seconds for data/mp-2677_H/2
 Running data/mp-2677_H/3
-  Elapsed time: 1.9 seconds for data/mp-2677_H/3
+  Elapsed time: 1.1 seconds for data/mp-2677_H/3
 Running data/mp-2677_H/4
-  Elapsed time: 1.9 seconds for data/mp-2677_H/4
+  Elapsed time: 1.7 seconds for data/mp-2677_H/4
 Running data/mp-2677_H/5
-  Elapsed time: 1.3 seconds for data/mp-2677_H/5
+  Elapsed time: 0.4 seconds for data/mp-2677_H/5
 Running data/mp-2677_H/6
-  Elapsed time: 0.7 seconds for data/mp-2677_H/6
+  Elapsed time: 1.2 seconds for data/mp-2677_H/6
 Running data/mp-2677_H/7
-  Elapsed time: 1.5 seconds for data/mp-2677_H/7
+  Elapsed time: 1.2 seconds for data/mp-2677_H/7
 Running data/mp-2677_H/8
-  Elapsed time: 1.9 seconds for data/mp-2677_H/8
+  Elapsed time: 0.9 seconds for data/mp-2677_H/8
 Running data/mp-2677_NNH/0
-  Elapsed time: 4.9 seconds for data/mp-2677_NNH/0
+  Elapsed time: 4.1 seconds for data/mp-2677_NNH/0
 Running data/mp-2677_NNH/1
-  Elapsed time: 4.9 seconds for data/mp-2677_NNH/1
+  Elapsed time: 4.3 seconds for data/mp-2677_NNH/1
 Running data/mp-2677_NNH/2
-  Elapsed time: 4.7 seconds for data/mp-2677_NNH/2
+  Elapsed time: 4.2 seconds for data/mp-2677_NNH/2
 Running data/mp-2677_NNH/3
-  Elapsed time: 4.6 seconds for data/mp-2677_NNH/3
+  Elapsed time: 4.2 seconds for data/mp-2677_NNH/3
 Running data/mp-2677_NNH/4
-  Elapsed time: 3.8 seconds for data/mp-2677_NNH/4
+  Elapsed time: 4.2 seconds for data/mp-2677_NNH/4
 Running data/mp-2677_NNH/5
-  Elapsed time: 4.6 seconds for data/mp-2677_NNH/5
+  Elapsed time: 3.6 seconds for data/mp-2677_NNH/5
 Running data/mp-2677_NNH/6
-  Elapsed time: 3.0 seconds for data/mp-2677_NNH/6
+  Elapsed time: 4.2 seconds for data/mp-2677_NNH/6
 Running data/mp-2677_NNH/7
-  Elapsed time: 3.7 seconds for data/mp-2677_NNH/7
+  Elapsed time: 4.2 seconds for data/mp-2677_NNH/7
 Running data/mp-2677_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 16%|█▌        | 3/19 [02:53&lt;15:04, 56.56s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 16%|█▌        | 3/19 [02:55&lt;15:09, 56.82s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.7 seconds for data/mp-2677_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.2 seconds for data/mp-2677_NNH/8
 9 H slabs to compute for mp-1186014
 9 NNH slabs to compute for mp-1186014
 Running data/mp-1186014_H/0
-  Elapsed time: 2.3 seconds for data/mp-1186014_H/0
+  Elapsed time: 1.1 seconds for data/mp-1186014_H/0
 Running data/mp-1186014_H/1
   Elapsed time: 1.3 seconds for data/mp-1186014_H/1
 Running data/mp-1186014_H/2
-  Elapsed time: 1.1 seconds for data/mp-1186014_H/2
+  Elapsed time: 2.3 seconds for data/mp-1186014_H/2
 Running data/mp-1186014_H/3
   Elapsed time: 2.3 seconds for data/mp-1186014_H/3
 Running data/mp-1186014_H/4
-  Elapsed time: 0.8 seconds for data/mp-1186014_H/4
+  Elapsed time: 1.1 seconds for data/mp-1186014_H/4
 Running data/mp-1186014_H/5
-  Elapsed time: 1.1 seconds for data/mp-1186014_H/5
+  Elapsed time: 2.3 seconds for data/mp-1186014_H/5
 Running data/mp-1186014_H/6
-  Elapsed time: 0.9 seconds for data/mp-1186014_H/6
+  Elapsed time: 0.8 seconds for data/mp-1186014_H/6
 Running data/mp-1186014_H/7
-  Elapsed time: 2.2 seconds for data/mp-1186014_H/7
+  Elapsed time: 0.9 seconds for data/mp-1186014_H/7
 Running data/mp-1186014_H/8
   Elapsed time: 2.3 seconds for data/mp-1186014_H/8
 Running data/mp-1186014_NNH/0
-  Elapsed time: 5.5 seconds for data/mp-1186014_NNH/0
+  Elapsed time: 5.7 seconds for data/mp-1186014_NNH/0
 Running data/mp-1186014_NNH/1
-  Elapsed time: 4.7 seconds for data/mp-1186014_NNH/1
+  Elapsed time: 5.7 seconds for data/mp-1186014_NNH/1
 Running data/mp-1186014_NNH/2
-  Elapsed time: 5.6 seconds for data/mp-1186014_NNH/2
+  Elapsed time: 5.3 seconds for data/mp-1186014_NNH/2
 Running data/mp-1186014_NNH/3
-  Elapsed time: 5.6 seconds for data/mp-1186014_NNH/3
+  Elapsed time: 5.7 seconds for data/mp-1186014_NNH/3
 Running data/mp-1186014_NNH/4
-  Elapsed time: 4.4 seconds for data/mp-1186014_NNH/4
+  Elapsed time: 3.6 seconds for data/mp-1186014_NNH/4
 Running data/mp-1186014_NNH/5
-  Elapsed time: 4.7 seconds for data/mp-1186014_NNH/5
+  Elapsed time: 5.7 seconds for data/mp-1186014_NNH/5
 Running data/mp-1186014_NNH/6
-  Elapsed time: 6.5 seconds for data/mp-1186014_NNH/6
+  Elapsed time: 5.7 seconds for data/mp-1186014_NNH/6
 Running data/mp-1186014_NNH/7
-  Elapsed time: 6.4 seconds for data/mp-1186014_NNH/7
+  Elapsed time: 4.1 seconds for data/mp-1186014_NNH/7
 Running data/mp-1186014_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 21%|██        | 4/19 [04:00&lt;15:12, 60.84s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 21%|██        | 4/19 [03:58&lt;14:46, 59.12s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 8.5 seconds for data/mp-1186014_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.7 seconds for data/mp-1186014_NNH/8
 9 H slabs to compute for oqmd-343039
 9 NNH slabs to compute for oqmd-343039
 Running data/oqmd-343039_H/0
-  Elapsed time: 1.7 seconds for data/oqmd-343039_H/0
+  Elapsed time: 1.2 seconds for data/oqmd-343039_H/0
 Running data/oqmd-343039_H/1
-  Elapsed time: 1.3 seconds for data/oqmd-343039_H/1
+  Elapsed time: 1.2 seconds for data/oqmd-343039_H/1
 Running data/oqmd-343039_H/2
-  Elapsed time: 1.9 seconds for data/oqmd-343039_H/2
+  Elapsed time: 1.7 seconds for data/oqmd-343039_H/2
 Running data/oqmd-343039_H/3
   Elapsed time: 1.1 seconds for data/oqmd-343039_H/3
 Running data/oqmd-343039_H/4
-  Elapsed time: 0.5 seconds for data/oqmd-343039_H/4
+  Elapsed time: 1.0 seconds for data/oqmd-343039_H/4
 Running data/oqmd-343039_H/5
-  Elapsed time: 1.2 seconds for data/oqmd-343039_H/5
+  Elapsed time: 1.7 seconds for data/oqmd-343039_H/5
 Running data/oqmd-343039_H/6
-  Elapsed time: 2.3 seconds for data/oqmd-343039_H/6
+  Elapsed time: 1.1 seconds for data/oqmd-343039_H/6
 Running data/oqmd-343039_H/7
-  Elapsed time: 1.4 seconds for data/oqmd-343039_H/7
+  Elapsed time: 1.0 seconds for data/oqmd-343039_H/7
 Running data/oqmd-343039_H/8
-  Elapsed time: 1.1 seconds for data/oqmd-343039_H/8
+  Elapsed time: 0.5 seconds for data/oqmd-343039_H/8
 Running data/oqmd-343039_NNH/0
-  Elapsed time: 4.1 seconds for data/oqmd-343039_NNH/0
+  Elapsed time: 4.2 seconds for data/oqmd-343039_NNH/0
 Running data/oqmd-343039_NNH/1
-  Elapsed time: 4.7 seconds for data/oqmd-343039_NNH/1
+  Elapsed time: 4.2 seconds for data/oqmd-343039_NNH/1
 Running data/oqmd-343039_NNH/2
-  Elapsed time: 4.3 seconds for data/oqmd-343039_NNH/2
+  Elapsed time: 4.2 seconds for data/oqmd-343039_NNH/2
 Running data/oqmd-343039_NNH/3
-  Elapsed time: 2.8 seconds for data/oqmd-343039_NNH/3
-Running data/oqmd-343039_NNH/4
-  Elapsed time: 4.7 seconds for data/oqmd-343039_NNH/4
-Running data/oqmd-343039_NNH/5
-  Elapsed time: 4.7 seconds for data/oqmd-343039_NNH/5
-Running data/oqmd-343039_NNH/6
-  Elapsed time: 4.7 seconds for data/oqmd-343039_NNH/6
-Running data/oqmd-343039_NNH/7
-  Elapsed time: 6.4 seconds for data/oqmd-343039_NNH/7
-Running data/oqmd-343039_NNH/8
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 26%|██▋       | 5/19 [04:55&lt;13:43, 58.80s/it]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.4 seconds for data/oqmd-343039_NNH/8
-9 H slabs to compute for oqmd-348629
-9 NNH slabs to compute for oqmd-348629
-Running data/oqmd-348629_H/0
-  Elapsed time: 1.2 seconds for data/oqmd-348629_H/0
-Running data/oqmd-348629_H/1
-  Elapsed time: 0.7 seconds for data/oqmd-348629_H/1
-Running data/oqmd-348629_H/2
-  Elapsed time: 1.8 seconds for data/oqmd-348629_H/2
-Running data/oqmd-348629_H/3
-  Elapsed time: 0.9 seconds for data/oqmd-348629_H/3
-Running data/oqmd-348629_H/4
-  Elapsed time: 0.6 seconds for data/oqmd-348629_H/4
-Running data/oqmd-348629_H/5
-  Elapsed time: 1.3 seconds for data/oqmd-348629_H/5
-Running data/oqmd-348629_H/6
-  Elapsed time: 1.4 seconds for data/oqmd-348629_H/6
-Running data/oqmd-348629_H/7
-  Elapsed time: 0.9 seconds for data/oqmd-348629_H/7
-Running data/oqmd-348629_H/8
-  Elapsed time: 1.1 seconds for data/oqmd-348629_H/8
-Running data/oqmd-348629_NNH/0
-  Elapsed time: 6.5 seconds for data/oqmd-348629_NNH/0
-Running data/oqmd-348629_NNH/1
-  Elapsed time: 8.5 seconds for data/oqmd-348629_NNH/1
-Running data/oqmd-348629_NNH/2
-  Elapsed time: 8.9 seconds for data/oqmd-348629_NNH/2
-Running data/oqmd-348629_NNH/3
-  Elapsed time: 8.9 seconds for data/oqmd-348629_NNH/3
-Running data/oqmd-348629_NNH/4
-  Elapsed time: 8.2 seconds for data/oqmd-348629_NNH/4
-Running data/oqmd-348629_NNH/5
-  Elapsed time: 3.9 seconds for data/oqmd-348629_NNH/5
-Running data/oqmd-348629_NNH/6
-  Elapsed time: 9.8 seconds for data/oqmd-348629_NNH/6
-Running data/oqmd-348629_NNH/7
-  Elapsed time: 7.7 seconds for data/oqmd-348629_NNH/7
-Running data/oqmd-348629_NNH/8
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 32%|███▏      | 6/19 [06:14&lt;14:11, 65.48s/it]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.8 seconds for data/oqmd-348629_NNH/8
-9 H slabs to compute for oqmd-343006
-9 NNH slabs to compute for oqmd-343006
-Running data/oqmd-343006_H/0
-  Elapsed time: 2.0 seconds for data/oqmd-343006_H/0
-Running data/oqmd-343006_H/1
-  Elapsed time: 3.4 seconds for data/oqmd-343006_H/1
-Running data/oqmd-343006_H/2
-  Elapsed time: 1.6 seconds for data/oqmd-343006_H/2
-Running data/oqmd-343006_H/3
-  Elapsed time: 0.9 seconds for data/oqmd-343006_H/3
-Running data/oqmd-343006_H/4
-  Elapsed time: 2.4 seconds for data/oqmd-343006_H/4
-Running data/oqmd-343006_H/5
-  Elapsed time: 1.9 seconds for data/oqmd-343006_H/5
-Running data/oqmd-343006_H/6
-  Elapsed time: 1.0 seconds for data/oqmd-343006_H/6
-Running data/oqmd-343006_H/7
-  Elapsed time: 1.9 seconds for data/oqmd-343006_H/7
-Running data/oqmd-343006_H/8
-  Elapsed time: 1.9 seconds for data/oqmd-343006_H/8
-Running data/oqmd-343006_NNH/0
-  Elapsed time: 4.6 seconds for data/oqmd-343006_NNH/0
-Running data/oqmd-343006_NNH/1
-  Elapsed time: 4.7 seconds for data/oqmd-343006_NNH/1
-Running data/oqmd-343006_NNH/2
-  Elapsed time: 4.7 seconds for data/oqmd-343006_NNH/2
+  Elapsed time: 4.2 seconds for data/oqmd-343006_NNH/2
 Running data/oqmd-343006_NNH/3
-  Elapsed time: 4.7 seconds for data/oqmd-343006_NNH/3
+  Elapsed time: 4.2 seconds for data/oqmd-343006_NNH/3
 Running data/oqmd-343006_NNH/4
-  Elapsed time: 4.7 seconds for data/oqmd-343006_NNH/4
+  Elapsed time: 4.0 seconds for data/oqmd-343006_NNH/4
 Running data/oqmd-343006_NNH/5
-  Elapsed time: 4.7 seconds for data/oqmd-343006_NNH/5
+  Elapsed time: 4.2 seconds for data/oqmd-343006_NNH/5
 Running data/oqmd-343006_NNH/6
-  Elapsed time: 4.6 seconds for data/oqmd-343006_NNH/6
+  Elapsed time: 4.2 seconds for data/oqmd-343006_NNH/6
 Running data/oqmd-343006_NNH/7
-  Elapsed time: 4.6 seconds for data/oqmd-343006_NNH/7
+  Elapsed time: 4.2 seconds for data/oqmd-343006_NNH/7
 Running data/oqmd-343006_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 37%|███▋      | 7/19 [07:13&lt;12:41, 63.47s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 37%|███▋      | 7/19 [06:21&lt;10:11, 50.97s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.1 seconds for data/oqmd-343006_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.0 seconds for data/oqmd-343006_NNH/8
 9 H slabs to compute for oqmd-349813
 9 NNH slabs to compute for oqmd-349813
 Running data/oqmd-349813_H/0
-  Elapsed time: 1.1 seconds for data/oqmd-349813_H/0
+  Elapsed time: 1.2 seconds for data/oqmd-349813_H/0
 Running data/oqmd-349813_H/1
-  Elapsed time: 0.8 seconds for data/oqmd-349813_H/1
+  Elapsed time: 1.7 seconds for data/oqmd-349813_H/1
 Running data/oqmd-349813_H/2
-  Elapsed time: 1.7 seconds for data/oqmd-349813_H/2
+  Elapsed time: 0.9 seconds for data/oqmd-349813_H/2
 Running data/oqmd-349813_H/3
-  Elapsed time: 1.6 seconds for data/oqmd-349813_H/3
+  Elapsed time: 1.0 seconds for data/oqmd-349813_H/3
 Running data/oqmd-349813_H/4
-  Elapsed time: 0.8 seconds for data/oqmd-349813_H/4
+  Elapsed time: 1.0 seconds for data/oqmd-349813_H/4
 Running data/oqmd-349813_H/5
-  Elapsed time: 1.1 seconds for data/oqmd-349813_H/5
+  Elapsed time: 1.5 seconds for data/oqmd-349813_H/5
 Running data/oqmd-349813_H/6
-  Elapsed time: 1.2 seconds for data/oqmd-349813_H/6
+  Elapsed time: 1.7 seconds for data/oqmd-349813_H/6
 Running data/oqmd-349813_H/7
-  Elapsed time: 1.4 seconds for data/oqmd-349813_H/7
+  Elapsed time: 1.2 seconds for data/oqmd-349813_H/7
 Running data/oqmd-349813_H/8
-  Elapsed time: 1.7 seconds for data/oqmd-349813_H/8
+  Elapsed time: 0.8 seconds for data/oqmd-349813_H/8
 Running data/oqmd-349813_NNH/0
-  Elapsed time: 5.6 seconds for data/oqmd-349813_NNH/0
+  Elapsed time: 5.8 seconds for data/oqmd-349813_NNH/0
 Running data/oqmd-349813_NNH/1
-  Elapsed time: 5.6 seconds for data/oqmd-349813_NNH/1
+  Elapsed time: 5.7 seconds for data/oqmd-349813_NNH/1
 Running data/oqmd-349813_NNH/2
-  Elapsed time: 5.6 seconds for data/oqmd-349813_NNH/2
+  Elapsed time: 5.8 seconds for data/oqmd-349813_NNH/2
 Running data/oqmd-349813_NNH/3
-  Elapsed time: 5.4 seconds for data/oqmd-349813_NNH/3
+  Elapsed time: 5.8 seconds for data/oqmd-349813_NNH/3
 Running data/oqmd-349813_NNH/4
-  Elapsed time: 5.7 seconds for data/oqmd-349813_NNH/4
+  Elapsed time: 5.2 seconds for data/oqmd-349813_NNH/4
 Running data/oqmd-349813_NNH/5
-  Elapsed time: 5.6 seconds for data/oqmd-349813_NNH/5
+  Elapsed time: 5.8 seconds for data/oqmd-349813_NNH/5
 Running data/oqmd-349813_NNH/6
-  Elapsed time: 5.6 seconds for data/oqmd-349813_NNH/6
+  Elapsed time: 3.5 seconds for data/oqmd-349813_NNH/6
 Running data/oqmd-349813_NNH/7
-  Elapsed time: 5.6 seconds for data/oqmd-349813_NNH/7
+  Elapsed time: 5.8 seconds for data/oqmd-349813_NNH/7
 Running data/oqmd-349813_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 42%|████▏     | 8/19 [08:16&lt;11:36, 63.28s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 42%|████▏     | 8/19 [07:22&lt;09:55, 54.11s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.6 seconds for data/oqmd-349813_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.8 seconds for data/oqmd-349813_NNH/8
 9 H slabs to compute for oqmd-347528
 9 NNH slabs to compute for oqmd-347528
 Running data/oqmd-347528_H/0
-  Elapsed time: 2.3 seconds for data/oqmd-347528_H/0
+  Elapsed time: 1.0 seconds for data/oqmd-347528_H/0
 Running data/oqmd-347528_H/1
-  Elapsed time: 0.6 seconds for data/oqmd-347528_H/1
+  Elapsed time: 1.1 seconds for data/oqmd-347528_H/1
 Running data/oqmd-347528_H/2
-  Elapsed time: 1.0 seconds for data/oqmd-347528_H/2
+  Elapsed time: 2.3 seconds for data/oqmd-347528_H/2
 Running data/oqmd-347528_H/3
-  Elapsed time: 0.4 seconds for data/oqmd-347528_H/3
+  Elapsed time: 1.6 seconds for data/oqmd-347528_H/3
 Running data/oqmd-347528_H/4
   Elapsed time: 2.3 seconds for data/oqmd-347528_H/4
 Running data/oqmd-347528_H/5
-  Elapsed time: 1.0 seconds for data/oqmd-347528_H/5
+  Elapsed time: 0.5 seconds for data/oqmd-347528_H/5
 Running data/oqmd-347528_H/6
   Elapsed time: 2.3 seconds for data/oqmd-347528_H/6
 Running data/oqmd-347528_H/7
-  Elapsed time: 1.5 seconds for data/oqmd-347528_H/7
+  Elapsed time: 0.7 seconds for data/oqmd-347528_H/7
 Running data/oqmd-347528_H/8
   Elapsed time: 2.3 seconds for data/oqmd-347528_H/8
 Running data/oqmd-347528_NNH/0
-  Elapsed time: 5.6 seconds for data/oqmd-347528_NNH/0
+  Elapsed time: 5.8 seconds for data/oqmd-347528_NNH/0
 Running data/oqmd-347528_NNH/1
-  Elapsed time: 3.0 seconds for data/oqmd-347528_NNH/1
+  Elapsed time: 5.8 seconds for data/oqmd-347528_NNH/1
 Running data/oqmd-347528_NNH/2
-  Elapsed time: 5.6 seconds for data/oqmd-347528_NNH/2
+  Elapsed time: 5.8 seconds for data/oqmd-347528_NNH/2
 Running data/oqmd-347528_NNH/3
-  Elapsed time: 5.5 seconds for data/oqmd-347528_NNH/3
+  Elapsed time: 5.8 seconds for data/oqmd-347528_NNH/3
 Running data/oqmd-347528_NNH/4
-  Elapsed time: 4.6 seconds for data/oqmd-347528_NNH/4
+  Elapsed time: 5.7 seconds for data/oqmd-347528_NNH/4
 Running data/oqmd-347528_NNH/5
-  Elapsed time: 5.6 seconds for data/oqmd-347528_NNH/5
+  Elapsed time: 4.9 seconds for data/oqmd-347528_NNH/5
 Running data/oqmd-347528_NNH/6
-  Elapsed time: 5.6 seconds for data/oqmd-347528_NNH/6
+  Elapsed time: 5.7 seconds for data/oqmd-347528_NNH/6
 Running data/oqmd-347528_NNH/7
-  Elapsed time: 5.6 seconds for data/oqmd-347528_NNH/7
+  Elapsed time: 5.8 seconds for data/oqmd-347528_NNH/7
 Running data/oqmd-347528_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 47%|████▋     | 9/19 [09:17&lt;10:27, 62.77s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 47%|████▋     | 9/19 [08:24&lt;09:28, 56.81s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.6 seconds for data/oqmd-347528_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 2.6 seconds for data/oqmd-347528_NNH/8
 9 H slabs to compute for oqmd-344251
 9 NNH slabs to compute for oqmd-344251
 Running data/oqmd-344251_H/0
-  Elapsed time: 0.6 seconds for data/oqmd-344251_H/0
+  Elapsed time: 0.7 seconds for data/oqmd-344251_H/0
 Running data/oqmd-344251_H/1
-  Elapsed time: 0.9 seconds for data/oqmd-344251_H/1
+  Elapsed time: 0.7 seconds for data/oqmd-344251_H/1
 Running data/oqmd-344251_H/2
-  Elapsed time: 1.1 seconds for data/oqmd-344251_H/2
+  Elapsed time: 0.7 seconds for data/oqmd-344251_H/2
 Running data/oqmd-344251_H/3
-  Elapsed time: 0.6 seconds for data/oqmd-344251_H/3
+  Elapsed time: 0.7 seconds for data/oqmd-344251_H/3
 Running data/oqmd-344251_H/4
-  Elapsed time: 1.9 seconds for data/oqmd-344251_H/4
+  Elapsed time: 0.7 seconds for data/oqmd-344251_H/4
 Running data/oqmd-344251_H/5
-  Elapsed time: 1.9 seconds for data/oqmd-344251_H/5
+  Elapsed time: 0.6 seconds for data/oqmd-344251_H/5
 Running data/oqmd-344251_H/6
-  Elapsed time: 0.9 seconds for data/oqmd-344251_H/6
+  Elapsed time: 1.7 seconds for data/oqmd-344251_H/6
 Running data/oqmd-344251_H/7
-  Elapsed time: 1.9 seconds for data/oqmd-344251_H/7
+  Elapsed time: 1.7 seconds for data/oqmd-344251_H/7
 Running data/oqmd-344251_H/8
-  Elapsed time: 0.8 seconds for data/oqmd-344251_H/8
+  Elapsed time: 1.7 seconds for data/oqmd-344251_H/8
 Running data/oqmd-344251_NNH/0
-  Elapsed time: 4.6 seconds for data/oqmd-344251_NNH/0
+  Elapsed time: 4.2 seconds for data/oqmd-344251_NNH/0
 Running data/oqmd-344251_NNH/1
-  Elapsed time: 4.6 seconds for data/oqmd-344251_NNH/1
+  Elapsed time: 4.2 seconds for data/oqmd-344251_NNH/1
 Running data/oqmd-344251_NNH/2
-  Elapsed time: 3.3 seconds for data/oqmd-344251_NNH/2
+  Elapsed time: 3.6 seconds for data/oqmd-344251_NNH/2
 Running data/oqmd-344251_NNH/3
-  Elapsed time: 4.0 seconds for data/oqmd-344251_NNH/3
+  Elapsed time: 4.2 seconds for data/oqmd-344251_NNH/3
 Running data/oqmd-344251_NNH/4
-  Elapsed time: 4.7 seconds for data/oqmd-344251_NNH/4
+  Elapsed time: 3.5 seconds for data/oqmd-344251_NNH/4
 Running data/oqmd-344251_NNH/5
-  Elapsed time: 4.6 seconds for data/oqmd-344251_NNH/5
+  Elapsed time: 4.2 seconds for data/oqmd-344251_NNH/5
 Running data/oqmd-344251_NNH/6
-  Elapsed time: 4.7 seconds for data/oqmd-344251_NNH/6
+  Elapsed time: 4.2 seconds for data/oqmd-344251_NNH/6
 Running data/oqmd-344251_NNH/7
-  Elapsed time: 3.1 seconds for data/oqmd-344251_NNH/7
+  Elapsed time: 4.2 seconds for data/oqmd-344251_NNH/7
 Running data/oqmd-344251_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 53%|█████▎    | 10/19 [10:07&lt;08:49, 58.79s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 53%|█████▎    | 10/19 [09:10&lt;07:59, 53.24s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.7 seconds for data/oqmd-344251_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 3.0 seconds for data/oqmd-344251_NNH/8
 9 H slabs to compute for oqmd-343394
 9 NNH slabs to compute for oqmd-343394
 Running data/oqmd-343394_H/0
-  Elapsed time: 2.3 seconds for data/oqmd-343394_H/0
+  Elapsed time: 1.1 seconds for data/oqmd-343394_H/0
 Running data/oqmd-343394_H/1
   Elapsed time: 2.3 seconds for data/oqmd-343394_H/1
 Running data/oqmd-343394_H/2
-  Elapsed time: 1.3 seconds for data/oqmd-343394_H/2
+  Elapsed time: 1.7 seconds for data/oqmd-343394_H/2
 Running data/oqmd-343394_H/3
-  Elapsed time: 1.1 seconds for data/oqmd-343394_H/3
+  Elapsed time: 2.3 seconds for data/oqmd-343394_H/3
 Running data/oqmd-343394_H/4
-  Elapsed time: 2.3 seconds for data/oqmd-343394_H/4
+  Elapsed time: 1.2 seconds for data/oqmd-343394_H/4
 Running data/oqmd-343394_H/5
   Elapsed time: 2.3 seconds for data/oqmd-343394_H/5
 Running data/oqmd-343394_H/6
   Elapsed time: 2.3 seconds for data/oqmd-343394_H/6
 Running data/oqmd-343394_H/7
-  Elapsed time: 1.3 seconds for data/oqmd-343394_H/7
+  Elapsed time: 2.3 seconds for data/oqmd-343394_H/7
 Running data/oqmd-343394_H/8
-  Elapsed time: 2.2 seconds for data/oqmd-343394_H/8
+  Elapsed time: 2.3 seconds for data/oqmd-343394_H/8
 Running data/oqmd-343394_NNH/0
-  Elapsed time: 5.5 seconds for data/oqmd-343394_NNH/0
+  Elapsed time: 5.7 seconds for data/oqmd-343394_NNH/0
 Running data/oqmd-343394_NNH/1
-  Elapsed time: 5.6 seconds for data/oqmd-343394_NNH/1
+  Elapsed time: 5.7 seconds for data/oqmd-343394_NNH/1
 Running data/oqmd-343394_NNH/2
-  Elapsed time: 5.6 seconds for data/oqmd-343394_NNH/2
+  Elapsed time: 5.7 seconds for data/oqmd-343394_NNH/2
 Running data/oqmd-343394_NNH/3
   Elapsed time: 5.7 seconds for data/oqmd-343394_NNH/3
 Running data/oqmd-343394_NNH/4
-  Elapsed time: 5.3 seconds for data/oqmd-343394_NNH/4
+  Elapsed time: 5.7 seconds for data/oqmd-343394_NNH/4
 Running data/oqmd-343394_NNH/5
-  Elapsed time: 5.7 seconds for data/oqmd-343394_NNH/5
+  Elapsed time: 4.1 seconds for data/oqmd-343394_NNH/5
 Running data/oqmd-343394_NNH/6
-  Elapsed time: 5.6 seconds for data/oqmd-343394_NNH/6
+  Elapsed time: 5.7 seconds for data/oqmd-343394_NNH/6
 Running data/oqmd-343394_NNH/7
-  Elapsed time: 5.6 seconds for data/oqmd-343394_NNH/7
+  Elapsed time: 5.7 seconds for data/oqmd-343394_NNH/7
 Running data/oqmd-343394_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 58%|█████▊    | 11/19 [11:14&lt;08:09, 61.18s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 58%|█████▊    | 11/19 [10:18&lt;07:43, 57.92s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 3.5 seconds for data/oqmd-343394_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.7 seconds for data/oqmd-343394_NNH/8
 9 H slabs to compute for oqmd-344635
 9 NNH slabs to compute for oqmd-344635
 Running data/oqmd-344635_H/0
-  Elapsed time: 2.3 seconds for data/oqmd-344635_H/0
+  Elapsed time: 1.4 seconds for data/oqmd-344635_H/0
 Running data/oqmd-344635_H/1
-  Elapsed time: 1.1 seconds for data/oqmd-344635_H/1
+  Elapsed time: 0.9 seconds for data/oqmd-344635_H/1
 Running data/oqmd-344635_H/2
-  Elapsed time: 0.7 seconds for data/oqmd-344635_H/2
+  Elapsed time: 2.3 seconds for data/oqmd-344635_H/2
 Running data/oqmd-344635_H/3
-  Elapsed time: 2.3 seconds for data/oqmd-344635_H/3
+  Elapsed time: 1.1 seconds for data/oqmd-344635_H/3
 Running data/oqmd-344635_H/4
-  Elapsed time: 1.1 seconds for data/oqmd-344635_H/4
+  Elapsed time: 2.3 seconds for data/oqmd-344635_H/4
 Running data/oqmd-344635_H/5
   Elapsed time: 2.3 seconds for data/oqmd-344635_H/5
 Running data/oqmd-344635_H/6
-  Elapsed time: 1.4 seconds for data/oqmd-344635_H/6
+  Elapsed time: 2.3 seconds for data/oqmd-344635_H/6
 Running data/oqmd-344635_H/7
-  Elapsed time: 2.3 seconds for data/oqmd-344635_H/7
+  Elapsed time: 1.1 seconds for data/oqmd-344635_H/7
 Running data/oqmd-344635_H/8
-  Elapsed time: 1.1 seconds for data/oqmd-344635_H/8
+  Elapsed time: 0.7 seconds for data/oqmd-344635_H/8
 Running data/oqmd-344635_NNH/0
-  Elapsed time: 4.3 seconds for data/oqmd-344635_NNH/0
+  Elapsed time: 5.7 seconds for data/oqmd-344635_NNH/0
 Running data/oqmd-344635_NNH/1
-  Elapsed time: 4.0 seconds for data/oqmd-344635_NNH/1
+  Elapsed time: 4.6 seconds for data/oqmd-344635_NNH/1
 Running data/oqmd-344635_NNH/2
-  Elapsed time: 4.9 seconds for data/oqmd-344635_NNH/2
+  Elapsed time: 5.7 seconds for data/oqmd-344635_NNH/2
 Running data/oqmd-344635_NNH/3
-  Elapsed time: 4.8 seconds for data/oqmd-344635_NNH/3
+  Elapsed time: 5.7 seconds for data/oqmd-344635_NNH/3
 Running data/oqmd-344635_NNH/4
-  Elapsed time: 5.6 seconds for data/oqmd-344635_NNH/4
+  Elapsed time: 4.6 seconds for data/oqmd-344635_NNH/4
 Running data/oqmd-344635_NNH/5
-  Elapsed time: 5.7 seconds for data/oqmd-344635_NNH/5
+  Elapsed time: 5.6 seconds for data/oqmd-344635_NNH/5
 Running data/oqmd-344635_NNH/6
-  Elapsed time: 2.3 seconds for data/oqmd-344635_NNH/6
+  Elapsed time: 5.7 seconds for data/oqmd-344635_NNH/6
 Running data/oqmd-344635_NNH/7
-  Elapsed time: 2.5 seconds for data/oqmd-344635_NNH/7
+  Elapsed time: 3.5 seconds for data/oqmd-344635_NNH/7
 Running data/oqmd-344635_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 63%|██████▎   | 12/19 [12:07&lt;06:50, 58.70s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 63%|██████▎   | 12/19 [11:20&lt;06:54, 59.22s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 3.4 seconds for data/oqmd-344635_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.7 seconds for data/oqmd-344635_NNH/8
 9 H slabs to compute for oqmd-344237
 9 NNH slabs to compute for oqmd-344237
 Running data/oqmd-344237_H/0
-  Elapsed time: 0.9 seconds for data/oqmd-344237_H/0
+  Elapsed time: 2.3 seconds for data/oqmd-344237_H/0
 Running data/oqmd-344237_H/1
   Elapsed time: 2.3 seconds for data/oqmd-344237_H/1
 Running data/oqmd-344237_H/2
   Elapsed time: 1.0 seconds for data/oqmd-344237_H/2
 Running data/oqmd-344237_H/3
-  Elapsed time: 2.2 seconds for data/oqmd-344237_H/3
+  Elapsed time: 1.4 seconds for data/oqmd-344237_H/3
 Running data/oqmd-344237_H/4
-  Elapsed time: 2.2 seconds for data/oqmd-344237_H/4
+  Elapsed time: 2.3 seconds for data/oqmd-344237_H/4
 Running data/oqmd-344237_H/5
-  Elapsed time: 1.7 seconds for data/oqmd-344237_H/5
+  Elapsed time: 1.0 seconds for data/oqmd-344237_H/5
 Running data/oqmd-344237_H/6
   Elapsed time: 1.2 seconds for data/oqmd-344237_H/6
 Running data/oqmd-344237_H/7
   Elapsed time: 2.3 seconds for data/oqmd-344237_H/7
 Running data/oqmd-344237_H/8
-  Elapsed time: 1.2 seconds for data/oqmd-344237_H/8
+  Elapsed time: 1.8 seconds for data/oqmd-344237_H/8
 Running data/oqmd-344237_NNH/0
-  Elapsed time: 5.6 seconds for data/oqmd-344237_NNH/0
+  Elapsed time: 5.7 seconds for data/oqmd-344237_NNH/0
 Running data/oqmd-344237_NNH/1
-  Elapsed time: 4.5 seconds for data/oqmd-344237_NNH/1
+  Elapsed time: 5.7 seconds for data/oqmd-344237_NNH/1
 Running data/oqmd-344237_NNH/2
-  Elapsed time: 4.6 seconds for data/oqmd-344237_NNH/2
+  Elapsed time: 5.2 seconds for data/oqmd-344237_NNH/2
 Running data/oqmd-344237_NNH/3
-  Elapsed time: 5.2 seconds for data/oqmd-344237_NNH/3
+  Elapsed time: 5.0 seconds for data/oqmd-344237_NNH/3
 Running data/oqmd-344237_NNH/4
-  Elapsed time: 5.6 seconds for data/oqmd-344237_NNH/4
+  Elapsed time: 5.7 seconds for data/oqmd-344237_NNH/4
 Running data/oqmd-344237_NNH/5
-  Elapsed time: 5.6 seconds for data/oqmd-344237_NNH/5
+  Elapsed time: 5.7 seconds for data/oqmd-344237_NNH/5
 Running data/oqmd-344237_NNH/6
-  Elapsed time: 5.6 seconds for data/oqmd-344237_NNH/6
+  Elapsed time: 5.7 seconds for data/oqmd-344237_NNH/6
 Running data/oqmd-344237_NNH/7
-  Elapsed time: 4.9 seconds for data/oqmd-344237_NNH/7
+  Elapsed time: 5.3 seconds for data/oqmd-344237_NNH/7
 Running data/oqmd-344237_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 68%|██████▊   | 13/19 [13:10&lt;06:00, 60.15s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 68%|██████▊   | 13/19 [12:26&lt;06:06, 61.04s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.6 seconds for data/oqmd-344237_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.6 seconds for data/oqmd-344237_NNH/8
 9 H slabs to compute for oqmd-346818
 9 NNH slabs to compute for oqmd-346818
 Running data/oqmd-346818_H/0
-  Elapsed time: 1.2 seconds for data/oqmd-346818_H/0
+  Elapsed time: 1.9 seconds for data/oqmd-346818_H/0
 Running data/oqmd-346818_H/1
-  Elapsed time: 1.7 seconds for data/oqmd-346818_H/1
+  Elapsed time: 1.1 seconds for data/oqmd-346818_H/1
 Running data/oqmd-346818_H/2
-  Elapsed time: 1.0 seconds for data/oqmd-346818_H/2
+  Elapsed time: 0.8 seconds for data/oqmd-346818_H/2
 Running data/oqmd-346818_H/3
-  Elapsed time: 0.8 seconds for data/oqmd-346818_H/3
+  Elapsed time: 1.1 seconds for data/oqmd-346818_H/3
 Running data/oqmd-346818_H/4
-  Elapsed time: 1.2 seconds for data/oqmd-346818_H/4
+  Elapsed time: 0.8 seconds for data/oqmd-346818_H/4
 Running data/oqmd-346818_H/5
-  Elapsed time: 2.3 seconds for data/oqmd-346818_H/5
+  Elapsed time: 1.0 seconds for data/oqmd-346818_H/5
 Running data/oqmd-346818_H/6
-  Elapsed time: 1.3 seconds for data/oqmd-346818_H/6
+  Elapsed time: 1.2 seconds for data/oqmd-346818_H/6
 Running data/oqmd-346818_H/7
-  Elapsed time: 0.6 seconds for data/oqmd-346818_H/7
+  Elapsed time: 2.3 seconds for data/oqmd-346818_H/7
 Running data/oqmd-346818_H/8
-  Elapsed time: 1.1 seconds for data/oqmd-346818_H/8
+  Elapsed time: 1.2 seconds for data/oqmd-346818_H/8
 Running data/oqmd-346818_NNH/0
-  Elapsed time: 4.9 seconds for data/oqmd-346818_NNH/0
+  Elapsed time: 5.7 seconds for data/oqmd-346818_NNH/0
 Running data/oqmd-346818_NNH/1
-  Elapsed time: 4.5 seconds for data/oqmd-346818_NNH/1
+  Elapsed time: 5.2 seconds for data/oqmd-346818_NNH/1
 Running data/oqmd-346818_NNH/2
-  Elapsed time: 5.6 seconds for data/oqmd-346818_NNH/2
+  Elapsed time: 5.7 seconds for data/oqmd-346818_NNH/2
 Running data/oqmd-346818_NNH/3
-  Elapsed time: 5.6 seconds for data/oqmd-346818_NNH/3
+  Elapsed time: 5.7 seconds for data/oqmd-346818_NNH/3
 Running data/oqmd-346818_NNH/4
-  Elapsed time: 5.7 seconds for data/oqmd-346818_NNH/4
+  Elapsed time: 4.5 seconds for data/oqmd-346818_NNH/4
 Running data/oqmd-346818_NNH/5
-  Elapsed time: 5.6 seconds for data/oqmd-346818_NNH/5
+  Elapsed time: 5.7 seconds for data/oqmd-346818_NNH/5
 Running data/oqmd-346818_NNH/6
-  Elapsed time: 5.6 seconds for data/oqmd-346818_NNH/6
+  Elapsed time: 4.3 seconds for data/oqmd-346818_NNH/6
 Running data/oqmd-346818_NNH/7
-  Elapsed time: 5.6 seconds for data/oqmd-346818_NNH/7
+  Elapsed time: 5.7 seconds for data/oqmd-346818_NNH/7
 Running data/oqmd-346818_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 74%|███████▎  | 14/19 [14:12&lt;05:02, 60.54s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 74%|███████▎  | 14/19 [13:26&lt;05:04, 60.86s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.6 seconds for data/oqmd-346818_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.7 seconds for data/oqmd-346818_NNH/8
 9 H slabs to compute for oqmd-349496
 9 NNH slabs to compute for oqmd-349496
 Running data/oqmd-349496_H/0
-  Elapsed time: 1.7 seconds for data/oqmd-349496_H/0
+  Elapsed time: 2.3 seconds for data/oqmd-349496_H/0
 Running data/oqmd-349496_H/1
-  Elapsed time: 1.1 seconds for data/oqmd-349496_H/1
+  Elapsed time: 1.2 seconds for data/oqmd-349496_H/1
 Running data/oqmd-349496_H/2
-  Elapsed time: 1.6 seconds for data/oqmd-349496_H/2
+  Elapsed time: 1.3 seconds for data/oqmd-349496_H/2
 Running data/oqmd-349496_H/3
-  Elapsed time: 1.3 seconds for data/oqmd-349496_H/3
+  Elapsed time: 2.3 seconds for data/oqmd-349496_H/3
 Running data/oqmd-349496_H/4
-  Elapsed time: 1.3 seconds for data/oqmd-349496_H/4
+  Elapsed time: 2.3 seconds for data/oqmd-349496_H/4
 Running data/oqmd-349496_H/5
   Elapsed time: 1.6 seconds for data/oqmd-349496_H/5
 Running data/oqmd-349496_H/6
-  Elapsed time: 2.3 seconds for data/oqmd-349496_H/6
+  Elapsed time: 1.7 seconds for data/oqmd-349496_H/6
 Running data/oqmd-349496_H/7
-  Elapsed time: 2.3 seconds for data/oqmd-349496_H/7
+  Elapsed time: 1.8 seconds for data/oqmd-349496_H/7
 Running data/oqmd-349496_H/8
-  Elapsed time: 3.6 seconds for data/oqmd-349496_H/8
+  Elapsed time: 0.9 seconds for data/oqmd-349496_H/8
 Running data/oqmd-349496_NNH/0
-  Elapsed time: 4.0 seconds for data/oqmd-349496_NNH/0
+  Elapsed time: 5.7 seconds for data/oqmd-349496_NNH/0
 Running data/oqmd-349496_NNH/1
-  Elapsed time: 5.7 seconds for data/oqmd-349496_NNH/1
+  Elapsed time: 4.9 seconds for data/oqmd-349496_NNH/1
 Running data/oqmd-349496_NNH/2
-  Elapsed time: 5.7 seconds for data/oqmd-349496_NNH/2
+  Elapsed time: 5.6 seconds for data/oqmd-349496_NNH/2
 Running data/oqmd-349496_NNH/3
-  Elapsed time: 5.6 seconds for data/oqmd-349496_NNH/3
+  Elapsed time: 5.7 seconds for data/oqmd-349496_NNH/3
 Running data/oqmd-349496_NNH/4
-  Elapsed time: 3.3 seconds for data/oqmd-349496_NNH/4
+  Elapsed time: 5.6 seconds for data/oqmd-349496_NNH/4
 Running data/oqmd-349496_NNH/5
   Elapsed time: 5.7 seconds for data/oqmd-349496_NNH/5
 Running data/oqmd-349496_NNH/6
-  Elapsed time: 4.6 seconds for data/oqmd-349496_NNH/6
+  Elapsed time: 5.1 seconds for data/oqmd-349496_NNH/6
 Running data/oqmd-349496_NNH/7
-  Elapsed time: 8.5 seconds for data/oqmd-349496_NNH/7
+  Elapsed time: 5.8 seconds for data/oqmd-349496_NNH/7
 Running data/oqmd-349496_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 79%|███████▉  | 15/19 [15:18&lt;04:08, 62.17s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 79%|███████▉  | 15/19 [14:32&lt;04:09, 62.48s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.6 seconds for data/oqmd-349496_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.5 seconds for data/oqmd-349496_NNH/8
 9 H slabs to compute for oqmd-343615
 9 NNH slabs to compute for oqmd-343615
 Running data/oqmd-343615_H/0
@@ -1582,168 +1541,168 @@ Running data/oqmd-343615_H/2
 Running data/oqmd-343615_H/3
   Elapsed time: 1.2 seconds for data/oqmd-343615_H/3
 Running data/oqmd-343615_H/4
-  Elapsed time: 0.9 seconds for data/oqmd-343615_H/4
+  Elapsed time: 1.0 seconds for data/oqmd-343615_H/4
 Running data/oqmd-343615_H/5
-  Elapsed time: 2.3 seconds for data/oqmd-343615_H/5
+  Elapsed time: 1.2 seconds for data/oqmd-343615_H/5
 Running data/oqmd-343615_H/6
   Elapsed time: 2.3 seconds for data/oqmd-343615_H/6
 Running data/oqmd-343615_H/7
   Elapsed time: 1.3 seconds for data/oqmd-343615_H/7
 Running data/oqmd-343615_H/8
-  Elapsed time: 1.2 seconds for data/oqmd-343615_H/8
+  Elapsed time: 2.3 seconds for data/oqmd-343615_H/8
 Running data/oqmd-343615_NNH/0
-  Elapsed time: 5.6 seconds for data/oqmd-343615_NNH/0
+  Elapsed time: 5.7 seconds for data/oqmd-343615_NNH/0
 Running data/oqmd-343615_NNH/1
-  Elapsed time: 5.7 seconds for data/oqmd-343615_NNH/1
+  Elapsed time: 3.1 seconds for data/oqmd-343615_NNH/1
 Running data/oqmd-343615_NNH/2
-  Elapsed time: 4.4 seconds for data/oqmd-343615_NNH/2
+  Elapsed time: 5.7 seconds for data/oqmd-343615_NNH/2
 Running data/oqmd-343615_NNH/3
   Elapsed time: 5.7 seconds for data/oqmd-343615_NNH/3
 Running data/oqmd-343615_NNH/4
-  Elapsed time: 2.4 seconds for data/oqmd-343615_NNH/4
+  Elapsed time: 5.7 seconds for data/oqmd-343615_NNH/4
 Running data/oqmd-343615_NNH/5
-  Elapsed time: 5.3 seconds for data/oqmd-343615_NNH/5
+  Elapsed time: 3.6 seconds for data/oqmd-343615_NNH/5
 Running data/oqmd-343615_NNH/6
-  Elapsed time: 5.6 seconds for data/oqmd-343615_NNH/6
+  Elapsed time: 5.7 seconds for data/oqmd-343615_NNH/6
 Running data/oqmd-343615_NNH/7
-  Elapsed time: 5.6 seconds for data/oqmd-343615_NNH/7
+  Elapsed time: 5.7 seconds for data/oqmd-343615_NNH/7
 Running data/oqmd-343615_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 84%|████████▍ | 16/19 [16:18&lt;03:04, 61.67s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 84%|████████▍ | 16/19 [15:35&lt;03:07, 62.65s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 3.9 seconds for data/oqmd-343615_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.8 seconds for data/oqmd-343615_NNH/8
 9 H slabs to compute for oqmd-348366
 9 NNH slabs to compute for oqmd-348366
 Running data/oqmd-348366_H/0
-  Elapsed time: 0.7 seconds for data/oqmd-348366_H/0
+  Elapsed time: 1.7 seconds for data/oqmd-348366_H/0
 Running data/oqmd-348366_H/1
-  Elapsed time: 1.0 seconds for data/oqmd-348366_H/1
+  Elapsed time: 1.1 seconds for data/oqmd-348366_H/1
 Running data/oqmd-348366_H/2
-  Elapsed time: 1.9 seconds for data/oqmd-348366_H/2
+  Elapsed time: 1.7 seconds for data/oqmd-348366_H/2
 Running data/oqmd-348366_H/3
-  Elapsed time: 1.9 seconds for data/oqmd-348366_H/3
+  Elapsed time: 1.7 seconds for data/oqmd-348366_H/3
 Running data/oqmd-348366_H/4
-  Elapsed time: 1.9 seconds for data/oqmd-348366_H/4
+  Elapsed time: 1.7 seconds for data/oqmd-348366_H/4
 Running data/oqmd-348366_H/5
-  Elapsed time: 1.9 seconds for data/oqmd-348366_H/5
+  Elapsed time: 0.7 seconds for data/oqmd-348366_H/5
 Running data/oqmd-348366_H/6
-  Elapsed time: 1.9 seconds for data/oqmd-348366_H/6
+  Elapsed time: 1.1 seconds for data/oqmd-348366_H/6
 Running data/oqmd-348366_H/7
-  Elapsed time: 1.2 seconds for data/oqmd-348366_H/7
+  Elapsed time: 1.7 seconds for data/oqmd-348366_H/7
 Running data/oqmd-348366_H/8
   Elapsed time: 0.7 seconds for data/oqmd-348366_H/8
 Running data/oqmd-348366_NNH/0
-  Elapsed time: 4.6 seconds for data/oqmd-348366_NNH/0
+  Elapsed time: 4.2 seconds for data/oqmd-348366_NNH/0
 Running data/oqmd-348366_NNH/1
-  Elapsed time: 4.6 seconds for data/oqmd-348366_NNH/1
+  Elapsed time: 3.8 seconds for data/oqmd-348366_NNH/1
 Running data/oqmd-348366_NNH/2
-  Elapsed time: 2.7 seconds for data/oqmd-348366_NNH/2
+  Elapsed time: 3.9 seconds for data/oqmd-348366_NNH/2
 Running data/oqmd-348366_NNH/3
-  Elapsed time: 4.7 seconds for data/oqmd-348366_NNH/3
+  Elapsed time: 4.2 seconds for data/oqmd-348366_NNH/3
 Running data/oqmd-348366_NNH/4
-  Elapsed time: 4.4 seconds for data/oqmd-348366_NNH/4
+  Elapsed time: 2.6 seconds for data/oqmd-348366_NNH/4
 Running data/oqmd-348366_NNH/5
-  Elapsed time: 3.3 seconds for data/oqmd-348366_NNH/5
+  Elapsed time: 4.2 seconds for data/oqmd-348366_NNH/5
 Running data/oqmd-348366_NNH/6
-  Elapsed time: 2.4 seconds for data/oqmd-348366_NNH/6
+  Elapsed time: 3.1 seconds for data/oqmd-348366_NNH/6
 Running data/oqmd-348366_NNH/7
-  Elapsed time: 4.5 seconds for data/oqmd-348366_NNH/7
+  Elapsed time: 4.2 seconds for data/oqmd-348366_NNH/7
 Running data/oqmd-348366_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 89%|████████▉ | 17/19 [17:06&lt;01:54, 57.41s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 89%|████████▉ | 17/19 [16:23&lt;01:56, 58.02s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 2.4 seconds for data/oqmd-348366_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.2 seconds for data/oqmd-348366_NNH/8
 9 H slabs to compute for oqmd-345352
 9 NNH slabs to compute for oqmd-345352
 Running data/oqmd-345352_H/0
-  Elapsed time: 1.9 seconds for data/oqmd-345352_H/0
+  Elapsed time: 1.7 seconds for data/oqmd-345352_H/0
 Running data/oqmd-345352_H/1
-  Elapsed time: 1.0 seconds for data/oqmd-345352_H/1
+  Elapsed time: 1.7 seconds for data/oqmd-345352_H/1
 Running data/oqmd-345352_H/2
-  Elapsed time: 1.9 seconds for data/oqmd-345352_H/2
+  Elapsed time: 1.1 seconds for data/oqmd-345352_H/2
 Running data/oqmd-345352_H/3
-  Elapsed time: 1.9 seconds for data/oqmd-345352_H/3
+  Elapsed time: 1.7 seconds for data/oqmd-345352_H/3
 Running data/oqmd-345352_H/4
-  Elapsed time: 1.3 seconds for data/oqmd-345352_H/4
+  Elapsed time: 1.0 seconds for data/oqmd-345352_H/4
 Running data/oqmd-345352_H/5
-  Elapsed time: 0.7 seconds for data/oqmd-345352_H/5
+  Elapsed time: 1.7 seconds for data/oqmd-345352_H/5
 Running data/oqmd-345352_H/6
-  Elapsed time: 1.9 seconds for data/oqmd-345352_H/6
+  Elapsed time: 1.7 seconds for data/oqmd-345352_H/6
 Running data/oqmd-345352_H/7
-  Elapsed time: 1.9 seconds for data/oqmd-345352_H/7
+  Elapsed time: 1.7 seconds for data/oqmd-345352_H/7
 Running data/oqmd-345352_H/8
-  Elapsed time: 1.9 seconds for data/oqmd-345352_H/8
+  Elapsed time: 0.8 seconds for data/oqmd-345352_H/8
 Running data/oqmd-345352_NNH/0
-  Elapsed time: 4.4 seconds for data/oqmd-345352_NNH/0
+  Elapsed time: 4.2 seconds for data/oqmd-345352_NNH/0
 Running data/oqmd-345352_NNH/1
-  Elapsed time: 4.7 seconds for data/oqmd-345352_NNH/1
+  Elapsed time: 4.2 seconds for data/oqmd-345352_NNH/1
 Running data/oqmd-345352_NNH/2
-  Elapsed time: 4.7 seconds for data/oqmd-345352_NNH/2
+  Elapsed time: 4.2 seconds for data/oqmd-345352_NNH/2
 Running data/oqmd-345352_NNH/3
-  Elapsed time: 4.0 seconds for data/oqmd-345352_NNH/3
+  Elapsed time: 4.2 seconds for data/oqmd-345352_NNH/3
 Running data/oqmd-345352_NNH/4
-  Elapsed time: 4.7 seconds for data/oqmd-345352_NNH/4
+  Elapsed time: 4.2 seconds for data/oqmd-345352_NNH/4
 Running data/oqmd-345352_NNH/5
-  Elapsed time: 4.6 seconds for data/oqmd-345352_NNH/5
+  Elapsed time: 4.2 seconds for data/oqmd-345352_NNH/5
 Running data/oqmd-345352_NNH/6
-  Elapsed time: 4.7 seconds for data/oqmd-345352_NNH/6
+  Elapsed time: 4.2 seconds for data/oqmd-345352_NNH/6
 Running data/oqmd-345352_NNH/7
-  Elapsed time: 6.3 seconds for data/oqmd-345352_NNH/7
+  Elapsed time: 4.2 seconds for data/oqmd-345352_NNH/7
 Running data/oqmd-345352_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 95%|█████████▍| 18/19 [18:05&lt;00:57, 57.89s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 95%|█████████▍| 18/19 [17:14&lt;00:56, 56.08s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 5.9 seconds for data/oqmd-345352_NNH/8
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.2 seconds for data/oqmd-345352_NNH/8
 9 H slabs to compute for oqmd-346653
 9 NNH slabs to compute for oqmd-346653
 Running data/oqmd-346653_H/0
-  Elapsed time: 1.9 seconds for data/oqmd-346653_H/0
+  Elapsed time: 0.6 seconds for data/oqmd-346653_H/0
 Running data/oqmd-346653_H/1
-  Elapsed time: 0.6 seconds for data/oqmd-346653_H/1
+  Elapsed time: 1.2 seconds for data/oqmd-346653_H/1
 Running data/oqmd-346653_H/2
-  Elapsed time: 1.9 seconds for data/oqmd-346653_H/2
+  Elapsed time: 1.7 seconds for data/oqmd-346653_H/2
 Running data/oqmd-346653_H/3
-  Elapsed time: 1.9 seconds for data/oqmd-346653_H/3
+  Elapsed time: 1.7 seconds for data/oqmd-346653_H/3
 Running data/oqmd-346653_H/4
-  Elapsed time: 1.9 seconds for data/oqmd-346653_H/4
+  Elapsed time: 1.7 seconds for data/oqmd-346653_H/4
 Running data/oqmd-346653_H/5
-  Elapsed time: 1.0 seconds for data/oqmd-346653_H/5
+  Elapsed time: 0.6 seconds for data/oqmd-346653_H/5
 Running data/oqmd-346653_H/6
-  Elapsed time: 1.9 seconds for data/oqmd-346653_H/6
+  Elapsed time: 1.7 seconds for data/oqmd-346653_H/6
 Running data/oqmd-346653_H/7
-  Elapsed time: 1.9 seconds for data/oqmd-346653_H/7
+  Elapsed time: 1.7 seconds for data/oqmd-346653_H/7
 Running data/oqmd-346653_H/8
-  Elapsed time: 1.3 seconds for data/oqmd-346653_H/8
+  Elapsed time: 1.7 seconds for data/oqmd-346653_H/8
 Running data/oqmd-346653_NNH/0
-  Elapsed time: 4.6 seconds for data/oqmd-346653_NNH/0
+  Elapsed time: 4.3 seconds for data/oqmd-346653_NNH/0
 Running data/oqmd-346653_NNH/1
-  Elapsed time: 4.2 seconds for data/oqmd-346653_NNH/1
+  Elapsed time: 4.1 seconds for data/oqmd-346653_NNH/1
 Running data/oqmd-346653_NNH/2
-  Elapsed time: 3.8 seconds for data/oqmd-346653_NNH/2
+  Elapsed time: 3.7 seconds for data/oqmd-346653_NNH/2
 Running data/oqmd-346653_NNH/3
-  Elapsed time: 4.7 seconds for data/oqmd-346653_NNH/3
+  Elapsed time: 2.9 seconds for data/oqmd-346653_NNH/3
 Running data/oqmd-346653_NNH/4
-  Elapsed time: 4.0 seconds for data/oqmd-346653_NNH/4
+  Elapsed time: 3.8 seconds for data/oqmd-346653_NNH/4
 Running data/oqmd-346653_NNH/5
-  Elapsed time: 3.4 seconds for data/oqmd-346653_NNH/5
+  Elapsed time: 3.1 seconds for data/oqmd-346653_NNH/5
 Running data/oqmd-346653_NNH/6
-  Elapsed time: 3.8 seconds for data/oqmd-346653_NNH/6
+  Elapsed time: 4.2 seconds for data/oqmd-346653_NNH/6
 Running data/oqmd-346653_NNH/7
-  Elapsed time: 4.7 seconds for data/oqmd-346653_NNH/7
+  Elapsed time: 3.0 seconds for data/oqmd-346653_NNH/7
 Running data/oqmd-346653_NNH/8
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 19/19 [18:58&lt;00:00, 59.92s/it]
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 19/19 [18:01&lt;00:00, 56.91s/it]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.7 seconds for data/oqmd-346653_NNH/8
-Elapsed time: 1138.5 seconds
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Elapsed time: 4.2 seconds for data/oqmd-346653_NNH/8
+Elapsed time: 1081.2 seconds
 </pre></div>
 </div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
@@ -1882,7 +1841,7 @@ Elapsed time: 1138.5 seconds
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/a621ceeb5b97890005d6f47e207120d4136e30d68ba2462c1a65327f204d6869.png" src="../_images/a621ceeb5b97890005d6f47e207120d4136e30d68ba2462c1a65327f204d6869.png" />
+<img alt="../_images/83e9c74aefa30f5fb52c4e0226bda5f9655b2301875b7ed44d7c35300ab3a7aa.png" src="../_images/83e9c74aefa30f5fb52c4e0226bda5f9655b2301875b7ed44d7c35300ab3a7aa.png" />
 </div>
 </div>
 </section>
@@ -1936,9 +1895,13 @@ Elapsed time: 1138.5 seconds
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/13c4aa347dc4d086b9335dbc574614897a66c9f6fade9b95b50e82db871a5cce.png" src="../_images/13c4aa347dc4d086b9335dbc574614897a66c9f6fade9b95b50e82db871a5cce.png" />
+<img alt="../_images/ee5a63ed1b706e9478e5bbde0b68203627279ec06749469ba09009127c2d86bc.png" src="../_images/ee5a63ed1b706e9478e5bbde0b68203627279ec06749469ba09009127c2d86bc.png" />
 </div>
 </div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="next-steps">
+<h1>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">#</a></h1>
+<p>Next we consider <a class="reference internal" href="../fine-tuning/fine-tuning-oxides.html"><span class="doc std std-doc">fine-tuning</span></a>.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -2008,7 +1971,7 @@ Elapsed time: 1138.5 seconds
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Using OCP to enumerate adsorbates on catalyst surfaces</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Using OCP to enumerate adsorbates on alloy catalyst surfaces</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#enumerate-the-adsorbate-slab-configurations-to-run-relaxations-on">Enumerate the adsorbate-slab configurations to run relaxations on</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#work-out-a-single-example">Work out a single example</a><ul class="nav section-nav flex-column">
@@ -2021,6 +1984,7 @@ Elapsed time: 1138.5 seconds
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#parse-the-trajectories-and-post-process">Parse the trajectories and post-process</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-parity-plots-for-values-obtained-by-ml-v-reported-in-the-paper">Make parity plots for values obtained by ML v. reported in the paper</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#make-figure-6b-and-compare-to-literature-results">Make figure 6b and compare to literature results</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
 </ul>
 
   </nav></div>
