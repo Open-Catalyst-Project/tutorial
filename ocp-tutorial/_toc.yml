@@ -13,6 +13,9 @@ parts:
 - caption: Fine-tuning a model
   chapters:
   - file: fine-tuning/fine-tuning-oxides.ipynb
+- caption: Advanced topics
+  chapters:
+  - file: advanced/mass-inference.ipynb
 # I don't know why, but the documentation is not building.
 # - caption: Documentation
 #  chapters:
