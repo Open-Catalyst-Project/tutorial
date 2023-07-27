@@ -13,6 +13,9 @@ parts:
 - caption: Fine-tuning a model
   chapters:
   - file: fine-tuning/fine-tuning-oxides.ipynb
+- caption: Gotchas
+  chapters:
+  - file: gotchas.ipynb
 - caption: Advanced topics
   chapters:
   - file: advanced/mass-inference.ipynb
