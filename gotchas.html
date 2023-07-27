@@ -184,6 +184,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Common gotchas with OCP</a></li>
 
 
+
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
 <ul class="nav bd-sidenav">
@@ -434,6 +436,12 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Common gotchas with OCP</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#outofmemoryerror">OutOfMemoryError</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#i-want-the-energy-of-a-gas-phase-atom">I want the energy of a gas phase atom</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#i-get-wildly-different-energies-from-the-different-models">I get wildly different energies from the different models</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#miscellaneous-warnings">Miscellaneous warnings</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unrecognized-arguments">Unrecognized arguments</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unable-to-identify-ocp-trainer">Unable to identify OCP trainer</a></li>
+</ul>
+</li>
 </ul>
 
             </nav>
@@ -457,6 +465,7 @@ document.write(`
 </div>
 <p>It means your GPU is out of memory. Some reasons could be that you have multiple notebooks open that are using the GPU, e.g. they have loaded a calculator or something. Try closing all the other notebooks.</p>
 <p>It could also mean the batch size is too large to fit in memory. You can try making it smaller in the yml config file (optim.batch_size).</p>
+<p>It is recommended you use automatic mixed precision, –amp, in the options to <a class="reference external" href="http://main.py">main.py</a>, or in the config.yml.</p>
 <p>If it is an option, you can try a GPU with more memory, or you may be able to split the job over multiple GPUs.</p>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="i-want-the-energy-of-a-gas-phase-atom">
@@ -672,6 +681,124 @@ document.write(`
 </div>
 </div>
 </section>
+<section class="tex2jax_ignore mathjax_ignore" id="i-get-wildly-different-energies-from-the-different-models">
+<h1>I get wildly different energies from the different models<a class="headerlink" href="#i-get-wildly-different-energies-from-the-different-models" title="Permalink to this heading">#</a></h1>
+<p>Some models are trained on adsorption energies, and some are trained on total energies. You have to know which one you are using.</p>
+<p>Sometimes you can tell by the magnitude of energies, but you should use care with this. If energies are “small” and near zero they are likely adsorption energies. If energies are “large” in magnitude they are probably total energies. This can be misleading though, as it depends on the total number of atoms in the systems.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ocp-tutorial.ipynb
+
+<span class="c1"># These are to suppress the output from making the calculators.</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+<span class="kn">import</span> <span class="nn">contextlib</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">fcc111</span><span class="p">,</span> <span class="n">add_adsorbate</span>
+<span class="n">slab</span> <span class="o">=</span> <span class="n">fcc111</span><span class="p">(</span><span class="s1">&#39;Pt&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">vacuum</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+<span class="n">add_adsorbate</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;fcc&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># OC20 model - trained on adsorption energies</span>
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;GemNet-OC All&#39;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">StringIO</span><span class="p">())</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
+    <span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">),</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+
+
+<span class="n">slab</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+<span class="n">slab</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_07/s2ef/gemnet_oc_base_s2ef_all.pt
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.2862205505371094
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># An OC22 checkpoint - trained on total energy</span>
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;GemNet-OC OC22&#39;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">StringIO</span><span class="p">())</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
+    <span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">checkpoint</span><span class="p">,</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+
+
+<span class="n">slab</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+<span class="n">slab</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_09/oc22/s2ef/gnoc_oc22_all_s2ef.pt
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:Unable to identify OCP trainer, defaulting to `forces`. Specify the `trainer` argument into OCPCalculator if otherwise.
+WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-111.44766998291016
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This eSCN model is trained on adsorption energies</span>
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;eSCN-L4-M2-Lay12 2M&#39;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stdout</span><span class="p">(</span><span class="n">StringIO</span><span class="p">())</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
+    <span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">checkpoint</span><span class="p">,</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">slab</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+<span class="n">slab</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.6795454025268555
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="miscellaneous-warnings">
+<h1>Miscellaneous warnings<a class="headerlink" href="#miscellaneous-warnings" title="Permalink to this heading">#</a></h1>
+<p>In general, warnings are not errors.</p>
+<section id="unrecognized-arguments">
+<h2>Unrecognized arguments<a class="headerlink" href="#unrecognized-arguments" title="Permalink to this heading">#</a></h2>
+<p>With Gemnet models you might see warnings like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">WARNING</span><span class="p">:</span><span class="n">root</span><span class="p">:</span><span class="n">Unrecognized</span> <span class="n">arguments</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;symmetric_edge_symmetrization&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>You can ignore this warning, it is not important for predictions.</p>
+</section>
+<section id="unable-to-identify-ocp-trainer">
+<h2>Unable to identify OCP trainer<a class="headerlink" href="#unable-to-identify-ocp-trainer" title="Permalink to this heading">#</a></h2>
+<p>The trainer is not specified in some checkpoints, and defaults to <code class="docutils literal notranslate"><span class="pre">forces</span></code> which means energy and forces are calculated. This is the default for the ASE OCP calculator, and this warning just alerts you it is setting that.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>WARNING:root:Unable to identify OCP trainer, defaulting to `forces`. Specify the `trainer` argument into OCPCalculator if otherwise.
+</pre></div>
+</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -743,6 +870,12 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Common gotchas with OCP</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#outofmemoryerror">OutOfMemoryError</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#i-want-the-energy-of-a-gas-phase-atom">I want the energy of a gas phase atom</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#i-get-wildly-different-energies-from-the-different-models">I get wildly different energies from the different models</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#miscellaneous-warnings">Miscellaneous warnings</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unrecognized-arguments">Unrecognized arguments</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unable-to-identify-ocp-trainer">Unable to identify OCP trainer</a></li>
+</ul>
+</li>
 </ul>
 
   </nav></div>
