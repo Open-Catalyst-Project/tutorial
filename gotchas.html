@@ -186,6 +186,7 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
 <ul class="nav bd-sidenav">
@@ -442,6 +443,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unable-to-identify-ocp-trainer">Unable to identify OCP trainer</a></li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#request-entity-too-large-can-t-save-your-notebook">Request entity too large - can’t save your Notebook</a></li>
 </ul>
 
             </nav>
@@ -799,6 +801,12 @@ WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
 </div>
 </section>
 </section>
+<section class="tex2jax_ignore mathjax_ignore" id="request-entity-too-large-can-t-save-your-notebook">
+<h1>Request entity too large - can’t save your Notebook<a class="headerlink" href="#request-entity-too-large-can-t-save-your-notebook" title="Permalink to this heading">#</a></h1>
+<p>If you run commands that generate a lot of output in a notebook, sometimes the Jupyter notebook will become too large to save. It is kind of sad, the only thing I know to do is delete the output of the cell. Then maybe you can save it.</p>
+<p>A solution after you know it happens is redirect output to a file.</p>
+<p>This has happened when running training in a notebook where there are too many lines of output.</p>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -876,6 +884,7 @@ WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unable-to-identify-ocp-trainer">Unable to identify OCP trainer</a></li>
 </ul>
 </li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#request-entity-too-large-can-t-save-your-notebook">Request entity too large - can’t save your Notebook</a></li>
 </ul>
 
   </nav></div>
