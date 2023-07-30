@@ -19,6 +19,7 @@ parts:
 - caption: Advanced topics
   chapters:
   - file: advanced/mass-inference.ipynb
+  - file: advanced/embeddings.ipynb
 # I don't know why, but the documentation is not building.
 # - caption: Documentation
 #  chapters:
