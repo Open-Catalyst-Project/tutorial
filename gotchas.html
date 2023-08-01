@@ -187,6 +187,8 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
+
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
 <ul class="nav bd-sidenav">
@@ -449,6 +451,8 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#request-entity-too-large-can-t-save-your-notebook">Request entity too large - can’t save your Notebook</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#you-need-at-least-four-atoms-for-molecules-with-some-models">You need at least four atoms for molecules with some models</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#to-tag-or-not">To tag or not?</a></li>
 </ul>
 
             </nav>
@@ -463,6 +467,13 @@ document.write(`
                   
   <section id="common-gotchas-with-ocp">
 <h1>Common gotchas with OCP<a class="headerlink" href="#common-gotchas-with-ocp" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ocp-tutorial.ipynb
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="outofmemoryerror">
 <h1>OutOfMemoryError<a class="headerlink" href="#outofmemoryerror" title="Permalink to this heading">#</a></h1>
@@ -810,7 +821,469 @@ WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
 <h1>Request entity too large - can’t save your Notebook<a class="headerlink" href="#request-entity-too-large-can-t-save-your-notebook" title="Permalink to this heading">#</a></h1>
 <p>If you run commands that generate a lot of output in a notebook, sometimes the Jupyter notebook will become too large to save. It is kind of sad, the only thing I know to do is delete the output of the cell. Then maybe you can save it.</p>
 <p>A solution after you know it happens is redirect output to a file.</p>
-<p>This has happened when running training in a notebook where there are too many lines of output.</p>
+<p>This has happened when running training in a notebook where there are too many lines of output, or if you have a lot (20+) of inline images.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="you-need-at-least-four-atoms-for-molecules-with-some-models">
+<h1>You need at least four atoms for molecules with some models<a class="headerlink" href="#you-need-at-least-four-atoms-for-molecules-with-some-models" title="Permalink to this heading">#</a></h1>
+<p>Gemnet in particular seems to require at least 4 atoms. This has to do with interactions between atoms and their neighbors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">cp</span> <span class="o">=</span> <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;GemNet-OC OC20+OC22&#39;</span><span class="p">)</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">cp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">molecule</span>
+<span class="n">atoms</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">(</span><span class="s1">&#39;H2O&#39;</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">set_tags</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)))</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">atoms</span><span class="o">.</span><span class="n">set_tags</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)))</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">atoms</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/atoms.py:731,</span> in <span class="ni">Atoms.get_potential_energy</span><span class="nt">(self, force_consistent, apply_constraint)</span>
+<span class="g g-Whitespace">    </span><span class="mi">728</span>     <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">729</span>         <span class="bp">self</span><span class="p">,</span> <span class="n">force_consistent</span><span class="o">=</span><span class="n">force_consistent</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">730</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">731</span>     <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">732</span> <span class="k">if</span> <span class="n">apply_constraint</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">733</span>     <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/calculators/calculator.py:709,</span> in <span class="ni">Calculator.get_potential_energy</span><span class="nt">(self, atoms, force_consistent)</span>
+<span class="g g-Whitespace">    </span><span class="mi">708</span> <span class="k">def</span> <span class="nf">get_potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_consistent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">709</span>     <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="s1">&#39;energy&#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">710</span>     <span class="k">if</span> <span class="n">force_consistent</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">711</span>         <span class="k">if</span> <span class="s1">&#39;free_energy&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/calculators/calculator.py:737,</span> in <span class="ni">Calculator.get_property</span><span class="nt">(self, name, atoms, allow_calculation)</span>
+<span class="g g-Whitespace">    </span><span class="mi">735</span>     <span class="k">if</span> <span class="ow">not</span> <span class="n">allow_calculation</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">736</span>         <span class="k">return</span> <span class="kc">None</span>
+<span class="ne">--&gt; </span><span class="mi">737</span>     <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">system_changes</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">739</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">740</span>     <span class="c1"># For some reason the calculator was not able to do what we want,</span>
+<span class="g g-Whitespace">    </span><span class="mi">741</span>     <span class="c1"># and that is OK.</span>
+<span class="g g-Whitespace">    </span><span class="mi">742</span>     <span class="k">raise</span> <span class="n">PropertyNotImplementedError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> not present in this &#39;</span>
+<span class="g g-Whitespace">    </span><span class="mi">743</span>                                       <span class="s1">&#39;calculation&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/common/relaxation/ase_utils.py:202,</span> in <span class="ni">OCPCalculator.calculate</span><span class="nt">(self, atoms, properties, system_changes)</span>
+<span class="g g-Whitespace">    </span><span class="mi">199</span> <span class="n">data_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a2g</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">200</span> <span class="n">batch</span> <span class="o">=</span> <span class="n">data_list_collater</span><span class="p">([</span><span class="n">data_object</span><span class="p">],</span> <span class="n">otf_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">202</span> <span class="n">predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">203</span>     <span class="n">batch</span><span class="p">,</span> <span class="n">per_image</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">disable_tqdm</span><span class="o">=</span><span class="kc">True</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">205</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;s2ef&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span>     <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">predictions</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/autograd/grad_mode.py:27,</span> in <span class="ni">_DecoratorContextManager.__call__.&lt;locals&gt;.decorate_context</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span> <span class="k">def</span> <span class="nf">decorate_context</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span>     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">clone</span><span class="p">():</span>
+<span class="ne">---&gt; </span><span class="mi">27</span>         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/trainers/forces_trainer.py:194,</span> in <span class="ni">ForcesTrainer.predict</span><span class="nt">(self, data_loader, per_image, results_file, disable_tqdm)</span>
+<span class="g g-Whitespace">    </span><span class="mi">186</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch_list</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">187</span>     <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_loader</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">188</span>     <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data_loader</span><span class="p">),</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">191</span>     <span class="n">disable</span><span class="o">=</span><span class="n">disable_tqdm</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">192</span> <span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">193</span>     <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">amp</span><span class="o">.</span><span class="n">autocast</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scaler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">194</span>         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward</span><span class="p">(</span><span class="n">batch_list</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">196</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalizers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;target&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalizers</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">197</span>         <span class="n">out</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalizers</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">denorm</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">198</span>             <span class="n">out</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">199</span>         <span class="p">)</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/trainers/forces_trainer.py:449,</span> in <span class="ni">ForcesTrainer._forward</span><span class="nt">(self, batch_list)</span>
+<span class="g g-Whitespace">    </span><span class="mi">446</span> <span class="k">def</span> <span class="nf">_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_list</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">447</span>     <span class="c1"># forward pass.</span>
+<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;model_attributes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;regress_forces&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">449</span>         <span class="n">out_energy</span><span class="p">,</span> <span class="n">out_forces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">batch_list</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">450</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">451</span>         <span class="n">out_energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">batch_list</span><span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/nn/modules/module.py:1194,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *input, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span> <span class="c1"># this function, and just call forward.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1194</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span> <span class="c1"># Do not call functions when jit is used</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/common/data_parallel.py:58,</span> in <span class="ni">OCPDataParallel.forward</span><span class="nt">(self, batch_list, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span> <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">58</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">(</span><span class="n">batch_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="g g-Whitespace">     </span><span class="mi">60</span>     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">61</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">62</span>             <span class="n">batch_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cuda:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">device_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span>         <span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/nn/modules/module.py:1194,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *input, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span> <span class="c1"># this function, and just call forward.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1194</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span> <span class="c1"># Do not call functions when jit is used</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/common/utils.py:135,</span> in <span class="ni">conditional_grad.&lt;locals&gt;.decorator.&lt;locals&gt;.cls_method</span><span class="nt">(self, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">133</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">regress_forces</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;direct_forces&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">134</span>     <span class="n">f</span> <span class="o">=</span> <span class="n">dec</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">135</span> <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/models/gemnet_oc/gemnet_oc.py:1259,</span> in <span class="ni">GemNetOC.forward</span><span class="nt">(self, data)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1237</span> <span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1238</span>     <span class="n">main_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1239</span>     <span class="n">a2a_graph</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1246</span>     <span class="n">quad_idx</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1247</span> <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_graphs_and_indices</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1248</span> <span class="n">_</span><span class="p">,</span> <span class="n">idx_t</span> <span class="o">=</span> <span class="n">main_graph</span><span class="p">[</span><span class="s2">&quot;edge_index&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1250</span> <span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1251</span>     <span class="n">basis_rad_raw</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1252</span>     <span class="n">basis_atom_update</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1253</span>     <span class="n">basis_output</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1254</span>     <span class="n">bases_qint</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1255</span>     <span class="n">bases_e2e</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1256</span>     <span class="n">bases_a2e</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1257</span>     <span class="n">bases_e2a</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1258</span>     <span class="n">basis_a2a_rad</span><span class="p">,</span>
+<span class="ne">-&gt; </span><span class="mi">1259</span> <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bases</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1260</span>     <span class="n">main_graph</span><span class="o">=</span><span class="n">main_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1261</span>     <span class="n">a2a_graph</span><span class="o">=</span><span class="n">a2a_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1262</span>     <span class="n">a2ee2a_graph</span><span class="o">=</span><span class="n">a2ee2a_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1263</span>     <span class="n">qint_graph</span><span class="o">=</span><span class="n">qint_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1264</span>     <span class="n">trip_idx_e2e</span><span class="o">=</span><span class="n">trip_idx_e2e</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1265</span>     <span class="n">trip_idx_a2e</span><span class="o">=</span><span class="n">trip_idx_a2e</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1266</span>     <span class="n">trip_idx_e2a</span><span class="o">=</span><span class="n">trip_idx_e2a</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1267</span>     <span class="n">quad_idx</span><span class="o">=</span><span class="n">quad_idx</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1268</span>     <span class="n">num_atoms</span><span class="o">=</span><span class="n">num_atoms</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1269</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1271</span> <span class="c1"># Embedding block</span>
+<span class="g g-Whitespace">   </span><span class="mi">1272</span> <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_emb</span><span class="p">(</span><span class="n">atomic_numbers</span><span class="p">)</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/models/gemnet_oc/gemnet_oc.py:1130,</span> in <span class="ni">GemNetOC.get_bases</span><span class="nt">(self, main_graph, a2a_graph, a2ee2a_graph, qint_graph, trip_idx_e2e, trip_idx_a2e, trip_idx_e2a, quad_idx, num_atoms)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1121</span>     <span class="n">cosφ_cab_q</span><span class="p">,</span> <span class="n">cosφ_abd</span><span class="p">,</span> <span class="n">angle_cabd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_quad_angles</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1122</span>         <span class="n">main_graph</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1123</span>         <span class="n">qint_graph</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1124</span>         <span class="n">quad_idx</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1125</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1127</span>     <span class="n">basis_rad_cir_qint_raw</span><span class="p">,</span> <span class="n">basis_cir_qint_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbf_basis_qint</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1128</span>         <span class="n">qint_graph</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">],</span> <span class="n">cosφ_abd</span>
+<span class="g g-Whitespace">   </span><span class="mi">1129</span>     <span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1130</span>     <span class="n">basis_rad_sph_qint_raw</span><span class="p">,</span> <span class="n">basis_sph_qint_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sbf_basis_qint</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1131</span>         <span class="n">main_graph</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1132</span>         <span class="n">cosφ_cab_q</span><span class="p">[</span><span class="n">quad_idx</span><span class="p">[</span><span class="s2">&quot;trip_out_to_quad&quot;</span><span class="p">]],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1133</span>         <span class="n">angle_cabd</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1134</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1135</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_edge_interaction</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1136</span>     <span class="n">basis_rad_a2ee2a_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radial_basis_aeaint</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1137</span>         <span class="n">a2ee2a_graph</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1138</span>     <span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/nn/modules/module.py:1194,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *input, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span> <span class="c1"># this function, and just call forward.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1194</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span> <span class="c1"># Do not call functions when jit is used</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/models/gemnet_oc/layers/spherical_basis.py:136,</span> in <span class="ni">SphericalBasisLayer.forward</span><span class="nt">(self, D_ca, cosφ_cab, θ_cabd)</span>
+<span class="g g-Whitespace">    </span><span class="mi">134</span> <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_ca</span><span class="p">,</span> <span class="n">cosφ_cab</span><span class="p">,</span> <span class="n">θ_cabd</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">135</span>     <span class="n">rad_basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radial_basis</span><span class="p">(</span><span class="n">D_ca</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">136</span>     <span class="n">sph_basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spherical_basis</span><span class="p">(</span><span class="n">cosφ_cab</span><span class="p">,</span> <span class="n">θ_cabd</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">137</span>     <span class="c1"># (num_quadruplets, num_spherical**2)</span>
+<span class="g g-Whitespace">    </span><span class="mi">139</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_basis</span><span class="p">:</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/models/gemnet_oc/layers/spherical_basis.py:117,</span> in <span class="ni">SphericalBasisLayer.__init__.&lt;locals&gt;.&lt;lambda&gt;</span><span class="nt">(cosφ, θ)</span>
+<span class="g g-Whitespace">    </span><span class="mi">113</span> <span class="k">elif</span> <span class="n">sbf_name</span> <span class="o">==</span> <span class="s2">&quot;legendre_outer&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">114</span>     <span class="n">circular_basis</span> <span class="o">=</span> <span class="n">get_sph_harm_basis</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">115</span>         <span class="n">num_spherical</span><span class="p">,</span> <span class="n">zero_m_only</span><span class="o">=</span><span class="kc">True</span>
+<span class="g g-Whitespace">    </span><span class="mi">116</span>     <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">117</span>     <span class="bp">self</span><span class="o">.</span><span class="n">spherical_basis</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">cosφ</span><span class="p">,</span> <span class="n">ϑ</span><span class="p">:</span> <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">118</span>         <span class="n">circular_basis</span><span class="p">(</span><span class="n">cosφ</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">119</span>         <span class="o">*</span> <span class="n">circular_basis</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ϑ</span><span class="p">))[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+<span class="g g-Whitespace">    </span><span class="mi">120</span>     <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">cosφ</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">122</span> <span class="k">elif</span> <span class="n">sbf_name</span> <span class="o">==</span> <span class="s2">&quot;gaussian_outer&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">123</span>     <span class="bp">self</span><span class="o">.</span><span class="n">circular_basis</span> <span class="o">=</span> <span class="n">GaussianBasis</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">124</span>         <span class="n">start</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_gaussians</span><span class="o">=</span><span class="n">num_spherical</span><span class="p">,</span> <span class="o">**</span><span class="n">sbf_hparams</span>
+<span class="g g-Whitespace">    </span><span class="mi">125</span>     <span class="p">)</span>
+
+<span class="ne">RuntimeError</span>: cannot reshape tensor of 0 elements into shape [0, -1] because the unspecified dimension size -1 can be any value and is ambiguous
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="to-tag-or-not">
+<h1>To tag or not?<a class="headerlink" href="#to-tag-or-not" title="Permalink to this heading">#</a></h1>
+<p>Some models use tags to determine which atoms to calculate energies for. For example, Gemnet uses a tag=1 to indicate the atom should be calculated. You will get an error with this model</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">cp</span> <span class="o">=</span> <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;GemNet-OC OC20+OC22&#39;</span><span class="p">)</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">cp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atoms</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">(</span><span class="s1">&#39;CH4&#39;</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>  <span class="c1"># error</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">22</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">atoms</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">(</span><span class="s1">&#39;CH4&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">atoms</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>  <span class="c1"># error</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/atoms.py:731,</span> in <span class="ni">Atoms.get_potential_energy</span><span class="nt">(self, force_consistent, apply_constraint)</span>
+<span class="g g-Whitespace">    </span><span class="mi">728</span>     <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">729</span>         <span class="bp">self</span><span class="p">,</span> <span class="n">force_consistent</span><span class="o">=</span><span class="n">force_consistent</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">730</span> <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">731</span>     <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">732</span> <span class="k">if</span> <span class="n">apply_constraint</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">733</span>     <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraints</span><span class="p">:</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/calculators/calculator.py:709,</span> in <span class="ni">Calculator.get_potential_energy</span><span class="nt">(self, atoms, force_consistent)</span>
+<span class="g g-Whitespace">    </span><span class="mi">708</span> <span class="k">def</span> <span class="nf">get_potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atoms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_consistent</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">709</span>     <span class="n">energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="s1">&#39;energy&#39;</span><span class="p">,</span> <span class="n">atoms</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">710</span>     <span class="k">if</span> <span class="n">force_consistent</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">711</span>         <span class="k">if</span> <span class="s1">&#39;free_energy&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/ase/calculators/calculator.py:737,</span> in <span class="ni">Calculator.get_property</span><span class="nt">(self, name, atoms, allow_calculation)</span>
+<span class="g g-Whitespace">    </span><span class="mi">735</span>     <span class="k">if</span> <span class="ow">not</span> <span class="n">allow_calculation</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">736</span>         <span class="k">return</span> <span class="kc">None</span>
+<span class="ne">--&gt; </span><span class="mi">737</span>     <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">system_changes</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">739</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">740</span>     <span class="c1"># For some reason the calculator was not able to do what we want,</span>
+<span class="g g-Whitespace">    </span><span class="mi">741</span>     <span class="c1"># and that is OK.</span>
+<span class="g g-Whitespace">    </span><span class="mi">742</span>     <span class="k">raise</span> <span class="n">PropertyNotImplementedError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> not present in this &#39;</span>
+<span class="g g-Whitespace">    </span><span class="mi">743</span>                                       <span class="s1">&#39;calculation&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/common/relaxation/ase_utils.py:202,</span> in <span class="ni">OCPCalculator.calculate</span><span class="nt">(self, atoms, properties, system_changes)</span>
+<span class="g g-Whitespace">    </span><span class="mi">199</span> <span class="n">data_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">a2g</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="n">atoms</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">200</span> <span class="n">batch</span> <span class="o">=</span> <span class="n">data_list_collater</span><span class="p">([</span><span class="n">data_object</span><span class="p">],</span> <span class="n">otf_graph</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">202</span> <span class="n">predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">203</span>     <span class="n">batch</span><span class="p">,</span> <span class="n">per_image</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">disable_tqdm</span><span class="o">=</span><span class="kc">True</span>
+<span class="g g-Whitespace">    </span><span class="mi">204</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">205</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;s2ef&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">206</span>     <span class="bp">self</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">predictions</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/autograd/grad_mode.py:27,</span> in <span class="ni">_DecoratorContextManager.__call__.&lt;locals&gt;.decorate_context</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span> <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span> <span class="k">def</span> <span class="nf">decorate_context</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span>     <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">clone</span><span class="p">():</span>
+<span class="ne">---&gt; </span><span class="mi">27</span>         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/trainers/forces_trainer.py:194,</span> in <span class="ni">ForcesTrainer.predict</span><span class="nt">(self, data_loader, per_image, results_file, disable_tqdm)</span>
+<span class="g g-Whitespace">    </span><span class="mi">186</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">batch_list</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">187</span>     <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_loader</span><span class="p">),</span>
+<span class="g g-Whitespace">    </span><span class="mi">188</span>     <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data_loader</span><span class="p">),</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">191</span>     <span class="n">disable</span><span class="o">=</span><span class="n">disable_tqdm</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">192</span> <span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">193</span>     <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">amp</span><span class="o">.</span><span class="n">autocast</span><span class="p">(</span><span class="n">enabled</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scaler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">194</span>         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward</span><span class="p">(</span><span class="n">batch_list</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">196</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalizers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;target&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalizers</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">197</span>         <span class="n">out</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalizers</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">denorm</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">198</span>             <span class="n">out</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">199</span>         <span class="p">)</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/trainers/forces_trainer.py:449,</span> in <span class="ni">ForcesTrainer._forward</span><span class="nt">(self, batch_list)</span>
+<span class="g g-Whitespace">    </span><span class="mi">446</span> <span class="k">def</span> <span class="nf">_forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_list</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">447</span>     <span class="c1"># forward pass.</span>
+<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;model_attributes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;regress_forces&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">449</span>         <span class="n">out_energy</span><span class="p">,</span> <span class="n">out_forces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">batch_list</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">450</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">451</span>         <span class="n">out_energy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">batch_list</span><span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/nn/modules/module.py:1194,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *input, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span> <span class="c1"># this function, and just call forward.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1194</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span> <span class="c1"># Do not call functions when jit is used</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/common/data_parallel.py:58,</span> in <span class="ni">OCPDataParallel.forward</span><span class="nt">(self, batch_list, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span> <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_list</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cpu</span><span class="p">:</span>
+<span class="ne">---&gt; </span><span class="mi">58</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">(</span><span class="n">batch_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="g g-Whitespace">     </span><span class="mi">60</span>     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device_ids</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">61</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">62</span>             <span class="n">batch_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cuda:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">device_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">     </span><span class="mi">63</span>         <span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/nn/modules/module.py:1194,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *input, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span> <span class="c1"># this function, and just call forward.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1194</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span> <span class="c1"># Do not call functions when jit is used</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/common/utils.py:135,</span> in <span class="ni">conditional_grad.&lt;locals&gt;.decorator.&lt;locals&gt;.cls_method</span><span class="nt">(self, *args, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">133</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">regress_forces</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;direct_forces&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">134</span>     <span class="n">f</span> <span class="o">=</span> <span class="n">dec</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">135</span> <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/models/gemnet_oc/gemnet_oc.py:1259,</span> in <span class="ni">GemNetOC.forward</span><span class="nt">(self, data)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1237</span> <span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1238</span>     <span class="n">main_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1239</span>     <span class="n">a2a_graph</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1246</span>     <span class="n">quad_idx</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1247</span> <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_graphs_and_indices</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1248</span> <span class="n">_</span><span class="p">,</span> <span class="n">idx_t</span> <span class="o">=</span> <span class="n">main_graph</span><span class="p">[</span><span class="s2">&quot;edge_index&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1250</span> <span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1251</span>     <span class="n">basis_rad_raw</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1252</span>     <span class="n">basis_atom_update</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1253</span>     <span class="n">basis_output</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1254</span>     <span class="n">bases_qint</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1255</span>     <span class="n">bases_e2e</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1256</span>     <span class="n">bases_a2e</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1257</span>     <span class="n">bases_e2a</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1258</span>     <span class="n">basis_a2a_rad</span><span class="p">,</span>
+<span class="ne">-&gt; </span><span class="mi">1259</span> <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_bases</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1260</span>     <span class="n">main_graph</span><span class="o">=</span><span class="n">main_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1261</span>     <span class="n">a2a_graph</span><span class="o">=</span><span class="n">a2a_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1262</span>     <span class="n">a2ee2a_graph</span><span class="o">=</span><span class="n">a2ee2a_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1263</span>     <span class="n">qint_graph</span><span class="o">=</span><span class="n">qint_graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1264</span>     <span class="n">trip_idx_e2e</span><span class="o">=</span><span class="n">trip_idx_e2e</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1265</span>     <span class="n">trip_idx_a2e</span><span class="o">=</span><span class="n">trip_idx_a2e</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1266</span>     <span class="n">trip_idx_e2a</span><span class="o">=</span><span class="n">trip_idx_e2a</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1267</span>     <span class="n">quad_idx</span><span class="o">=</span><span class="n">quad_idx</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1268</span>     <span class="n">num_atoms</span><span class="o">=</span><span class="n">num_atoms</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1269</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1271</span> <span class="c1"># Embedding block</span>
+<span class="g g-Whitespace">   </span><span class="mi">1272</span> <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_emb</span><span class="p">(</span><span class="n">atomic_numbers</span><span class="p">)</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/models/gemnet_oc/gemnet_oc.py:1130,</span> in <span class="ni">GemNetOC.get_bases</span><span class="nt">(self, main_graph, a2a_graph, a2ee2a_graph, qint_graph, trip_idx_e2e, trip_idx_a2e, trip_idx_e2a, quad_idx, num_atoms)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1121</span>     <span class="n">cosφ_cab_q</span><span class="p">,</span> <span class="n">cosφ_abd</span><span class="p">,</span> <span class="n">angle_cabd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_quad_angles</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1122</span>         <span class="n">main_graph</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1123</span>         <span class="n">qint_graph</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1124</span>         <span class="n">quad_idx</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1125</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1127</span>     <span class="n">basis_rad_cir_qint_raw</span><span class="p">,</span> <span class="n">basis_cir_qint_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbf_basis_qint</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1128</span>         <span class="n">qint_graph</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">],</span> <span class="n">cosφ_abd</span>
+<span class="g g-Whitespace">   </span><span class="mi">1129</span>     <span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1130</span>     <span class="n">basis_rad_sph_qint_raw</span><span class="p">,</span> <span class="n">basis_sph_qint_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sbf_basis_qint</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1131</span>         <span class="n">main_graph</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1132</span>         <span class="n">cosφ_cab_q</span><span class="p">[</span><span class="n">quad_idx</span><span class="p">[</span><span class="s2">&quot;trip_out_to_quad&quot;</span><span class="p">]],</span>
+<span class="g g-Whitespace">   </span><span class="mi">1133</span>         <span class="n">angle_cabd</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1134</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1135</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">atom_edge_interaction</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1136</span>     <span class="n">basis_rad_a2ee2a_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radial_basis_aeaint</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1137</span>         <span class="n">a2ee2a_graph</span><span class="p">[</span><span class="s2">&quot;distance&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1138</span>     <span class="p">)</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/nn/modules/module.py:1194,</span> in <span class="ni">Module._call_impl</span><span class="nt">(self, *input, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1190</span> <span class="c1"># If we don&#39;t have any hooks, we want to skip the rest of the logic in</span>
+<span class="g g-Whitespace">   </span><span class="mi">1191</span> <span class="c1"># this function, and just call forward.</span>
+<span class="g g-Whitespace">   </span><span class="mi">1192</span> <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_backward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_hooks</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forward_pre_hooks</span> <span class="ow">or</span> <span class="n">_global_backward_hooks</span>
+<span class="g g-Whitespace">   </span><span class="mi">1193</span>         <span class="ow">or</span> <span class="n">_global_forward_hooks</span> <span class="ow">or</span> <span class="n">_global_forward_pre_hooks</span><span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1194</span>     <span class="k">return</span> <span class="n">forward_call</span><span class="p">(</span><span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1195</span> <span class="c1"># Do not call functions when jit is used</span>
+<span class="g g-Whitespace">   </span><span class="mi">1196</span> <span class="n">full_backward_hooks</span><span class="p">,</span> <span class="n">non_full_backward_hooks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/models/gemnet_oc/layers/spherical_basis.py:136,</span> in <span class="ni">SphericalBasisLayer.forward</span><span class="nt">(self, D_ca, cosφ_cab, θ_cabd)</span>
+<span class="g g-Whitespace">    </span><span class="mi">134</span> <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D_ca</span><span class="p">,</span> <span class="n">cosφ_cab</span><span class="p">,</span> <span class="n">θ_cabd</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">135</span>     <span class="n">rad_basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radial_basis</span><span class="p">(</span><span class="n">D_ca</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">136</span>     <span class="n">sph_basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spherical_basis</span><span class="p">(</span><span class="n">cosφ_cab</span><span class="p">,</span> <span class="n">θ_cabd</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">137</span>     <span class="c1"># (num_quadruplets, num_spherical**2)</span>
+<span class="g g-Whitespace">    </span><span class="mi">139</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale_basis</span><span class="p">:</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/esunshine-ocp/ocpmodels/models/gemnet_oc/layers/spherical_basis.py:117,</span> in <span class="ni">SphericalBasisLayer.__init__.&lt;locals&gt;.&lt;lambda&gt;</span><span class="nt">(cosφ, θ)</span>
+<span class="g g-Whitespace">    </span><span class="mi">113</span> <span class="k">elif</span> <span class="n">sbf_name</span> <span class="o">==</span> <span class="s2">&quot;legendre_outer&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">114</span>     <span class="n">circular_basis</span> <span class="o">=</span> <span class="n">get_sph_harm_basis</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">115</span>         <span class="n">num_spherical</span><span class="p">,</span> <span class="n">zero_m_only</span><span class="o">=</span><span class="kc">True</span>
+<span class="g g-Whitespace">    </span><span class="mi">116</span>     <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">117</span>     <span class="bp">self</span><span class="o">.</span><span class="n">spherical_basis</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">cosφ</span><span class="p">,</span> <span class="n">ϑ</span><span class="p">:</span> <span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">118</span>         <span class="n">circular_basis</span><span class="p">(</span><span class="n">cosφ</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">119</span>         <span class="o">*</span> <span class="n">circular_basis</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">ϑ</span><span class="p">))[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+<span class="g g-Whitespace">    </span><span class="mi">120</span>     <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">cosφ</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">122</span> <span class="k">elif</span> <span class="n">sbf_name</span> <span class="o">==</span> <span class="s2">&quot;gaussian_outer&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">123</span>     <span class="bp">self</span><span class="o">.</span><span class="n">circular_basis</span> <span class="o">=</span> <span class="n">GaussianBasis</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">124</span>         <span class="n">start</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_gaussians</span><span class="o">=</span><span class="n">num_spherical</span><span class="p">,</span> <span class="o">**</span><span class="n">sbf_hparams</span>
+<span class="g g-Whitespace">    </span><span class="mi">125</span>     <span class="p">)</span>
+
+<span class="ne">RuntimeError</span>: cannot reshape tensor of 0 elements into shape [0, -1] because the unspecified dimension size -1 can be any value and is ambiguous
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atoms</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">(</span><span class="s1">&#39;CH4&#39;</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">set_tags</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">atoms</span><span class="p">)))</span>  <span class="c1"># &lt;- critical line for Gemnet</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-23.71796226501465
+</pre></div>
+</div>
+</div>
+</div>
+<p>Not all models require tags though. This eSCN model does not use them. This is another detail that is important to keep in mind.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%capture</span>
+<span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">cp</span> <span class="o">=</span> <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;eSCN-L6-M3-Lay20 All+MD&#39;</span><span class="p">)</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">cp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">atoms</span> <span class="o">=</span> <span class="n">molecule</span><span class="p">(</span><span class="s1">&#39;CH4&#39;</span><span class="p">)</span>
+
+<span class="n">atoms</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+<span class="n">atoms</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.23504638671875
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -890,6 +1363,8 @@ WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#request-entity-too-large-can-t-save-your-notebook">Request entity too large - can’t save your Notebook</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#you-need-at-least-four-atoms-for-molecules-with-some-models">You need at least four atoms for molecules with some models</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#to-tag-or-not">To tag or not?</a></li>
 </ul>
 
   </nav></div>
