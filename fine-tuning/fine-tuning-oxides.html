@@ -460,153 +460,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <p>TODO: remove this, and make sure this works on main.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="k">bash</span>
-
-[ ! -d &quot;ocp&quot; ] &amp;&amp; git clone https://github.com/emsunshine/ocp.git
-
-cd ocp
-git pull
-git checkout ase_datasets_bugfixes
-pip install -e .
-git rev-parse HEAD
-echo &quot;Restart the kernel&quot;
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>From https://github.com/emsunshine/ocp
-   52ec4b0..3973c79  ase_datasets_bugfixes -&gt; origin/ase_datasets_bugfixes
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Updating 52ec4b0..3973c79
-Fast-forward
- .circleci/config.yml                               |   5 +-
- .pre-commit-config.yaml                            |   6 +-
- ocpmodels/common/distutils.py                      |  15 ++-
- ocpmodels/common/registry.py                       |  25 ++--
- ocpmodels/common/relaxation/ase_utils.py           |   8 +-
- ocpmodels/common/relaxation/ml_relaxation.py       |  17 ++-
- ocpmodels/common/utils.py                          |   8 +-
- ocpmodels/datasets/ase_datasets.py                 |  14 ++-
- ocpmodels/datasets/lmdb_dataset.py                 |  11 +-
- ocpmodels/models/dimenet_plus_plus.py              |  56 ++++-----
- ocpmodels/models/equiformer_v2/activation.py       |  28 ++---
- ocpmodels/models/equiformer_v2/drop.py             |  10 +-
- .../models/equiformer_v2/equiformer_v2_oc20.py     | 102 ++++++++--------
- ocpmodels/models/equiformer_v2/gaussian_rbf.py     |   2 +-
- ocpmodels/models/equiformer_v2/input_block.py      |  15 +--
- ocpmodels/models/equiformer_v2/layer_norm.py       | 130 +++++++++++----------
- ocpmodels/models/equiformer_v2/module_list.py      |   4 +-
- ocpmodels/models/equiformer_v2/radial_function.py  |   2 +-
- ocpmodels/models/equiformer_v2/so2_ops.py          |  21 ++--
- ocpmodels/models/equiformer_v2/so3.py              | 117 ++++++++++---------
- .../models/equiformer_v2/trainers/__init__.py      |   0
- .../equiformer_v2/trainers/forces_trainer.py       |  24 ++--
- .../models/equiformer_v2/trainers/lr_scheduler.py  |   6 +-
- .../models/equiformer_v2/transformer_block.py      | 121 +++++++++----------
- ocpmodels/models/escn/escn.py                      |  68 +++++------
- ocpmodels/models/escn/so3.py                       |  69 +++++------
- ocpmodels/models/forcenet.py                       |  49 ++++----
- ocpmodels/models/gemnet/gemnet.py                  |   8 +-
- ocpmodels/models/gemnet/initializers.py            |   2 +-
- .../models/gemnet/layers/interaction_block.py      |  47 ++++----
- ocpmodels/models/gemnet/utils.py                   |  23 ++--
- ocpmodels/models/gemnet_gp/gemnet.py               |   4 +-
- ocpmodels/models/gemnet_gp/initializers.py         |   2 +-
- .../models/gemnet_gp/layers/atom_update_block.py   |   6 +-
- ocpmodels/models/gemnet_gp/utils.py                |   2 +-
- ocpmodels/models/gemnet_oc/gemnet_oc.py            |   8 +-
- ocpmodels/models/gemnet_oc/initializers.py         |  10 +-
- .../models/gemnet_oc/layers/atom_update_block.py   |  11 +-
- ocpmodels/models/gemnet_oc/layers/base_layers.py   |   7 +-
- ocpmodels/models/gemnet_oc/layers/efficient.py     |   2 +
- .../models/gemnet_oc/layers/embedding_block.py     |  18 +--
- .../models/gemnet_oc/layers/interaction_block.py   |  38 +++---
- ocpmodels/models/gemnet_oc/utils.py                |   2 +-
- ocpmodels/models/schnet.py                         |  24 ++--
- ocpmodels/models/scn/scn.py                        |   7 ++
- ocpmodels/models/spinconv.py                       |  24 ++--
- ocpmodels/models/utils/basis.py                    |  37 ++++--
- ocpmodels/modules/exponential_moving_average.py    |   2 +-
- ocpmodels/modules/normalizer.py                    |  16 ++-
- ocpmodels/trainers/base_trainer.py                 |  11 +-
- ocpmodels/trainers/forces_trainer.py               |  13 ++-
- scripts/download_data.py                           |   1 +
- tests/conftest.py                                  |   4 +-
- 53 files changed, 692 insertions(+), 570 deletions(-)
- create mode 100644 ocpmodels/models/equiformer_v2/trainers/__init__.py
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Already on &#39;ase_datasets_bugfixes&#39;
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Your branch is up to date with &#39;origin/ase_datasets_bugfixes&#39;.
-Obtaining file:///home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/ocp
-  Installing build dependencies: started
-  Installing build dependencies: finished with status &#39;done&#39;
-  Checking if build backend supports build_editable: started
-  Checking if build backend supports build_editable: finished with status &#39;done&#39;
-  Getting requirements to build editable: started
-  Getting requirements to build editable: finished with status &#39;done&#39;
-  Preparing editable metadata (pyproject.toml): started
-  Preparing editable metadata (pyproject.toml): finished with status &#39;done&#39;
-Building wheels for collected packages: ocp-models
-  Building editable for ocp-models (pyproject.toml): started
-  Building editable for ocp-models (pyproject.toml): finished with status &#39;done&#39;
-  Created wheel for ocp-models: filename=ocp_models-0.0.3-0.editable-py3-none-any.whl size=3334 sha256=7fd764b0c3855a7842fbe8ccccd11cd8a976068ab29a3e629330252879a690be
-  Stored in directory: /tmp/pip-ephem-wheel-cache-1tq8uf3g/wheels/10/4b/3b/4e0bb17f5f6f297ada608943d3b4dbc2406c2ce5b7f15f99f5
-Successfully built ocp-models
-Installing collected packages: ocp-models
-  Attempting uninstall: ocp-models
-    Found existing installation: ocp-models 0.0.3
-    Uninstalling ocp-models-0.0.3:
-      Successfully uninstalled ocp-models-0.0.3
-Successfully installed ocp-models-0.0.3
-3973c79ab867535abf8470a07d397ff2fb21345e
-Restart the kernel
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ../ocp-tutorial.ipynb  # load some helper functions
-<span class="n">describe_ocp</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/conda/bin/python 3.9.15 | packaged by conda-forge | (main, Nov 22 2022, 15:55:03) 
-[GCC 10.4.0]
-ocp is installed at /home/jovyan/shared-scratch/jkitchin/esunshine-ocp
-ocp repo is at git commit: 3973c79
-numba: 0.57.1
-numpy: 1.23.5
-ase: 3.22.1
-e3nn: 0.4.4
-pymatgen: 2023.5.10
-torch: 1.13.1
-torch.version.cuda: 11.6
-torch.cuda: is_available: True
-  __CUDNN VERSION: 8302
-  __Number CUDA Devices: 1
-  __CUDA Device Name: NVIDIA RTX A6000
-  __CUDA Device Total Memory [GB]: 51.050315776
-torch geometric: 2.2.0
-
-Platform: Linux-5.15.0-56-generic-x86_64-with-glibc2.31
-  Processor: x86_64
-  Virtual memory: svmem(total=270094749696, available=176702713856, percent=34.6, used=96290365440, free=51140415488, active=69285498880, inactive=134535172096, buffers=15252389888, cached=107411578880, shared=153247744, slab=10718543872)
-  Swap memory: sswap(total=8589930496, used=3167645696, free=5422284800, percent=36.9, sin=1210961920, sout=13977411584)
-  Disk usage: sdiskusage(total=983349022720, used=355674435584, free=577648074752, percent=38.1)
-</pre></div>
-</div>
-</div>
-</div>
-<section class="tex2jax_ignore mathjax_ignore" id="fine-tuning-a-model">
+  <section class="tex2jax_ignore mathjax_ignore" id="fine-tuning-a-model">
 <h1>Fine tuning a model<a class="headerlink" href="#fine-tuning-a-model" title="Permalink to this heading">#</a></h1>
 <p>In this section we look at how to improve a model. We start by using a pre-trained model to predict the energies of several oxide polymorphs. The data here comes from this paper:</p>
 <p>Identifying Potential BO<sub>2</sub> Oxide Polymorphs for Epitaxial Growth Candidates
@@ -616,7 +470,8 @@ Mehta, P., Salvador, P. A., &amp; Kitchin, J. R. (2015). Identifying potential B
 <p>We get this checkpoint here.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;GemNet-OC OC20+OC22&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ../ocp-tutorial.ipynb  # load some helper functions
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;GemNet-OC OC20+OC22&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -745,124 +600,6 @@ Mehta, P., Salvador, P. A., &amp; Kitchin, J. R. (2015). Identifying potential B
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
 </pre></div>
 </div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: true
-cmd:
-  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/checkpoints/2023-08-01-13-34-56
-  commit: 3973c79
-  identifier: &#39;&#39;
-  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/logs/tensorboard/2023-08-01-13-34-56
-  print_every: 100
-  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/results/2023-08-01-13-34-56
-  seed: null
-  timestamp_id: 2023-08-01-13-34-56
-dataset: null
-gpus: 1
-logger: tensorboard
-model: gemnet_oc
-model_attributes:
-  activation: silu
-  atom_edge_interaction: true
-  atom_interaction: true
-  cbf:
-    name: spherical_harmonics
-  cutoff: 12.0
-  cutoff_aeaint: 12.0
-  cutoff_aint: 12.0
-  cutoff_qint: 12.0
-  direct_forces: true
-  edge_atom_interaction: true
-  emb_size_aint_in: 64
-  emb_size_aint_out: 64
-  emb_size_atom: 256
-  emb_size_cbf: 16
-  emb_size_edge: 512
-  emb_size_quad_in: 32
-  emb_size_quad_out: 32
-  emb_size_rbf: 16
-  emb_size_sbf: 32
-  emb_size_trip_in: 64
-  emb_size_trip_out: 64
-  envelope:
-    exponent: 5
-    name: polynomial
-  extensive: true
-  forces_coupled: false
-  max_neighbors: 30
-  max_neighbors_aeaint: 20
-  max_neighbors_aint: 1000
-  max_neighbors_qint: 8
-  num_after_skip: 2
-  num_atom: 3
-  num_atom_emb_layers: 2
-  num_before_skip: 2
-  num_blocks: 4
-  num_concat: 1
-  num_global_out_layers: 2
-  num_output_afteratom: 3
-  num_radial: 128
-  num_spherical: 7
-  otf_graph: true
-  output_init: HeOrthogonal
-  qint_tags:
-  - 1
-  - 2
-  quad_interaction: true
-  rbf:
-    name: gaussian
-  regress_forces: true
-  sbf:
-    name: legendre_outer
-  symmetric_edge_symmetrization: false
-noddp: false
-optim:
-  batch_size: 16
-  clip_grad_norm: 10
-  ema_decay: 0.999
-  energy_coefficient: 1
-  eval_batch_size: 16
-  eval_every: 5000
-  factor: 0.8
-  force_coefficient: 1
-  load_balancing: atoms
-  loss_energy: mae
-  loss_force: atomwisel2
-  lr_initial: 0.0005
-  max_epochs: 80
-  mode: min
-  num_workers: 2
-  optimizer: AdamW
-  optimizer_params:
-    amsgrad: true
-  patience: 3
-  scheduler: ReduceLROnPlateau
-  weight_decay: 0
-slurm:
-  additional_parameters:
-    constraint: volta32gb
-  cpus_per_task: 3
-  folder: /checkpoint/abhshkdz/ocp_oct1_logs/57632342
-  gpus_per_node: 8
-  job_id: &#39;57632342&#39;
-  job_name: gnoc_oc22_oc20_all_s2ef
-  mem: 480GB
-  nodes: 8
-  ntasks_per_node: 8
-  partition: ocp,learnaccel
-  time: 4320
-task:
-  dataset: oc22_lmdb
-  description: Regressing to energies and forces for DFT trajectories from OCP
-  eval_on_free_atoms: true
-  grad_input: atomic forces
-  labels:
-  - potential energy
-  metric: mae
-  primary_metric: forces_mae
-  train_on_free_atoms: true
-  type: regression
-trainer: forces
-</pre></div>
-</div>
 </div>
 </div>
 <p>Now, we loop through each structure and accumulate the OCP predictions. Then, we plot the parity results.</p>
@@ -903,10 +640,10 @@ trainer: forces
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time 19.8 seconds.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time 14.7 seconds.
 </pre></div>
 </div>
-<img alt="../_images/d018947080ba8caeb79a4e0f40866087fce40bada3828df5df4e67d93655bdd0.png" src="../_images/d018947080ba8caeb79a4e0f40866087fce40bada3828df5df4e67d93655bdd0.png" />
+<img alt="../_images/4bcad0495724f1a0778becf7d7a26d90951e42fb7a999133755082a56c2daf45.png" src="../_images/4bcad0495724f1a0778becf7d7a26d90951e42fb7a999133755082a56c2daf45.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -937,7 +674,7 @@ trainer: forces
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/fbb94ef58a713865c0d773bfc2315ff132968e8520474aa8aa689097fb7804be.png" src="../_images/fbb94ef58a713865c0d773bfc2315ff132968e8520474aa8aa689097fb7804be.png" />
+<img alt="../_images/de4aeb56db25435cd86120c5773425280258559f2ee4aa94ec9f38810a915789.png" src="../_images/de4aeb56db25435cd86120c5773425280258559f2ee4aa94ec9f38810a915789.png" />
 </div>
 </div>
 <p>We can improve this by fine-tuning the model.</p>
@@ -1051,7 +788,7 @@ Rows: 295 (showing first 20)
                    <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;gpus&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
                            <span class="s1">&#39;task.dataset&#39;</span><span class="p">:</span> <span class="s1">&#39;ase_db&#39;</span><span class="p">,</span>
                            <span class="s1">&#39;optim.eval_every&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-                           <span class="s1">&#39;optim.max_epochs&#39;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+                           <span class="s1">&#39;optim.max_epochs&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
                            <span class="c1"># Train data</span>
                            <span class="s1">&#39;dataset.train.src&#39;</span><span class="p">:</span> <span class="s1">&#39;train.db&#39;</span><span class="p">,</span>
                            <span class="s1">&#39;dataset.train.a2g_args.r_energy&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
@@ -1174,7 +911,7 @@ optim:
   load_balancing: atoms
   loss_energy: mae
   lr_initial: 0.0005
-  max_epochs: 80
+  max_epochs: 10
   mode: min
   num_workers: 2
   optimizer: AdamW
@@ -1205,13 +942,28 @@ trainer: forces
 </pre></div>
 </div>
 <p>You can also visit it in a browser at <span class="xref myst">train.txt</span>. You have to periodically refresh the view to see updates though.</p>
+<p>This can take up to 30 minutes for 80 epochs, so we only do a few here to see what happens.</p>
 <div class="cell tag_hide-output docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>! python {ocp_main()} --mode train --config-yml $yml --checkpoint $checkpoint \
+<div class="cell_input above-output-prompt docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import time
+t0 = time.time()
+! python {ocp_main()} --mode train --config-yml $yml --checkpoint $checkpoint \
   --run-dir fine-tuning --identifier ft-oxides --amp &gt; train.txt 2&gt;&amp;1 
+print(f&#39;Elapsed time = {time.time() - t0:1.1f} seconds&#39;)
 </pre></div>
 </div>
 </div>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time = 189.9 seconds
+</pre></div>
+</div>
+</div>
+</details>
 </div>
 <p>Now since we have a file, we can find the training results in it. See <span class="xref myst">train.txt</span>. At the top, the config is printed, so we can get the checkpoint directory. I use shell commands and Python to get the line, split and strip it here.</p>
 <div class="cell docutils container">
@@ -1223,7 +975,7 @@ trainer: forces
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;fine-tuning/checkpoints/2023-08-01-13-34-56-ft-oxides&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;fine-tuning/checkpoints/2023-08-02-23-15-12-ft-oxides&#39;
 </pre></div>
 </div>
 </div>
@@ -1238,103 +990,37 @@ trainer: forces
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: true
-cmd:
-  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/checkpoints/2023-08-01-14-04-48
-  commit: 3973c79
-  identifier: &#39;&#39;
-  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/logs/tensorboard/2023-08-01-14-04-48
-  print_every: 100
-  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/results/2023-08-01-14-04-48
-  seed: null
-  timestamp_id: 2023-08-01-14-04-48
-dataset: null
-gpus: 1
-logger: tensorboard
-model: gemnet_oc
-model_attributes:
-  activation: silu
-  atom_edge_interaction: true
-  atom_interaction: true
-  cbf:
-    name: spherical_harmonics
-  cutoff: 12.0
-  cutoff_aeaint: 12.0
-  cutoff_aint: 12.0
-  cutoff_qint: 12.0
-  direct_forces: true
-  edge_atom_interaction: true
-  emb_size_aint_in: 64
-  emb_size_aint_out: 64
-  emb_size_atom: 256
-  emb_size_cbf: 16
-  emb_size_edge: 512
-  emb_size_quad_in: 32
-  emb_size_quad_out: 32
-  emb_size_rbf: 16
-  emb_size_sbf: 32
-  emb_size_trip_in: 64
-  emb_size_trip_out: 64
-  envelope:
-    exponent: 5
-    name: polynomial
-  extensive: true
-  forces_coupled: false
-  max_neighbors: 30
-  max_neighbors_aeaint: 20
-  max_neighbors_aint: 1000
-  max_neighbors_qint: 8
-  num_after_skip: 2
-  num_atom: 3
-  num_atom_emb_layers: 2
-  num_before_skip: 2
-  num_blocks: 4
-  num_concat: 1
-  num_global_out_layers: 2
-  num_output_afteratom: 3
-  num_radial: 128
-  num_spherical: 7
-  otf_graph: true
-  output_init: HeOrthogonal
-  qint_tags:
-  - 1
-  - 2
-  quad_interaction: true
-  rbf:
-    name: gaussian
-  regress_forces: true
-  sbf:
-    name: legendre_outer
-  symmetric_edge_symmetrization: false
-noddp: false
-optim:
-  batch_size: 16
-  clip_grad_norm: 10
-  ema_decay: 0.999
-  energy_coefficient: 1
-  eval_batch_size: 16
-  eval_every: 1
-  factor: 0.8
-  force_coefficient: 1
-  load_balancing: atoms
-  loss_energy: mae
-  lr_initial: 0.0005
-  max_epochs: 80
-  mode: min
-  num_workers: 2
-  optimizer: AdamW
-  optimizer_params:
-    amsgrad: true
-  patience: 3
-  scheduler: ReduceLROnPlateau
-  weight_decay: 0
-slurm: {}
-task:
-  dataset: ase_db
-trainer: forces
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">newckpt</span> <span class="o">=</span> <span class="n">cpdir</span> <span class="o">+</span> <span class="s1">&#39;/checkpoint.pt&#39;</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">newcalc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">newckpt</span><span class="p">,</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="nn">File ~/shared-scratch/jkitchin/ocp/ocpmodels/common/relaxation/ase_utils.py:119,</span> in <span class="ni">OCPCalculator.__init__</span><span class="nt">(self, config_yml, checkpoint, trainer, cutoff, max_neighbors, cpu)</span>
+<span class="g g-Whitespace">    </span><span class="mi">116</span>         <span class="n">config</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">117</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">118</span>     <span class="c1"># Loads the config from the checkpoint directly (always on CPU).</span>
+<span class="ne">--&gt; </span><span class="mi">119</span>     <span class="n">config</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">))[</span>
+<span class="g g-Whitespace">    </span><span class="mi">120</span>         <span class="s2">&quot;config&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">121</span>     <span class="p">]</span>
+<span class="g g-Whitespace">    </span><span class="mi">122</span> <span class="k">if</span> <span class="n">trainer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># passing the arg overrides everything else</span>
+<span class="g g-Whitespace">    </span><span class="mi">123</span>     <span class="n">config</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trainer</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/serialization.py:789,</span> in <span class="ni">load</span><span class="nt">(f, map_location, pickle_module, weights_only, **pickle_load_args)</span>
+<span class="g g-Whitespace">    </span><span class="mi">787</span>             <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">788</span>                 <span class="k">raise</span> <span class="n">pickle</span><span class="o">.</span><span class="n">UnpicklingError</span><span class="p">(</span><span class="n">UNSAFE_MESSAGE</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="kn">from</span> <span class="kc">None</span>
+<span class="ne">--&gt; </span><span class="mi">789</span>         <span class="k">return</span> <span class="n">_load</span><span class="p">(</span><span class="n">opened_zipfile</span><span class="p">,</span> <span class="n">map_location</span><span class="p">,</span> <span class="n">pickle_module</span><span class="p">,</span> <span class="o">**</span><span class="n">pickle_load_args</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">790</span> <span class="k">if</span> <span class="n">weights_only</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">791</span>     <span class="k">try</span><span class="p">:</span>
+
+<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/serialization.py:1127,</span> in <span class="ni">_load</span><span class="nt">(zip_file, map_location, pickle_module, pickle_file, **pickle_load_args)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1124</span>         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">find_class</span><span class="p">(</span><span class="n">mod_name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1126</span> <span class="c1"># Load the data (which may in turn use `persistent_load` to load tensors)</span>
+<span class="ne">-&gt; </span><span class="mi">1127</span> <span class="n">data_file</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">zip_file</span><span class="o">.</span><span class="n">get_record</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">))</span>
+<span class="g g-Whitespace">   </span><span class="mi">1129</span> <span class="n">unpickler</span> <span class="o">=</span> <span class="n">UnpicklerWrapper</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="o">**</span><span class="n">pickle_load_args</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1130</span> <span class="n">unpickler</span><span class="o">.</span><span class="n">persistent_load</span> <span class="o">=</span> <span class="n">persistent_load</span>
+
+<span class="ne">RuntimeError</span>: PytorchStreamReader failed locating file data.pkl: file not found
 </pre></div>
 </div>
 </div>
@@ -1371,19 +1057,11 @@ trainer: forces
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<img alt="../_images/6cb0d1074c791fec131679de6fcdb49ad81e5eeb56527265bf4a6f4c6138f25f.png" src="../_images/6cb0d1074c791fec131679de6fcdb49ad81e5eeb56527265bf4a6f4c6138f25f.png" />
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mae</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dft</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ocp</span><span class="p">)))</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;New MAE = </span><span class="si">{</span><span class="n">mae</span><span class="si">:</span><span class="s1">1.3f</span><span class="si">}</span><span class="s1"> eV/atom&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>New MAE = 0.018 eV/atom
 </pre></div>
 </div>
 </div>
@@ -1400,9 +1078,6 @@ trainer: forces
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/fd8cedb3e01406bb9d191cc6d4d056bcc50e1c9d7630d694a860eb5c8e7cd9f1.png" src="../_images/fd8cedb3e01406bb9d191cc6d4d056bcc50e1c9d7630d694a860eb5c8e7cd9f1.png" />
 </div>
 </div>
 <p>It is possible to continue refining the fit. The simple things to do are to use more epochs of training. Eventually the MAE will stabilize, and then it may be necessary to adjust other optimization parameters like the learning rate (usually you decrease it).</p>
