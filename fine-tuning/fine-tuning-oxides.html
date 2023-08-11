@@ -600,6 +600,124 @@ Mehta, P., Salvador, P. A., &amp; Kitchin, J. R. (2015). Identifying potential B
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
 </pre></div>
 </div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: true
+cmd:
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/checkpoints/2023-08-11-14-41-04
+  commit: 3973c79
+  identifier: &#39;&#39;
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/logs/tensorboard/2023-08-11-14-41-04
+  print_every: 100
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/results/2023-08-11-14-41-04
+  seed: null
+  timestamp_id: 2023-08-11-14-41-04
+dataset: null
+gpus: 1
+logger: tensorboard
+model: gemnet_oc
+model_attributes:
+  activation: silu
+  atom_edge_interaction: true
+  atom_interaction: true
+  cbf:
+    name: spherical_harmonics
+  cutoff: 12.0
+  cutoff_aeaint: 12.0
+  cutoff_aint: 12.0
+  cutoff_qint: 12.0
+  direct_forces: true
+  edge_atom_interaction: true
+  emb_size_aint_in: 64
+  emb_size_aint_out: 64
+  emb_size_atom: 256
+  emb_size_cbf: 16
+  emb_size_edge: 512
+  emb_size_quad_in: 32
+  emb_size_quad_out: 32
+  emb_size_rbf: 16
+  emb_size_sbf: 32
+  emb_size_trip_in: 64
+  emb_size_trip_out: 64
+  envelope:
+    exponent: 5
+    name: polynomial
+  extensive: true
+  forces_coupled: false
+  max_neighbors: 30
+  max_neighbors_aeaint: 20
+  max_neighbors_aint: 1000
+  max_neighbors_qint: 8
+  num_after_skip: 2
+  num_atom: 3
+  num_atom_emb_layers: 2
+  num_before_skip: 2
+  num_blocks: 4
+  num_concat: 1
+  num_global_out_layers: 2
+  num_output_afteratom: 3
+  num_radial: 128
+  num_spherical: 7
+  otf_graph: true
+  output_init: HeOrthogonal
+  qint_tags:
+  - 1
+  - 2
+  quad_interaction: true
+  rbf:
+    name: gaussian
+  regress_forces: true
+  sbf:
+    name: legendre_outer
+  symmetric_edge_symmetrization: false
+noddp: false
+optim:
+  batch_size: 16
+  clip_grad_norm: 10
+  ema_decay: 0.999
+  energy_coefficient: 1
+  eval_batch_size: 16
+  eval_every: 5000
+  factor: 0.8
+  force_coefficient: 1
+  load_balancing: atoms
+  loss_energy: mae
+  loss_force: atomwisel2
+  lr_initial: 0.0005
+  max_epochs: 80
+  mode: min
+  num_workers: 2
+  optimizer: AdamW
+  optimizer_params:
+    amsgrad: true
+  patience: 3
+  scheduler: ReduceLROnPlateau
+  weight_decay: 0
+slurm:
+  additional_parameters:
+    constraint: volta32gb
+  cpus_per_task: 3
+  folder: /checkpoint/abhshkdz/ocp_oct1_logs/57632342
+  gpus_per_node: 8
+  job_id: &#39;57632342&#39;
+  job_name: gnoc_oc22_oc20_all_s2ef
+  mem: 480GB
+  nodes: 8
+  ntasks_per_node: 8
+  partition: ocp,learnaccel
+  time: 4320
+task:
+  dataset: oc22_lmdb
+  description: Regressing to energies and forces for DFT trajectories from OCP
+  eval_on_free_atoms: true
+  grad_input: atomic forces
+  labels:
+  - potential energy
+  metric: mae
+  primary_metric: forces_mae
+  train_on_free_atoms: true
+  type: regression
+trainer: forces
+</pre></div>
+</div>
 </div>
 </div>
 <p>Now, we loop through each structure and accumulate the OCP predictions. Then, we plot the parity results.</p>
@@ -640,10 +758,10 @@ Mehta, P., Salvador, P. A., &amp; Kitchin, J. R. (2015). Identifying potential B
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time 14.7 seconds.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time 19.7 seconds.
 </pre></div>
 </div>
-<img alt="../_images/4bcad0495724f1a0778becf7d7a26d90951e42fb7a999133755082a56c2daf45.png" src="../_images/4bcad0495724f1a0778becf7d7a26d90951e42fb7a999133755082a56c2daf45.png" />
+<img alt="../_images/bc4e47bfc3d75fd3c6a3a7d2c8d8a0f3fabdf10385afa9adc01adf2b8aba04e0.png" src="../_images/bc4e47bfc3d75fd3c6a3a7d2c8d8a0f3fabdf10385afa9adc01adf2b8aba04e0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -674,7 +792,7 @@ Mehta, P., Salvador, P. A., &amp; Kitchin, J. R. (2015). Identifying potential B
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/de4aeb56db25435cd86120c5773425280258559f2ee4aa94ec9f38810a915789.png" src="../_images/de4aeb56db25435cd86120c5773425280258559f2ee4aa94ec9f38810a915789.png" />
+<img alt="../_images/938574d7d4fd91f6693752fbbe3080332748570bce6f23875118cff8c84a97db.png" src="../_images/938574d7d4fd91f6693752fbbe3080332748570bce6f23875118cff8c84a97db.png" />
 </div>
 </div>
 <p>We can improve this by fine-tuning the model.</p>
@@ -728,26 +846,26 @@ Mehta, P., Salvador, P. A., &amp; Kitchin, J. R. (2015). Identifying potential B
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>id|age|formula|calculator| energy|natoms| fmax|pbc| volume|charge|   mass
- 1| 3s|Sn2O4  |unknown   |-41.359|     6|0.045|TTT| 64.258| 0.000|301.416
- 2| 3s|Sn2O4  |unknown   |-41.853|     6|0.025|TTT| 66.526| 0.000|301.416
- 3| 3s|Sn2O4  |unknown   |-42.199|     6|0.010|TTT| 68.794| 0.000|301.416
- 4| 3s|Sn2O4  |unknown   |-42.419|     6|0.006|TTT| 71.062| 0.000|301.416
- 5| 3s|Sn2O4  |unknown   |-42.534|     6|0.011|TTT| 73.330| 0.000|301.416
- 6| 3s|Sn2O4  |unknown   |-42.562|     6|0.029|TTT| 75.598| 0.000|301.416
- 7| 3s|Sn2O4  |unknown   |-42.518|     6|0.033|TTT| 77.866| 0.000|301.416
- 8| 3s|Sn2O4  |unknown   |-42.415|     6|0.010|TTT| 80.134| 0.000|301.416
- 9| 3s|Sn2O4  |unknown   |-42.266|     6|0.006|TTT| 82.402| 0.000|301.416
-10| 3s|Sn2O4  |unknown   |-42.083|     6|0.017|TTT| 84.670| 0.000|301.416
-11| 3s|Sn4O8  |unknown   |-81.424|    12|0.012|TTT|117.473| 0.000|602.832
-12| 3s|Sn4O8  |unknown   |-82.437|    12|0.005|TTT|121.620| 0.000|602.832
-13| 3s|Sn4O8  |unknown   |-83.147|    12|0.015|TTT|125.766| 0.000|602.832
-14| 3s|Sn4O8  |unknown   |-83.599|    12|0.047|TTT|129.912| 0.000|602.832
-15| 3s|Sn4O8  |unknown   |-83.831|    12|0.081|TTT|134.058| 0.000|602.832
-16| 3s|Sn4O8  |unknown   |-83.898|    12|0.001|TTT|138.204| 0.000|602.832
-17| 3s|Sn4O8  |unknown   |-83.805|    12|0.001|TTT|142.350| 0.000|602.832
-18| 3s|Sn4O8  |unknown   |-83.586|    12|0.002|TTT|146.496| 0.000|602.832
-19| 3s|Sn4O8  |unknown   |-83.262|    12|0.002|TTT|150.642| 0.000|602.832
-20| 3s|Sn4O8  |unknown   |-82.851|    12|0.013|TTT|154.788| 0.000|602.832
+ 1| 4s|Sn2O4  |unknown   |-41.359|     6|0.045|TTT| 64.258| 0.000|301.416
+ 2| 4s|Sn2O4  |unknown   |-41.853|     6|0.025|TTT| 66.526| 0.000|301.416
+ 3| 4s|Sn2O4  |unknown   |-42.199|     6|0.010|TTT| 68.794| 0.000|301.416
+ 4| 4s|Sn2O4  |unknown   |-42.419|     6|0.006|TTT| 71.062| 0.000|301.416
+ 5| 4s|Sn2O4  |unknown   |-42.534|     6|0.011|TTT| 73.330| 0.000|301.416
+ 6| 4s|Sn2O4  |unknown   |-42.562|     6|0.029|TTT| 75.598| 0.000|301.416
+ 7| 4s|Sn2O4  |unknown   |-42.518|     6|0.033|TTT| 77.866| 0.000|301.416
+ 8| 4s|Sn2O4  |unknown   |-42.415|     6|0.010|TTT| 80.134| 0.000|301.416
+ 9| 4s|Sn2O4  |unknown   |-42.266|     6|0.006|TTT| 82.402| 0.000|301.416
+10| 4s|Sn2O4  |unknown   |-42.083|     6|0.017|TTT| 84.670| 0.000|301.416
+11| 4s|Sn4O8  |unknown   |-81.424|    12|0.012|TTT|117.473| 0.000|602.832
+12| 4s|Sn4O8  |unknown   |-82.437|    12|0.005|TTT|121.620| 0.000|602.832
+13| 4s|Sn4O8  |unknown   |-83.147|    12|0.015|TTT|125.766| 0.000|602.832
+14| 4s|Sn4O8  |unknown   |-83.599|    12|0.047|TTT|129.912| 0.000|602.832
+15| 4s|Sn4O8  |unknown   |-83.831|    12|0.081|TTT|134.058| 0.000|602.832
+16| 4s|Sn4O8  |unknown   |-83.898|    12|0.001|TTT|138.204| 0.000|602.832
+17| 4s|Sn4O8  |unknown   |-83.805|    12|0.001|TTT|142.350| 0.000|602.832
+18| 4s|Sn4O8  |unknown   |-83.586|    12|0.002|TTT|146.496| 0.000|602.832
+19| 4s|Sn4O8  |unknown   |-83.262|    12|0.002|TTT|150.642| 0.000|602.832
+20| 4s|Sn4O8  |unknown   |-82.851|    12|0.013|TTT|154.788| 0.000|602.832
 Rows: 295 (showing first 20)
 </pre></div>
 </div>
@@ -959,7 +1077,7 @@ print(f&#39;Elapsed time = {time.time() - t0:1.1f} seconds&#39;)
 <span class="expanded">Hide code cell output</span>
 </summary>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time = 189.9 seconds
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Elapsed time = 251.4 seconds
 </pre></div>
 </div>
 </div>
@@ -975,7 +1093,7 @@ print(f&#39;Elapsed time = {time.time() - t0:1.1f} seconds&#39;)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;fine-tuning/checkpoints/2023-08-02-23-15-12-ft-oxides&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;fine-tuning/checkpoints/2023-08-11-14-41-04-ft-oxides&#39;
 </pre></div>
 </div>
 </div>
@@ -990,37 +1108,103 @@ print(f&#39;Elapsed time = {time.time() - t0:1.1f} seconds&#39;)
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">newckpt</span> <span class="o">=</span> <span class="n">cpdir</span> <span class="o">+</span> <span class="s1">&#39;/checkpoint.pt&#39;</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">newcalc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">newckpt</span><span class="p">,</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="nn">File ~/shared-scratch/jkitchin/ocp/ocpmodels/common/relaxation/ase_utils.py:119,</span> in <span class="ni">OCPCalculator.__init__</span><span class="nt">(self, config_yml, checkpoint, trainer, cutoff, max_neighbors, cpu)</span>
-<span class="g g-Whitespace">    </span><span class="mi">116</span>         <span class="n">config</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;dataset&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">117</span> <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">118</span>     <span class="c1"># Loads the config from the checkpoint directly (always on CPU).</span>
-<span class="ne">--&gt; </span><span class="mi">119</span>     <span class="n">config</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">))[</span>
-<span class="g g-Whitespace">    </span><span class="mi">120</span>         <span class="s2">&quot;config&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">121</span>     <span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">122</span> <span class="k">if</span> <span class="n">trainer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># passing the arg overrides everything else</span>
-<span class="g g-Whitespace">    </span><span class="mi">123</span>     <span class="n">config</span><span class="p">[</span><span class="s2">&quot;trainer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">trainer</span>
-
-<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/serialization.py:789,</span> in <span class="ni">load</span><span class="nt">(f, map_location, pickle_module, weights_only, **pickle_load_args)</span>
-<span class="g g-Whitespace">    </span><span class="mi">787</span>             <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">788</span>                 <span class="k">raise</span> <span class="n">pickle</span><span class="o">.</span><span class="n">UnpicklingError</span><span class="p">(</span><span class="n">UNSAFE_MESSAGE</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="kn">from</span> <span class="kc">None</span>
-<span class="ne">--&gt; </span><span class="mi">789</span>         <span class="k">return</span> <span class="n">_load</span><span class="p">(</span><span class="n">opened_zipfile</span><span class="p">,</span> <span class="n">map_location</span><span class="p">,</span> <span class="n">pickle_module</span><span class="p">,</span> <span class="o">**</span><span class="n">pickle_load_args</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">790</span> <span class="k">if</span> <span class="n">weights_only</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">791</span>     <span class="k">try</span><span class="p">:</span>
-
-<span class="nn">File /opt/conda/lib/python3.9/site-packages/torch/serialization.py:1127,</span> in <span class="ni">_load</span><span class="nt">(zip_file, map_location, pickle_module, pickle_file, **pickle_load_args)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1124</span>         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">find_class</span><span class="p">(</span><span class="n">mod_name</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1126</span> <span class="c1"># Load the data (which may in turn use `persistent_load` to load tensors)</span>
-<span class="ne">-&gt; </span><span class="mi">1127</span> <span class="n">data_file</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">zip_file</span><span class="o">.</span><span class="n">get_record</span><span class="p">(</span><span class="n">pickle_file</span><span class="p">))</span>
-<span class="g g-Whitespace">   </span><span class="mi">1129</span> <span class="n">unpickler</span> <span class="o">=</span> <span class="n">UnpicklerWrapper</span><span class="p">(</span><span class="n">data_file</span><span class="p">,</span> <span class="o">**</span><span class="n">pickle_load_args</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1130</span> <span class="n">unpickler</span><span class="o">.</span><span class="n">persistent_load</span> <span class="o">=</span> <span class="n">persistent_load</span>
-
-<span class="ne">RuntimeError</span>: PytorchStreamReader failed locating file data.pkl: file not found
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: true
+cmd:
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/checkpoints/2023-08-11-14-45-20
+  commit: 3973c79
+  identifier: &#39;&#39;
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/logs/tensorboard/2023-08-11-14-45-20
+  print_every: 100
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/results/2023-08-11-14-45-20
+  seed: null
+  timestamp_id: 2023-08-11-14-45-20
+dataset: null
+gpus: 1
+logger: tensorboard
+model: gemnet_oc
+model_attributes:
+  activation: silu
+  atom_edge_interaction: true
+  atom_interaction: true
+  cbf:
+    name: spherical_harmonics
+  cutoff: 12.0
+  cutoff_aeaint: 12.0
+  cutoff_aint: 12.0
+  cutoff_qint: 12.0
+  direct_forces: true
+  edge_atom_interaction: true
+  emb_size_aint_in: 64
+  emb_size_aint_out: 64
+  emb_size_atom: 256
+  emb_size_cbf: 16
+  emb_size_edge: 512
+  emb_size_quad_in: 32
+  emb_size_quad_out: 32
+  emb_size_rbf: 16
+  emb_size_sbf: 32
+  emb_size_trip_in: 64
+  emb_size_trip_out: 64
+  envelope:
+    exponent: 5
+    name: polynomial
+  extensive: true
+  forces_coupled: false
+  max_neighbors: 30
+  max_neighbors_aeaint: 20
+  max_neighbors_aint: 1000
+  max_neighbors_qint: 8
+  num_after_skip: 2
+  num_atom: 3
+  num_atom_emb_layers: 2
+  num_before_skip: 2
+  num_blocks: 4
+  num_concat: 1
+  num_global_out_layers: 2
+  num_output_afteratom: 3
+  num_radial: 128
+  num_spherical: 7
+  otf_graph: true
+  output_init: HeOrthogonal
+  qint_tags:
+  - 1
+  - 2
+  quad_interaction: true
+  rbf:
+    name: gaussian
+  regress_forces: true
+  sbf:
+    name: legendre_outer
+  symmetric_edge_symmetrization: false
+noddp: false
+optim:
+  batch_size: 16
+  clip_grad_norm: 10
+  ema_decay: 0.999
+  energy_coefficient: 1
+  eval_batch_size: 16
+  eval_every: 1
+  factor: 0.8
+  force_coefficient: 1
+  load_balancing: atoms
+  loss_energy: mae
+  lr_initial: 0.0005
+  max_epochs: 10
+  mode: min
+  num_workers: 2
+  optimizer: AdamW
+  optimizer_params:
+    amsgrad: true
+  patience: 3
+  scheduler: ReduceLROnPlateau
+  weight_decay: 0
+slurm: {}
+task:
+  dataset: ase_db
+trainer: forces
 </pre></div>
 </div>
 </div>
@@ -1057,11 +1241,19 @@ print(f&#39;Elapsed time = {time.time() - t0:1.1f} seconds&#39;)
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<img alt="../_images/3a7e2ec63efc7a998471c2975e3e33f23231cf3e3677f59a0e1d683da8211162.png" src="../_images/3a7e2ec63efc7a998471c2975e3e33f23231cf3e3677f59a0e1d683da8211162.png" />
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mae</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dft</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ocp</span><span class="p">)))</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;New MAE = </span><span class="si">{</span><span class="n">mae</span><span class="si">:</span><span class="s1">1.3f</span><span class="si">}</span><span class="s1"> eV/atom&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>New MAE = 0.030 eV/atom
 </pre></div>
 </div>
 </div>
@@ -1078,6 +1270,9 @@ print(f&#39;Elapsed time = {time.time() - t0:1.1f} seconds&#39;)
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/4abb3688cec55aaf844e651e007aa52a7b92c532ed5326fec4023440469bdf61.png" src="../_images/4abb3688cec55aaf844e651e007aa52a7b92c532ed5326fec4023440469bdf61.png" />
 </div>
 </div>
 <p>It is possible to continue refining the fit. The simple things to do are to use more epochs of training. Eventually the MAE will stabilize, and then it may be necessary to adjust other optimization parameters like the learning rate (usually you decrease it).</p>
