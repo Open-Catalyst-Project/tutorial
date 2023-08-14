@@ -1,0 +1,1221 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Fine-tuning with Python &#8212; OCP tutorials</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'advanced/fine-tuning-in-python';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Utilizing large, graph-based, pre-trained  machine learned potentials in atomistic simulations
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to OCP</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../OCP-introduction.html">Introduction to using OCP in molecular simulations</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Screening catalysts with OCP</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../NRR/NRR_example-gemnet.html">Using OCP to enumerate adsorbates on alloy catalyst surfaces</a></li>
+
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Fine-tuning a model</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../fine-tuning/fine-tuning-oxides.html">Fine tuning a model</a></li>
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Gotchas</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../gotchas.html">Common gotchas with OCP</a></li>
+
+
+
+
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="mass-inference.html">Mass inference</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="embeddings.html">Working with embeddings</a></li>
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-launch-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Launch interactive content">
+    <i class="fas fa-rocket"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://lab.amdatascience.com/hub/user-redirect/git-pull?repo=https%3A//github.com/Open-Catalyst-Project/tutorial&urlpath=lab/tree/tutorial/ocp-tutorial/advanced/fine-tuning-in-python.ipynb&branch=main" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onJupyterHub"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_jupyterhub.svg">
+  </span>
+<span class="btn__text-container">JupyterHub</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://colab.research.google.com/github/Open-Catalyst-Project/tutorial/blob/main/ocp-tutorial/advanced/fine-tuning-in-python.ipynb" target="_blank"
+   class="btn btn-sm dropdown-item"
+   title="Launch onColab"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  
+    <img src="../_static/images/logo_colab.png">
+  </span>
+<span class="btn__text-container">Colab</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Open-Catalyst-Project/tutorial" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Open-Catalyst-Project/tutorial/issues/new?title=Issue%20on%20page%20%2Fadvanced/fine-tuning-in-python.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/advanced/fine-tuning-in-python.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Fine-tuning with Python</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fine-tuning with Python</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#split-the-data-into-train-test-val-sets">Split the data into train, test, val sets</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-the-training-code">Setup the training code</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-the-training-task">Setup the training task</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-training-task">Run the training task</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="fine-tuning-with-python">
+<h1>Fine-tuning with Python<a class="headerlink" href="#fine-tuning-with-python" title="Permalink to this heading">#</a></h1>
+<p>The recommended way to do training is with the <code class="docutils literal notranslate"><span class="pre">main.py</span></code> script in ocp. One of the reasons for that is training often takes a long time and is better suited for queue systems like slurm. However, you can submit Python scripts too, and it is possible to run notebooks in Slurm too. Here we work out a proof of concept in training from Python and a Jupyter notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ../ocp-tutorial.ipynb
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">ocpmodels.common.utils</span> <span class="kn">import</span> <span class="n">SeverityLevelBetween</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+
+ 
+<span class="n">root</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+<span class="n">log_formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span>
+            <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> (</span><span class="si">%(levelname)s</span><span class="s2">): </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,)</span>
+
+<span class="c1"># Send INFO to stdout</span>
+<span class="n">handler_out</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s1">&#39;out.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">handler_out</span><span class="o">.</span><span class="n">addFilter</span><span class="p">(</span>
+            <span class="n">SeverityLevelBetween</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+        <span class="p">)</span>
+<span class="n">handler_out</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">log_formatter</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler_out</span><span class="p">)</span>
+
+<span class="c1"># Send WARNING (and higher) to stderr</span>
+<span class="n">handler_err</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s1">&#39;out.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span>
+<span class="n">handler_err</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+<span class="n">handler_err</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">log_formatter</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler_err</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>ase<span class="w"> </span>db<span class="w"> </span>../fine-tuning/oxides.db
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>id| age|formula|calculator| energy|natoms| fmax|pbc| volume|charge|   mass
+ 1|224m|Sn2O4  |unknown   |-41.359|     6|0.045|TTT| 64.258| 0.000|301.416
+ 2|224m|Sn2O4  |unknown   |-41.853|     6|0.025|TTT| 66.526| 0.000|301.416
+ 3|224m|Sn2O4  |unknown   |-42.199|     6|0.010|TTT| 68.794| 0.000|301.416
+ 4|224m|Sn2O4  |unknown   |-42.419|     6|0.006|TTT| 71.062| 0.000|301.416
+ 5|224m|Sn2O4  |unknown   |-42.534|     6|0.011|TTT| 73.330| 0.000|301.416
+ 6|224m|Sn2O4  |unknown   |-42.562|     6|0.029|TTT| 75.598| 0.000|301.416
+ 7|224m|Sn2O4  |unknown   |-42.518|     6|0.033|TTT| 77.866| 0.000|301.416
+ 8|224m|Sn2O4  |unknown   |-42.415|     6|0.010|TTT| 80.134| 0.000|301.416
+ 9|224m|Sn2O4  |unknown   |-42.266|     6|0.006|TTT| 82.402| 0.000|301.416
+10|224m|Sn2O4  |unknown   |-42.083|     6|0.017|TTT| 84.670| 0.000|301.416
+11|224m|Sn4O8  |unknown   |-81.424|    12|0.012|TTT|117.473| 0.000|602.832
+12|224m|Sn4O8  |unknown   |-82.437|    12|0.005|TTT|121.620| 0.000|602.832
+13|224m|Sn4O8  |unknown   |-83.147|    12|0.015|TTT|125.766| 0.000|602.832
+14|224m|Sn4O8  |unknown   |-83.599|    12|0.047|TTT|129.912| 0.000|602.832
+15|224m|Sn4O8  |unknown   |-83.831|    12|0.081|TTT|134.058| 0.000|602.832
+16|224m|Sn4O8  |unknown   |-83.898|    12|0.001|TTT|138.204| 0.000|602.832
+17|224m|Sn4O8  |unknown   |-83.805|    12|0.001|TTT|142.350| 0.000|602.832
+18|224m|Sn4O8  |unknown   |-83.586|    12|0.002|TTT|146.496| 0.000|602.832
+19|224m|Sn4O8  |unknown   |-83.262|    12|0.002|TTT|150.642| 0.000|602.832
+20|224m|Sn4O8  |unknown   |-82.851|    12|0.013|TTT|154.788| 0.000|602.832
+Rows: 295 (showing first 20)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;GemNet-OC OC20+OC22&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">checkpoint</span><span class="p">,</span> <span class="n">trainer</span><span class="o">=</span><span class="s1">&#39;forces&#39;</span><span class="p">,</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: true
+cmd:
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/advanced/checkpoints/2023-08-01-17-18-56
+  commit: 3973c79
+  identifier: &#39;&#39;
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/advanced/logs/tensorboard/2023-08-01-17-18-56
+  print_every: 100
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/advanced/results/2023-08-01-17-18-56
+  seed: null
+  timestamp_id: 2023-08-01-17-18-56
+dataset: null
+gpus: 1
+logger: tensorboard
+model: gemnet_oc
+model_attributes:
+  activation: silu
+  atom_edge_interaction: true
+  atom_interaction: true
+  cbf:
+    name: spherical_harmonics
+  cutoff: 12.0
+  cutoff_aeaint: 12.0
+  cutoff_aint: 12.0
+  cutoff_qint: 12.0
+  direct_forces: true
+  edge_atom_interaction: true
+  emb_size_aint_in: 64
+  emb_size_aint_out: 64
+  emb_size_atom: 256
+  emb_size_cbf: 16
+  emb_size_edge: 512
+  emb_size_quad_in: 32
+  emb_size_quad_out: 32
+  emb_size_rbf: 16
+  emb_size_sbf: 32
+  emb_size_trip_in: 64
+  emb_size_trip_out: 64
+  envelope:
+    exponent: 5
+    name: polynomial
+  extensive: true
+  forces_coupled: false
+  max_neighbors: 30
+  max_neighbors_aeaint: 20
+  max_neighbors_aint: 1000
+  max_neighbors_qint: 8
+  num_after_skip: 2
+  num_atom: 3
+  num_atom_emb_layers: 2
+  num_before_skip: 2
+  num_blocks: 4
+  num_concat: 1
+  num_global_out_layers: 2
+  num_output_afteratom: 3
+  num_radial: 128
+  num_spherical: 7
+  otf_graph: true
+  output_init: HeOrthogonal
+  qint_tags:
+  - 1
+  - 2
+  quad_interaction: true
+  rbf:
+    name: gaussian
+  regress_forces: true
+  sbf:
+    name: legendre_outer
+  symmetric_edge_symmetrization: false
+noddp: false
+optim:
+  batch_size: 16
+  clip_grad_norm: 10
+  ema_decay: 0.999
+  energy_coefficient: 1
+  eval_batch_size: 16
+  eval_every: 5000
+  factor: 0.8
+  force_coefficient: 1
+  load_balancing: atoms
+  loss_energy: mae
+  loss_force: atomwisel2
+  lr_initial: 0.0005
+  max_epochs: 80
+  mode: min
+  num_workers: 2
+  optimizer: AdamW
+  optimizer_params:
+    amsgrad: true
+  patience: 3
+  scheduler: ReduceLROnPlateau
+  weight_decay: 0
+slurm:
+  additional_parameters:
+    constraint: volta32gb
+  cpus_per_task: 3
+  folder: /checkpoint/abhshkdz/ocp_oct1_logs/57632342
+  gpus_per_node: 8
+  job_id: &#39;57632342&#39;
+  job_name: gnoc_oc22_oc20_all_s2ef
+  mem: 480GB
+  nodes: 8
+  ntasks_per_node: 8
+  partition: ocp,learnaccel
+  time: 4320
+task:
+  dataset: oc22_lmdb
+  description: Regressing to energies and forces for DFT trajectories from OCP
+  eval_on_free_atoms: true
+  grad_input: atomic forces
+  labels:
+  - potential energy
+  metric: mae
+  primary_metric: forces_mae
+  train_on_free_atoms: true
+  type: regression
+trainer: forces
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="split-the-data-into-train-test-val-sets">
+<h1>Split the data into train, test, val sets<a class="headerlink" href="#split-the-data-into-train-test-val-sets" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>rm<span class="w"> </span>-fr<span class="w"> </span>train.db<span class="w"> </span>test.db<span class="w"> </span>val.db
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">train_test_val_split</span><span class="p">(</span><span class="s1">&#39;../fine-tuning/oxides.db&#39;</span><span class="p">)</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">,</span> <span class="n">val</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(PosixPath(&#39;/home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/advanced/train.db&#39;),
+ PosixPath(&#39;/home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/advanced/test.db&#39;),
+ PosixPath(&#39;/home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/advanced/val.db&#39;))
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="setup-the-training-code">
+<h1>Setup the training code<a class="headerlink" href="#setup-the-training-code" title="Permalink to this heading">#</a></h1>
+<p>We start by making the config.yml. We build this from the calculator checkpoint.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">yml</span> <span class="o">=</span> <span class="n">generate_yml_config</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">,</span> <span class="s1">&#39;config.yml&#39;</span><span class="p">,</span>
+                   <span class="n">delete</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;slurm&#39;</span><span class="p">,</span> <span class="s1">&#39;cmd&#39;</span><span class="p">,</span> <span class="s1">&#39;logger&#39;</span><span class="p">,</span> <span class="s1">&#39;task&#39;</span><span class="p">,</span> <span class="s1">&#39;model_attributes&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;optim.loss_force&#39;</span><span class="p">,</span> <span class="c1"># the checkpoint setting causes an error</span>
+                           <span class="s1">&#39;dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;test_dataset&#39;</span><span class="p">,</span> <span class="s1">&#39;val_dataset&#39;</span><span class="p">],</span>
+                   <span class="n">update</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;gpus&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                           <span class="s1">&#39;task.dataset&#39;</span><span class="p">:</span> <span class="s1">&#39;ase_db&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;optim.eval_every&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                           <span class="s1">&#39;optim.max_epochs&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                           <span class="c1"># Train data</span>
+                           <span class="s1">&#39;dataset.train.src&#39;</span><span class="p">:</span> <span class="s1">&#39;train.db&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;dataset.train.a2g_args.r_energy&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s1">&#39;dataset.train.a2g_args.r_forces&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                            <span class="c1"># Test data - prediction only so no regression</span>
+                           <span class="s1">&#39;dataset.test.src&#39;</span><span class="p">:</span> <span class="s1">&#39;test.db&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;dataset.test.a2g_args.r_energy&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                           <span class="s1">&#39;dataset.test.a2g_args.r_forces&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                           <span class="c1"># val data</span>
+                           <span class="s1">&#39;dataset.val.src&#39;</span><span class="p">:</span> <span class="s1">&#39;val.db&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;dataset.val.a2g_args.r_energy&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s1">&#39;dataset.val.a2g_args.r_forces&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                          <span class="p">})</span>
+
+<span class="n">yml</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PosixPath(&#39;/home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/advanced/config.yml&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<section id="setup-the-training-task">
+<h2>Setup the training task<a class="headerlink" href="#setup-the-training-task" title="Permalink to this heading">#</a></h2>
+<p>This essentially allows several opportunities to define and override the config. You start with the base config.yml, and then via “command-line” arguments you specify changes you want to make.</p>
+<p>The code is build around <code class="docutils literal notranslate"><span class="pre">submitit</span></code>, which is often used with Slurm, but also works locally.</p>
+<p>We have to mimic the <code class="docutils literal notranslate"><span class="pre">main.py</span></code> setup to get the arguments and config setup. Here is a minimal way to do this.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ocpmodels.common.flags</span> <span class="kn">import</span> <span class="n">flags</span>
+<span class="n">parser</span> <span class="o">=</span> <span class="n">flags</span><span class="o">.</span><span class="n">get_parser</span><span class="p">()</span>
+<span class="n">args</span><span class="p">,</span> <span class="n">args_override</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_known_args</span><span class="p">([</span><span class="s2">&quot;--mode=train&quot;</span><span class="p">,</span>                                            
+                                               <span class="s2">&quot;--config-yml=config.yml&quot;</span><span class="p">,</span> 
+                                               <span class="sa">f</span><span class="s2">&quot;--checkpoint=</span><span class="si">{</span><span class="n">checkpoint</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                               <span class="s2">&quot;--amp&quot;</span><span class="p">])</span>
+<span class="n">args</span><span class="p">,</span> <span class="n">args_override</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(Namespace(mode=&#39;train&#39;, config_yml=PosixPath(&#39;config.yml&#39;), identifier=&#39;&#39;, debug=False, run_dir=&#39;./&#39;, print_every=10, seed=0, amp=True, checkpoint=&#39;gnoc_oc22_oc20_all_s2ef.pt&#39;, timestamp_id=None, sweep_yml=None, submit=False, summit=False, logdir=PosixPath(&#39;logs&#39;), slurm_partition=&#39;ocp&#39;, slurm_mem=80, slurm_timeout=72, num_gpus=1, distributed=False, cpu=False, num_nodes=1, distributed_port=13356, distributed_backend=&#39;nccl&#39;, local_rank=0, no_ddp=False, gp_gpus=None),
+ [])
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we build the first stage in our config. This starts with the file config.yml, then updates it with the args</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ocpmodels.common.utils</span> <span class="kn">import</span> <span class="n">build_config</span><span class="p">,</span> <span class="n">new_trainer_context</span>
+
+<span class="n">config</span> <span class="o">=</span> <span class="n">build_config</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">args_override</span><span class="o">=</span><span class="p">{})</span>
+<span class="n">config</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;amp&#39;: True,
+ &#39;checkpoint&#39;: &#39;gnoc_oc22_oc20_all_s2ef.pt&#39;,
+ &#39;dataset&#39;: {&#39;test&#39;: {&#39;a2g_args&#39;: {&#39;r_energy&#39;: False, &#39;r_forces&#39;: False},
+   &#39;src&#39;: &#39;test.db&#39;},
+  &#39;train&#39;: {&#39;a2g_args&#39;: {&#39;r_energy&#39;: True, &#39;r_forces&#39;: True},
+   &#39;src&#39;: &#39;train.db&#39;},
+  &#39;val&#39;: {&#39;a2g_args&#39;: {&#39;r_energy&#39;: True, &#39;r_forces&#39;: True}, &#39;src&#39;: &#39;val.db&#39;}},
+ &#39;gpus&#39;: 1,
+ &#39;model&#39;: {&#39;activation&#39;: &#39;silu&#39;,
+  &#39;atom_edge_interaction&#39;: True,
+  &#39;atom_interaction&#39;: True,
+  &#39;cbf&#39;: {&#39;name&#39;: &#39;spherical_harmonics&#39;},
+  &#39;cutoff&#39;: 12.0,
+  &#39;cutoff_aeaint&#39;: 12.0,
+  &#39;cutoff_aint&#39;: 12.0,
+  &#39;cutoff_qint&#39;: 12.0,
+  &#39;direct_forces&#39;: True,
+  &#39;edge_atom_interaction&#39;: True,
+  &#39;emb_size_aint_in&#39;: 64,
+  &#39;emb_size_aint_out&#39;: 64,
+  &#39;emb_size_atom&#39;: 256,
+  &#39;emb_size_cbf&#39;: 16,
+  &#39;emb_size_edge&#39;: 512,
+  &#39;emb_size_quad_in&#39;: 32,
+  &#39;emb_size_quad_out&#39;: 32,
+  &#39;emb_size_rbf&#39;: 16,
+  &#39;emb_size_sbf&#39;: 32,
+  &#39;emb_size_trip_in&#39;: 64,
+  &#39;emb_size_trip_out&#39;: 64,
+  &#39;envelope&#39;: {&#39;exponent&#39;: 5, &#39;name&#39;: &#39;polynomial&#39;},
+  &#39;extensive&#39;: True,
+  &#39;forces_coupled&#39;: False,
+  &#39;max_neighbors&#39;: 30,
+  &#39;max_neighbors_aeaint&#39;: 20,
+  &#39;max_neighbors_aint&#39;: 1000,
+  &#39;max_neighbors_qint&#39;: 8,
+  &#39;name&#39;: &#39;gemnet_oc&#39;,
+  &#39;num_after_skip&#39;: 2,
+  &#39;num_atom&#39;: 3,
+  &#39;num_atom_emb_layers&#39;: 2,
+  &#39;num_before_skip&#39;: 2,
+  &#39;num_blocks&#39;: 4,
+  &#39;num_concat&#39;: 1,
+  &#39;num_global_out_layers&#39;: 2,
+  &#39;num_output_afteratom&#39;: 3,
+  &#39;num_radial&#39;: 128,
+  &#39;num_spherical&#39;: 7,
+  &#39;otf_graph&#39;: True,
+  &#39;output_init&#39;: &#39;HeOrthogonal&#39;,
+  &#39;qint_tags&#39;: [1, 2],
+  &#39;quad_interaction&#39;: True,
+  &#39;rbf&#39;: {&#39;name&#39;: &#39;gaussian&#39;},
+  &#39;regress_forces&#39;: True,
+  &#39;sbf&#39;: {&#39;name&#39;: &#39;legendre_outer&#39;},
+  &#39;symmetric_edge_symmetrization&#39;: False},
+ &#39;noddp&#39;: False,
+ &#39;optim&#39;: {&#39;batch_size&#39;: 16,
+  &#39;clip_grad_norm&#39;: 10,
+  &#39;ema_decay&#39;: 0.999,
+  &#39;energy_coefficient&#39;: 1,
+  &#39;eval_batch_size&#39;: 16,
+  &#39;eval_every&#39;: 1,
+  &#39;factor&#39;: 0.8,
+  &#39;force_coefficient&#39;: 1,
+  &#39;load_balancing&#39;: &#39;atoms&#39;,
+  &#39;loss_energy&#39;: &#39;mae&#39;,
+  &#39;lr_initial&#39;: 0.0005,
+  &#39;max_epochs&#39;: 5,
+  &#39;mode&#39;: &#39;min&#39;,
+  &#39;num_workers&#39;: 2,
+  &#39;optimizer&#39;: &#39;AdamW&#39;,
+  &#39;optimizer_params&#39;: {&#39;amsgrad&#39;: True},
+  &#39;patience&#39;: 3,
+  &#39;scheduler&#39;: &#39;ReduceLROnPlateau&#39;,
+  &#39;weight_decay&#39;: 0},
+ &#39;task&#39;: {&#39;dataset&#39;: &#39;ase_db&#39;},
+ &#39;trainer&#39;: &#39;forces&#39;,
+ &#39;mode&#39;: &#39;train&#39;,
+ &#39;identifier&#39;: &#39;&#39;,
+ &#39;timestamp_id&#39;: None,
+ &#39;seed&#39;: 0,
+ &#39;is_debug&#39;: False,
+ &#39;run_dir&#39;: &#39;./&#39;,
+ &#39;print_every&#39;: 10,
+ &#39;cpu&#39;: False,
+ &#39;submit&#39;: False,
+ &#39;summit&#39;: False,
+ &#39;local_rank&#39;: 0,
+ &#39;distributed_port&#39;: 13356,
+ &#39;world_size&#39;: 1,
+ &#39;distributed_backend&#39;: &#39;nccl&#39;,
+ &#39;gp_gpus&#39;: None}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="run-the-training-task">
+<h1>Run the training task<a class="headerlink" href="#run-the-training-task" title="Permalink to this heading">#</a></h1>
+<p>It is still annoying that if your output is too large the notebook will not be able to be saved. On the other hand, it is annoying to simply capture the output.</p>
+<p>We are able to redirect most logging to a file above, but not all of it. The link below will open the file in a browser, and the subsequent cell captures all residual output. We do not need any of that, so it is ultimately discarded.</p>
+<p>Alternatively, you can open a Terminal and use <code class="docutils literal notranslate"><span class="pre">tail</span> <span class="pre">-f</span> <span class="pre">out.txt</span></code> to see the progress.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">FileLink</span>
+<span class="n">display</span><span class="p">(</span><span class="n">FileLink</span><span class="p">(</span><span class="s1">&#39;out.txt&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><a href='out.txt' target='_blank'>out.txt</a><br></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">new_trainer_context</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span> <span class="k">as</span> <span class="n">ctx</span><span class="p">:</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">config</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">task</span>
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">trainer</span>
+    <span class="n">task</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">trainer</span><span class="p">)</span>
+    <span class="n">task</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: true
+cmd:
+  checkpoint_dir: ./checkpoints/2023-08-01-17-42-24
+  commit: 3973c79
+  identifier: &#39;&#39;
+  logs_dir: ./logs/tensorboard/2023-08-01-17-42-24
+  print_every: 10
+  results_dir: ./results/2023-08-01-17-42-24
+  seed: 0
+  timestamp_id: 2023-08-01-17-42-24
+dataset:
+  a2g_args:
+    r_energy: true
+    r_forces: true
+  src: train.db
+gpus: 1
+logger: tensorboard
+model: gemnet_oc
+model_attributes:
+  activation: silu
+  atom_edge_interaction: true
+  atom_interaction: true
+  cbf:
+    name: spherical_harmonics
+  cutoff: 12.0
+  cutoff_aeaint: 12.0
+  cutoff_aint: 12.0
+  cutoff_qint: 12.0
+  direct_forces: true
+  edge_atom_interaction: true
+  emb_size_aint_in: 64
+  emb_size_aint_out: 64
+  emb_size_atom: 256
+  emb_size_cbf: 16
+  emb_size_edge: 512
+  emb_size_quad_in: 32
+  emb_size_quad_out: 32
+  emb_size_rbf: 16
+  emb_size_sbf: 32
+  emb_size_trip_in: 64
+  emb_size_trip_out: 64
+  envelope:
+    exponent: 5
+    name: polynomial
+  extensive: true
+  forces_coupled: false
+  max_neighbors: 30
+  max_neighbors_aeaint: 20
+  max_neighbors_aint: 1000
+  max_neighbors_qint: 8
+  num_after_skip: 2
+  num_atom: 3
+  num_atom_emb_layers: 2
+  num_before_skip: 2
+  num_blocks: 4
+  num_concat: 1
+  num_global_out_layers: 2
+  num_output_afteratom: 3
+  num_radial: 128
+  num_spherical: 7
+  otf_graph: true
+  output_init: HeOrthogonal
+  qint_tags:
+  - 1
+  - 2
+  quad_interaction: true
+  rbf:
+    name: gaussian
+  regress_forces: true
+  sbf:
+    name: legendre_outer
+  symmetric_edge_symmetrization: false
+noddp: false
+optim:
+  batch_size: 16
+  clip_grad_norm: 10
+  ema_decay: 0.999
+  energy_coefficient: 1
+  eval_batch_size: 16
+  eval_every: 1
+  factor: 0.8
+  force_coefficient: 1
+  load_balancing: atoms
+  loss_energy: mae
+  lr_initial: 0.0005
+  max_epochs: 5
+  mode: min
+  num_workers: 2
+  optimizer: AdamW
+  optimizer_params:
+    amsgrad: true
+  patience: 3
+  scheduler: ReduceLROnPlateau
+  weight_decay: 0
+slurm: {}
+task:
+  dataset: ase_db
+test_dataset:
+  a2g_args:
+    r_energy: false
+    r_forces: false
+  src: test.db
+trainer: forces
+val_dataset:
+  a2g_args:
+    r_energy: true
+    r_forces: true
+  src: val.db
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/fine-tuning/ocp/ocpmodels/datasets/ase_datasets.py:108: UserWarning: Supplied sid is not numeric (or missing). Using dataset indices instead.
+  warnings.warn(
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.65it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.31it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.64it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.78it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.47it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.62it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.08it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.40it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.11it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.08it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.18it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.73it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.43it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.19it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.50it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.56it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.25it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.08it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.02it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.93it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.01it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.31it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.53it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.29it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.50it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.34it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.30it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.58it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.17it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.18it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.75it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.88it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  2.56it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.33it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.04it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.10it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.66it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.65it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.86it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.16it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.44it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.99it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.06it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.08it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.87it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.38it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  6.25it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  3.52it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.56it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.80it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.21it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.35it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.36it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.39it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.66it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.43it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.42it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.88it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.61it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.52it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.35it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  3.41it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.52it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.11it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.17it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.63it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.45it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.14it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.05it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.86it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.97it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.15it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.90it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.81it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  4.91it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.52it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.36it/s]
+device 0: 100%|██████████| 2/2 [00:00&lt;00:00,  5.95it/s]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span><span class="w"> </span>head<span class="w"> </span>out.txt
+<span class="o">!</span><span class="w"> </span>tail<span class="w"> </span>out.txt
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2023-08-01 17:18:26 (WARNING): Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
+2023-08-01 17:18:34 (WARNING): Unable to identify OCP trainer, defaulting to `forces`. Specify the `trainer` argument into OCPCalculator if otherwise.
+2023-08-01 17:18:34 (WARNING): Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
+2023-08-01 17:18:38 (WARNING): Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
+2023-08-01 17:18:41 (WARNING): Model gradient logging to tensorboard not yet supported.
+pretrained checkpoint, this is the correct behavior. To disable this, delete `scale_dict` from the checkpoint. 
+2023-08-01 17:18:34 (INFO): Loading dataset: oc22_lmdb
+2023-08-01 17:18:34 (INFO): Loading model: gemnet_oc
+2023-08-01 17:18:37 (INFO): Loaded GemNetOC with 38864438 parameters.
+2023-08-01 17:18:37 (INFO): Loading checkpoint from: gnoc_oc22_oc20_all_s2ef.pt
+2023-08-01 17:20:21 (INFO): forcesx_mae: 0.0091, forcesy_mae: 0.0103, forcesz_mae: 0.0080, forces_mae: 0.0091, forces_cos: 0.0461, forces_magnitude: 0.0147, energy_mae: 0.8628, energy_force_within_threshold: 0.0000, loss: 0.8812, epoch: 4.7333
+2023-08-01 17:20:22 (INFO): Evaluating on val.
+2023-08-01 17:20:22 (INFO): forcesx_mae: 0.0091, forcesy_mae: 0.0103, forcesz_mae: 0.0079, forces_mae: 0.0091, forces_cos: 0.0441, forces_magnitude: 0.0146, energy_mae: 0.8308, energy_force_within_threshold: 0.0000, loss: 0.8492, epoch: 4.8000
+2023-08-01 17:20:23 (INFO): Evaluating on val.
+2023-08-01 17:20:24 (INFO): forcesx_mae: 0.0090, forcesy_mae: 0.0103, forcesz_mae: 0.0079, forces_mae: 0.0090, forces_cos: 0.0411, forces_magnitude: 0.0146, energy_mae: 0.7813, energy_force_within_threshold: 0.0333, loss: 0.7999, epoch: 4.8667
+2023-08-01 17:20:25 (INFO): Evaluating on val.
+2023-08-01 17:20:25 (INFO): forcesx_mae: 0.0090, forcesy_mae: 0.0102, forcesz_mae: 0.0077, forces_mae: 0.0090, forces_cos: 0.0638, forces_magnitude: 0.0145, energy_mae: 0.7215, energy_force_within_threshold: 0.0000, loss: 0.7410, epoch: 4.9333
+2023-08-01 17:20:26 (INFO): Evaluating on val.
+2023-08-01 17:20:26 (INFO): forcesx_mae: 0.0089, forcesy_mae: 0.0101, forcesz_mae: 0.0076, forces_mae: 0.0089, forces_cos: 0.0619, forces_magnitude: 0.0145, energy_mae: 0.6652, energy_force_within_threshold: 0.0000, loss: 0.6855, epoch: 5.0000
+2023-08-01 17:20:27 (INFO): Total time taken: 105.35927224159241
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, you are all set to carry on with what ever subsequent analysis you want to do.</p>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./advanced"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fine-tuning with Python</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#split-the-data-into-train-test-val-sets">Split the data into train, test, val sets</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-the-training-code">Setup the training code</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-the-training-task">Setup the training task</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#run-the-training-task">Run the training task</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The OCP Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
