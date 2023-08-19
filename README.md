@@ -1,15 +1,12 @@
 # ocp-tutorial
 
-This tutorial was designed for an ACS workshop at the Fall ACS meeting in San Francisco on August 16, 2023. It will be a work in progress until then.
+This tutorial was designed for an ACS workshop at the Fall ACS meeting in San Francisco on August 16, 2023. We continue to update it.
 
 The hosted web pages can be found at https://open-catalyst-project.github.io/tutorial/intro.html.
 
 ## Usage
 
-### Fall ACS 2023
 
-We are providing a Jupyter Lab environment with GPU support for the Fall ACS  2023 workshop. Instructions for access will be provided at the Workshop.
- 
 ### In GitHUB Codespaces
 
 This repo provide a Codespace for running OCP. One checkpoint is available at /home/mambauser/gnoc_oc22_oc20_all_s2ef.pt. This is also in the env var $OCP_S2EF.
