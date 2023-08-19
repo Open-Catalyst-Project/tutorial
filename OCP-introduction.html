@@ -162,6 +162,7 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Screening catalysts with OCP</span></p>
 <ul class="nav bd-sidenav">
@@ -455,6 +456,13 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-study">Convergence study</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effects-of-number-of-layers">Effects of number of layers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effects-of-relaxation">Effects of relaxation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unit-cell-size">Unit cell size</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+</li>
 </ul>
 
             </nav>
@@ -525,14 +533,14 @@ H2O + * -&gt; O* + H2  re2  # Get from OCP as a direct calculation
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>amp: true
 cmd:
-  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/checkpoints/2023-07-20-20-11-44
-  commit: f79a6f7
+  checkpoint_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/checkpoints/2023-08-19-16-44-48
+  commit: 3973c79
   identifier: &#39;&#39;
-  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/logs/tensorboard/2023-07-20-20-11-44
+  logs_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/logs/tensorboard/2023-08-19-16-44-48
   print_every: 100
-  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/results/2023-07-20-20-11-44
+  results_dir: /home/jovyan/shared-scratch/jkitchin/tutorial/ocp-tutorial/results/2023-08-19-16-44-48
   seed: null
-  timestamp_id: 2023-07-20-20-11-44
+  timestamp_id: 2023-08-19-16-44-48
 dataset: null
 gpus: 1
 logger: tensorboard
@@ -642,20 +650,20 @@ trainer: forces
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      Step     Time          Energy         fmax
-BFGS:    0 20:12:09        1.760548        1.6865
-BFGS:    1 20:12:09        1.534237        0.9638
-BFGS:    2 20:12:09        1.343823        0.7221
-BFGS:    3 20:12:09        1.279805        0.7960
-BFGS:    4 20:12:10        0.858139        0.7011
-BFGS:    5 20:12:10        0.805099        0.4904
-BFGS:    6 20:12:10        0.779147        0.6091
-BFGS:    7 20:12:10        0.762659        0.7291
-BFGS:    8 20:12:10        0.743507        0.5098
-BFGS:    9 20:12:10        0.734425        0.1280
-BFGS:   10 20:12:10        0.730592        0.0421
+BFGS:    0 16:45:46        1.734571        1.6863
+BFGS:    1 16:45:46        1.526617        0.9688
+BFGS:    2 16:45:46        1.375589        0.7231
+BFGS:    3 16:45:46        1.282416        0.7910
+BFGS:    4 16:45:46        0.859390        0.6855
+BFGS:    5 16:45:47        0.804168        0.4963
+BFGS:    6 16:45:47        0.778587        0.6211
+BFGS:    7 16:45:47        0.765790        0.7337
+BFGS:    8 16:45:47        0.749063        0.4882
+BFGS:    9 16:45:47        0.730627        0.1268
+BFGS:   10 16:45:47        0.729829        0.0355
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.299408285617828
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-2.300171225070953
 </pre></div>
 </div>
 </div>
@@ -679,15 +687,17 @@ BFGS:   10 20:12:10        0.730592        0.0421
 </div>
 </div>
 <p>How did we do? We need a reference point. In the paper below, there is an atomic adsorption energy for O on Pt(111) of about -4.264 eV. This is for the reaction O + * -&gt; O*. To convert this to the dissociative adsorption energy, we have to add the reaction:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1/2 O2 -&gt; O   D = -2.58 eV (expt)
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>1/2 O2 -&gt; O   D = 2.58 eV (expt)
 </pre></div>
 </div>
-<p>to get a comparable energy of about -1.68 eV. There is about ~0.6 eV difference to account for. The biggest difference is likely due to the differences in exchange-correlation functional. The reference data used the PBE functional, and eSCN was trained on <em>RPBE</em> data. To additional places where there are differences include:</p>
+<p>to get a comparable energy of about -1.68 eV. There is about ~0.6 eV difference (we predicted -2.3 eV above, and the reference comparison is -1.68 eV) to account for. The biggest difference is likely due to the differences in exchange-correlation functional. The reference data used the PBE functional, and eSCN was trained on <em>RPBE</em> data. To additional places where there are differences include:</p>
 <ol class="arabic simple">
 <li><p>Difference in lattice constant</p></li>
 <li><p>The reference energy used for the experiment references. These can differ by up to 0.5 eV from comparable DFT calculations.</p></li>
+<li><p>How many layers are relaxed in the calculation</p></li>
 </ol>
-<p>These differences tend to be systematic, and you can calibrate and correct these, especially if you can augment these with your own DFT calculations.</p>
+<p>Some of these differences tend to be systematic, and you can calibrate and correct these, especially if you can augment these with your own DFT calculations.</p>
+<p>See <span class="xref myst">convergence study</span> for some additional studies of factors that influence this number.</p>
 <section id="exercises">
 <h2>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
@@ -936,6 +946,108 @@ BFGS:    8 20:12:12        0.590783        0.0244
 <h1>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">#</a></h1>
 <p>In the next step, we consider some more complex adsorbates in nitrogen reduction, and how we can leverage OCP to automate the search for the most stable adsorbate geometry. See <a class="reference internal" href="NRR/NRR_example-gemnet.html"><span class="doc std std-doc">the next step</span></a>.</p>
 </section>
+<section class="tex2jax_ignore mathjax_ignore" id="convergence-study">
+<h1>Convergence study<a class="headerlink" href="#convergence-study" title="Permalink to this heading">#</a></h1>
+<p>In <span class="xref myst">Calculating adsorption energies</span> we discussed some possible reasons we might see a discrepancy. Here we investigate some factors that impact the computed energies.</p>
+<p>In this section, the energies refer to the reaction 1/2 O2 -&gt; O*.</p>
+<section id="effects-of-number-of-layers">
+<h2>Effects of number of layers<a class="headerlink" href="#effects-of-number-of-layers" title="Permalink to this heading">#</a></h2>
+<p>Slab thickness could be a factor. Here we relax the whole slab, and see by about 4 layers the energy is converged to ~0.02 eV.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">nlayers</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]:</span>
+    <span class="n">slab</span> <span class="o">=</span> <span class="n">fcc111</span><span class="p">(</span><span class="s1">&#39;Pt&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nlayers</span><span class="p">),</span> <span class="n">vacuum</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+    <span class="n">add_adsorbate</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;fcc&#39;</span><span class="p">)</span>
+
+    <span class="n">slab</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">slab_e</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;nlayers = </span><span class="si">{</span><span class="n">nlayers</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">slab_e</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">re1</span><span class="si">:</span><span class="s1">1.2f</span><span class="si">}</span><span class="s1"> eV&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nlayers = 3: -2.40 eV
+nlayers = 4: -2.29 eV
+nlayers = 5: -2.30 eV
+nlayers = 6: -2.28 eV
+nlayers = 7: -2.28 eV
+nlayers = 8: -2.30 eV
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="effects-of-relaxation">
+<h2>Effects of relaxation<a class="headerlink" href="#effects-of-relaxation" title="Permalink to this heading">#</a></h2>
+<p>It is common to only relax a few layers, and constrain lower layers to bulk coordinates. We do that here. We only relax the adsorbate and the top layer.</p>
+<p>This has a small effect (0.1 eV).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ase.constraints</span> <span class="kn">import</span> <span class="n">FixAtoms</span>
+
+<span class="k">for</span> <span class="n">nlayers</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]:</span>
+    <span class="n">slab</span> <span class="o">=</span> <span class="n">fcc111</span><span class="p">(</span><span class="s1">&#39;Pt&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">nlayers</span><span class="p">),</span> <span class="n">vacuum</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+    <span class="n">add_adsorbate</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;fcc&#39;</span><span class="p">)</span>
+    
+    <span class="n">slab</span><span class="o">.</span><span class="n">set_constraint</span><span class="p">(</span><span class="n">FixAtoms</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="p">[</span><span class="n">atom</span><span class="o">.</span><span class="n">tag</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">slab</span><span class="p">]))</span>
+
+    <span class="n">slab</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">slab_e</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;nlayers = </span><span class="si">{</span><span class="n">nlayers</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">slab_e</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">re1</span><span class="si">:</span><span class="s1">1.2f</span><span class="si">}</span><span class="s1"> eV&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>nlayers = 3: -2.25 eV
+nlayers = 4: -2.17 eV
+nlayers = 5: -2.16 eV
+nlayers = 6: -2.18 eV
+nlayers = 7: -2.18 eV
+nlayers = 8: -2.18 eV
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="unit-cell-size">
+<h2>Unit cell size<a class="headerlink" href="#unit-cell-size" title="Permalink to this heading">#</a></h2>
+<p>Coverage effects are quite noticeable with oxygen. Here we consider larger unit cells. This effect is large, and the results don’t look right, usually adsorption energies get more favorable at lower coverage, not less. This suggests fine-tuning could be important even at low coverages.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">size</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]:</span>
+    <span class="n">slab</span> <span class="o">=</span> <span class="n">fcc111</span><span class="p">(</span><span class="s1">&#39;Pt&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">vacuum</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+    <span class="n">add_adsorbate</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;fcc&#39;</span><span class="p">)</span>
+    
+    <span class="n">slab</span><span class="o">.</span><span class="n">set_constraint</span><span class="p">(</span><span class="n">FixAtoms</span><span class="p">(</span><span class="n">mask</span><span class="o">=</span><span class="p">[</span><span class="n">atom</span><span class="o">.</span><span class="n">tag</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">slab</span><span class="p">]))</span>
+
+    <span class="n">slab</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">BFGS</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">slab_e</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s1">x</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s1">): </span><span class="si">{</span><span class="n">slab_e</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">re1</span><span class="si">:</span><span class="s1">1.2f</span><span class="si">}</span><span class="s1"> eV&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1x1): -0.74 eV
+(2x2): -2.16 eV
+(3x3): -1.38 eV
+(4x4): -1.30 eV
+(5x5): -1.30 eV
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h2>
+<p>As with DFT, you should take care to see how these kinds of decisions affect your results, and determine if they would change any interpretations or not.</p>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1017,6 +1129,13 @@ BFGS:    8 20:12:12        0.590783        0.0244
 </ul>
 </li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">Next steps</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#convergence-study">Convergence study</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effects-of-number-of-layers">Effects of number of layers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#effects-of-relaxation">Effects of relaxation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unit-cell-size">Unit cell size</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+</li>
 </ul>
 
   </nav></div>
