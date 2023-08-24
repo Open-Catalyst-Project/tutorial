@@ -191,6 +191,7 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
 <ul class="nav bd-sidenav">
@@ -455,6 +456,7 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#request-entity-too-large-can-t-save-your-notebook">Request entity too large - can’t save your Notebook</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#you-need-at-least-four-atoms-for-molecules-with-some-models">You need at least four atoms for molecules with some models</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#to-tag-or-not">To tag or not?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-simulation-results">Stochastic simulation results</a></li>
 </ul>
 
             </nav>
@@ -1287,6 +1289,52 @@ WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
 </div>
 </div>
 </section>
+<section class="tex2jax_ignore mathjax_ignore" id="stochastic-simulation-results">
+<h1>Stochastic simulation results<a class="headerlink" href="#stochastic-simulation-results" title="Permalink to this heading">#</a></h1>
+<p>Some models are not deterministic (SCN/eSCN.EqV2), i.e. you can get slightly different answers each time you run it. An example is shown below. See <a class="github reference external" href="https://github.com/Open-Catalyst-Project/ocp/issues/563">Open-Catalyst-Project/ocp#563</a> for more discussion. This happens because a random selection of is made to sample edges, and a different selection is made each time you run it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ocp-tutorial.ipynb
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;eSCN-L6-M3-Lay20 All+MD&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">),</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">fcc111</span><span class="p">,</span> <span class="n">add_adsorbate</span>
+<span class="kn">from</span> <span class="nn">ase.optimize</span> <span class="kn">import</span> <span class="n">BFGS</span>
+<span class="n">slab</span> <span class="o">=</span> <span class="n">fcc111</span><span class="p">(</span><span class="s1">&#39;Pt&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">vacuum</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+<span class="n">add_adsorbate</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;fcc&#39;</span><span class="p">)</span>
+<span class="n">slab</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">calc</span><span class="o">.</span><span class="n">calculate</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;energy&#39;</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">+=</span> <span class="p">[</span><span class="n">slab</span><span class="o">.</span><span class="n">get_potential_energy</span><span class="p">()]</span>
+    
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">results</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">results</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1.7137908697128297 0.002903242520056841
+1.7156665325164795
+1.7084295749664307
+1.7146689891815186
+1.711714267730713
+1.7096374034881592
+1.7145936489105225
+1.7145006656646729
+1.716435432434082
+1.7138292789459229
+1.718432903289795
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1367,6 +1415,7 @@ WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#request-entity-too-large-can-t-save-your-notebook">Request entity too large - can’t save your Notebook</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#you-need-at-least-four-atoms-for-molecules-with-some-models">You need at least four atoms for molecules with some models</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#to-tag-or-not">To tag or not?</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-simulation-results">Stochastic simulation results</a></li>
 </ul>
 
   </nav></div>
