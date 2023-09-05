@@ -192,6 +192,7 @@ const thebe_selector_output = ".output, .cell_output"
 
 
 
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
 <ul class="nav bd-sidenav">
@@ -457,6 +458,7 @@ document.write(`
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#you-need-at-least-four-atoms-for-molecules-with-some-models">You need at least four atoms for molecules with some models</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#to-tag-or-not">To tag or not?</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-simulation-results">Stochastic simulation results</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-forces-don-t-sum-to-zero">The forces don’t sum to zero</a></li>
 </ul>
 
             </nav>
@@ -1334,6 +1336,142 @@ WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
 </div>
 </div>
 </div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ocp-tutorial.ipynb
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+
+<span class="k">for</span> <span class="n">ckp</span> <span class="ow">in</span> <span class="n">checkpoints</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="n">ckp</span><span class="p">)</span>
+        <span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">,</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">ckp</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/cgcnn_200k.pt
+CGCNN 200k &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/cgcnn_2M.pt
+CGCNN 2M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+CGCNN 20M argument of type &#39;NoneType&#39; is not iterable
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/cgcnn_all.pt
+CGCNN All &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/dimenet_200k.pt
+DimeNet 200k &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/dimenet_2M.pt
+DimeNet 2M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/schnet_200k.pt
+SchNet 200k &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/schnet_2M.pt
+SchNet 2M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/schnet_20M.pt
+SchNet 20M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2020_11/s2ef/schnet_all_large.pt
+SchNet All &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_02/s2ef/dimenetpp_200k.pt
+DimeNet++ 200k &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_02/s2ef/dimenetpp_2M.pt
+DimeNet++ 2M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_02/s2ef/dimenetpp_20M.pt
+DimeNet++ 20M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_02/s2ef/dimenetpp_all.pt
+DimeNet++ All &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_12/s2ef/spinconv_force_centric_2M.pt
+SpinConv 2M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_08/s2ef/spinconv_force_centric_all.pt
+SpinConv All &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_12/s2ef/gemnet_t_direct_h512_2M.pt
+GemNet-dT 2M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2021_08/s2ef/gemnet_t_direct_h512_all.pt
+GemNet-dT All &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+PaiNN All argument of type &#39;NoneType&#39; is not iterable
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_07/s2ef/gemnet_oc_base_s2ef_2M.pt
+GemNet-OC 2M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_07/s2ef/gemnet_oc_base_s2ef_all.pt
+GemNet-OC All &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/gemnet_oc_base_s2ef_all_md.pt
+GemNet-OC All+MD &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 128: invalid start byte
+GemNet-OC-Large All+MD &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/scn_t1_b1_s2ef_2M.pt
+SCN 2M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+SCN-t4-b2 2M argument of type &#39;NoneType&#39; is not iterable
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/scn_all_md_s2ef.pt
+SCN All+MD &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+eSCN-L4-M2-Lay12 2M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/escn_l6_m2_lay12_2M_s2ef.pt
+eSCN-L6-M2-Lay12 2M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/escn_l6_m2_lay12_all_md_s2ef.pt
+eSCN-L6-M2-Lay12 All+MD &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+eSCN-L6-M3-Lay20 All+MD &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_06/oc20/s2ef/eq2_83M_2M.pt
+EquiformerV2 (83M) 2M &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_06/oc20/s2ef/eq2_31M_ec4_allmd.pt
+EquiformerV2 (31M) All+MD &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_06/oc20/s2ef/eq2_153M_ec4_allmd.pt
+EquiformerV2 (153M) All+MD &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_09/oc22/s2ef/gndt_oc22_all_s2ef.pt
+GemNet-dT OC22 &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+GemNet-OC OC22 &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+GemNet-OC OC20+OC22 &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_05/oc22/s2ef/gnoc_oc22_oc20_all_s2ef.pt
+GemNet-OC trained with `enforce_max_neighbors_strictly=False` #467 OC20+OC22 &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 128: invalid start byte
+Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2022_09/oc22/s2ef/gnoc_finetune_all_s2ef.pt
+GemNet-OC OC20-&gt;OC22 &#39;utf-8&#39; codec can&#39;t decode byte 0x80 in position 64: invalid start byte
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="the-forces-don-t-sum-to-zero">
+<h1>The forces don’t sum to zero<a class="headerlink" href="#the-forces-don-t-sum-to-zero" title="Permalink to this heading">#</a></h1>
+<p>In DFT, the forces on all the atoms should sum to zero; otherwise, there is a net translational or rotational force present. This is not enforced in OCP models. Instead, individual forces are predicted, with no constraint that they sum to zero. If the force predictions are very accurate, then they sum close to zero. You can further improve this if you subtract the mean force from each atom.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ocp-tutorial.ipynb
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="n">get_checkpoint</span><span class="p">(</span><span class="s1">&#39;eSCN-L6-M3-Lay20 All+MD&#39;</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">ocpmodels.common.relaxation.ase_utils</span> <span class="kn">import</span> <span class="n">OCPCalculator</span>
+<span class="n">calc</span> <span class="o">=</span> <span class="n">OCPCalculator</span><span class="p">(</span><span class="n">checkpoint</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">),</span> <span class="n">cpu</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">ase.build</span> <span class="kn">import</span> <span class="n">fcc111</span><span class="p">,</span> <span class="n">add_adsorbate</span>
+<span class="kn">from</span> <span class="nn">ase.optimize</span> <span class="kn">import</span> <span class="n">BFGS</span>
+<span class="n">slab</span> <span class="o">=</span> <span class="n">fcc111</span><span class="p">(</span><span class="s1">&#39;Pt&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">vacuum</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+<span class="n">add_adsorbate</span><span class="p">(</span><span class="n">slab</span><span class="p">,</span> <span class="s1">&#39;O&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;fcc&#39;</span><span class="p">)</span>
+<span class="n">slab</span><span class="o">.</span><span class="n">set_calculator</span><span class="p">(</span><span class="n">calc</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">slab</span><span class="o">.</span><span class="n">get_forces</span><span class="p">()</span>
+<span class="n">f</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading https://dl.fbaipublicfiles.com/opencatalystproject/models/2023_03/s2ef/escn_l6_m3_lay20_all_md_s2ef.pt
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-0.00371197, -0.01800631,  0.01127684], dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This makes them sum closer to zero by removing net translational force</span>
+<span class="p">(</span><span class="n">f</span> <span class="o">-</span> <span class="n">f</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 1.2270175e-07,  7.5437129e-08, -1.1920929e-07], dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -1416,6 +1554,7 @@ WARNING:root:Unrecognized arguments: [&#39;symmetric_edge_symmetrization&#39;]
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#you-need-at-least-four-atoms-for-molecules-with-some-models">You need at least four atoms for molecules with some models</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#to-tag-or-not">To tag or not?</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stochastic-simulation-results">Stochastic simulation results</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#the-forces-don-t-sum-to-zero">The forces don’t sum to zero</a></li>
 </ul>
 
   </nav></div>
