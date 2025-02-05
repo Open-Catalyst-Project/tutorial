@@ -1,3 +1,5 @@
+# REPO DEPRECATION: In 2024 the FAIR Chemistry team consolidated its various resources to improve release/testing/availability, and  [the tutorials moved to the fairchem repo](https://github.com/FAIR-Chem/fairchem/tree/main/docs/tutorials). You can find updated documentation on how to use the consolidated resources at https://fair-chem.github.io/
+
 # ocp-tutorial
 
 This tutorial was designed for an ACS workshop at the Fall ACS meeting in San Francisco on August 16, 2023. We continue to update it.
